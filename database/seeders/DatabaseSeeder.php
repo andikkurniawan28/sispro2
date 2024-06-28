@@ -7,9 +7,16 @@ use App\Models\User;
 use App\Models\Fitur;
 use App\Models\Setup;
 use App\Models\Divisi;
+use App\Models\Gudang;
+use App\Models\Satuan;
 use App\Models\Jabatan;
 use App\Models\Permission;
+use App\Models\JenisBahanBaku;
+use App\Models\JenisTransaksi;
 use Illuminate\Database\Seeder;
+use App\Models\JenisProdukAkhir;
+use App\Models\JenisProdukSamping;
+use App\Models\JenisProdukReproses;
 
 class DatabaseSeeder extends Seeder
 {
@@ -100,6 +107,30 @@ class DatabaseSeeder extends Seeder
             ['nama' => ucwords(str_replace('_', ' ', 'edit_jenis_bahan_baku')), 'rute' => 'jenis_bahan_baku.edit'],
             ['nama' => ucwords(str_replace('_', ' ', 'update_jenis_bahan_baku')), 'rute' => 'jenis_bahan_baku.update'],
             ['nama' => ucwords(str_replace('_', ' ', 'hapus_jenis_bahan_baku')), 'rute' => 'jenis_bahan_baku.destroy'],
+            ['nama' => ucwords(str_replace('_', ' ', 'daftar_jenis_produk_reproses')), 'rute' => 'jenis_produk_reproses.index'],
+            ['nama' => ucwords(str_replace('_', ' ', 'tambah_jenis_produk_reproses')), 'rute' => 'jenis_produk_reproses.create'],
+            ['nama' => ucwords(str_replace('_', ' ', 'simpan_jenis_produk_reproses')), 'rute' => 'jenis_produk_reproses.store'],
+            ['nama' => ucwords(str_replace('_', ' ', 'edit_jenis_produk_reproses')), 'rute' => 'jenis_produk_reproses.edit'],
+            ['nama' => ucwords(str_replace('_', ' ', 'update_jenis_produk_reproses')), 'rute' => 'jenis_produk_reproses.update'],
+            ['nama' => ucwords(str_replace('_', ' ', 'hapus_jenis_produk_reproses')), 'rute' => 'jenis_produk_reproses.destroy'],
+            ['nama' => ucwords(str_replace('_', ' ', 'daftar_jenis_produk_samping')), 'rute' => 'jenis_produk_samping.index'],
+            ['nama' => ucwords(str_replace('_', ' ', 'tambah_jenis_produk_samping')), 'rute' => 'jenis_produk_samping.create'],
+            ['nama' => ucwords(str_replace('_', ' ', 'simpan_jenis_produk_samping')), 'rute' => 'jenis_produk_samping.store'],
+            ['nama' => ucwords(str_replace('_', ' ', 'edit_jenis_produk_samping')), 'rute' => 'jenis_produk_samping.edit'],
+            ['nama' => ucwords(str_replace('_', ' ', 'update_jenis_produk_samping')), 'rute' => 'jenis_produk_samping.update'],
+            ['nama' => ucwords(str_replace('_', ' ', 'hapus_jenis_produk_samping')), 'rute' => 'jenis_produk_samping.destroy'],
+            ['nama' => ucwords(str_replace('_', ' ', 'daftar_jenis_produk_akhir')), 'rute' => 'jenis_produk_akhir.index'],
+            ['nama' => ucwords(str_replace('_', ' ', 'tambah_jenis_produk_akhir')), 'rute' => 'jenis_produk_akhir.create'],
+            ['nama' => ucwords(str_replace('_', ' ', 'simpan_jenis_produk_akhir')), 'rute' => 'jenis_produk_akhir.store'],
+            ['nama' => ucwords(str_replace('_', ' ', 'edit_jenis_produk_akhir')), 'rute' => 'jenis_produk_akhir.edit'],
+            ['nama' => ucwords(str_replace('_', ' ', 'update_jenis_produk_akhir')), 'rute' => 'jenis_produk_akhir.update'],
+            ['nama' => ucwords(str_replace('_', ' ', 'hapus_jenis_produk_akhir')), 'rute' => 'jenis_produk_akhir.destroy'],
+            ['nama' => ucwords(str_replace('_', ' ', 'daftar_bahan_baku')), 'rute' => 'bahan_baku.index'],
+            ['nama' => ucwords(str_replace('_', ' ', 'tambah_bahan_baku')), 'rute' => 'bahan_baku.create'],
+            ['nama' => ucwords(str_replace('_', ' ', 'simpan_bahan_baku')), 'rute' => 'bahan_baku.store'],
+            ['nama' => ucwords(str_replace('_', ' ', 'edit_bahan_baku')), 'rute' => 'bahan_baku.edit'],
+            ['nama' => ucwords(str_replace('_', ' ', 'update_bahan_baku')), 'rute' => 'bahan_baku.update'],
+            ['nama' => ucwords(str_replace('_', ' ', 'hapus_bahan_baku')), 'rute' => 'bahan_baku.destroy'],
         ];
         Fitur::insert($fitur);
 
@@ -109,6 +140,56 @@ class DatabaseSeeder extends Seeder
                 "jabatan_id" => 1,
             ]);
         }
+
+        $satuan = [
+            ["nama" => ucReplaceUnderscoreToSpace('pack')],
+            ["nama" => ucReplaceUnderscoreToSpace('box')],
+            ["nama" => ucReplaceUnderscoreToSpace('kuintal')],
+            ["nama" => ucReplaceUnderscoreToSpace('kilogram')],
+            ["nama" => ucReplaceUnderscoreToSpace('ons')],
+            ["nama" => ucReplaceUnderscoreToSpace('gram')],
+        ];
+        Satuan::insert($satuan);
+
+        $gudang = [
+            ["nama" => ucReplaceUnderscoreToSpace('gudang_a')],
+            ["nama" => ucReplaceUnderscoreToSpace('gudang_b')],
+            ["nama" => ucReplaceUnderscoreToSpace('gudang_c')],
+        ];
+        Gudang::insert($gudang);
+
+        $jenis_transaksi = [
+            ["nama" => ucReplaceUnderscoreToSpace('serah_terima_hasil_produksi'), 'saldo' => 'plus'],
+            ["nama" => ucReplaceUnderscoreToSpace('kebutuhan_bahan_produksi'), 'saldo' => 'minus'],
+        ];
+        JenisTransaksi::insert($jenis_transaksi);
+
+        $jenis_bahan_baku = [
+            ["nama" => ucReplaceUnderscoreToSpace('tepung')],
+            ["nama" => ucReplaceUnderscoreToSpace('seasoning')],
+            ["nama" => ucReplaceUnderscoreToSpace('plastik_kemasan')],
+            ["nama" => ucReplaceUnderscoreToSpace('tray')],
+        ];
+        JenisBahanBaku::insert($jenis_bahan_baku);
+
+        $jenis_produk_reproses = [
+            ["nama" => ucReplaceUnderscoreToSpace('filling')],
+            ["nama" => ucReplaceUnderscoreToSpace('sambal')],
+        ];
+        JenisProdukReproses::insert($jenis_produk_reproses);
+
+        $jenis_produk_samping = [
+            ["nama" => ucReplaceUnderscoreToSpace('tetes')],
+            ["nama" => ucReplaceUnderscoreToSpace('ampas')],
+        ];
+        JenisProdukSamping::insert($jenis_produk_samping);
+
+        $jenis_produk_akhir = [
+            ["nama" => ucReplaceUnderscoreToSpace('meat')],
+            ["nama" => ucReplaceUnderscoreToSpace('bakery')],
+            ["nama" => ucReplaceUnderscoreToSpace('saus')],
+        ];
+        JenisProdukAkhir::insert($jenis_produk_akhir);
 
     }
 }
