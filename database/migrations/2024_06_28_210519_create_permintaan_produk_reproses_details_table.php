@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('permintaan_details', function (Blueprint $table) {
+        Schema::create('permintaan_produk_reproses_details', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('permintaan_id')->constrained();
-            $table->foreignId('produk_akhir_id')->constrained();
+            $table->foreignId('permintaan_id')->constrained('permintaan_produk_reproses')->onDelete('cascade');
+            $table->foreignId('produk_reproses_id')->constrained();
             $table->float('jumlah');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('permintaan_details');
+        Schema::dropIfExists('permintaan_produk_reproses_details');
     }
 };

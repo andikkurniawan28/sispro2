@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class PermintaanDetail extends Model
+class PermintaanProdukReprosesDetail extends Model
 {
     use HasFactory;
 
@@ -13,11 +13,11 @@ class PermintaanDetail extends Model
 
     public function permintaan()
     {
-        return $this->belongsTo(Permintaan::class);
+        return $this->belongsTo(PermintaanProdukReproses::class, 'permintaan_id');
     }
 
-    public function produk_akhir()
+    public function produk_reproses()
     {
-        return $this->belongsTo(ProdukAkhir::class);
+        return $this->belongsTo(ProdukReproses::class);
     }
 }

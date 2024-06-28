@@ -140,8 +140,13 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="{{ route('permintaan.index') }}">
-                                    <span class="sub-item">{{ ucReplaceUnderscoreToSpace('permintaan') }}</span>
+                                <a href="{{ route('permintaan_produk_akhir.index') }}">
+                                    <span class="sub-item">{{ ucReplaceUnderscoreToSpace('permintaan_produk_akhir') }}</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('permintaan_produk_reproses.index') }}">
+                                    <span class="sub-item">{{ ucReplaceUnderscoreToSpace('permintaan_produk_reproses') }}</span>
                                 </a>
                             </li>
                             <li>

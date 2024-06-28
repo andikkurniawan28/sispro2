@@ -1,7 +1,7 @@
 @extends('template.kaiadmin.master')
 
 @section('title')
-    Tambah {{ ucReplaceUnderscoreToSpace('permintaan') }}
+    Edit {{ ucReplaceUnderscoreToSpace('permintaan_produk_akhir') }}
 @endsection
 
 @section('navigation')
@@ -15,13 +15,13 @@
             <i class="icon-arrow-right"></i>
         </li>
         <li class="nav-item">
-            <a href="{{ route('permintaan.index') }}">{{ ucReplaceUnderscoreToSpace('permintaan') }}</a>
+            <a href="{{ route('permintaan_produk_akhir.index') }}">{{ ucReplaceUnderscoreToSpace('permintaan_produk_akhir') }}</a>
         </li>
         <li class="separator">
             <i class="icon-arrow-right"></i>
         </li>
         <li class="nav-item">
-            <a href="{{ route('permintaan.index') }}">@yield('title')</a>
+            <a href="{{ route('permintaan_produk_akhir.index') }}">@yield('title')</a>
         </li>
     </ul>
 @endsection
@@ -37,29 +37,29 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
-                            <form action="{{ route('permintaan.store') }}" method="POST">
+                            <form action="{{ route('permintaan_produk_akhir.update', $permintaan_produk_akhir->id) }}" method="POST">
                                 @csrf
+                                @method('PUT')
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="kode">{{ ucReplaceUnderscoreToSpace('kode') }}</label>
                                             <input type="text" class="form-control" id="kode" name="kode"
-                                                value="{{ old('kode') }}" placeholder="Masukkan kode ..." required
-                                                autofocus>
+                                                value="{{ old('kode', $permintaan_produk_akhir->kode) }}" placeholder="Masukkan kode ..." readonly>
                                         </div>
                                         <div class="form-group">
                                             <label
                                                 for="berlaku_sampai">{{ ucReplaceUnderscoreToSpace('berlaku_sampai') }}</label>
                                             <input type="datetime-local" class="form-control" id="berlaku_sampai"
-                                                name="berlaku_sampai" value="{{ old('berlaku_sampai') }}"
-                                                placeholder="Masukkan {{ ucReplaceUnderscoreToSpace('berlaku_sampai') }} ..." required>
+                                                name="berlaku_sampai" value="{{ old('berlaku_sampai', $permintaan_produk_akhir->berlaku_sampai) }}"
+                                                placeholder="Masukkan {{ ucReplaceUnderscoreToSpace('berlaku_sampai') }} ..." required autofocus>
                                         </div>
                                         <button type="submit" class="btn btn-primary">Simpan</button>
                                     </div>
                                     <div class="col-md-8">
                                         <div id="produk_akhirs_container">
-                                            @if (old('produk_akhirs'))
-                                                @foreach (old('produk_akhirs') as $index => $produk_akhir)
+                                            @if (old('produk_akhirs', $permintaan_produk_akhir_detail ))
+                                                @foreach (old('produk_akhirs', $permintaan_produk_akhir_detail ) as $index => $produk_akhir)
                                                     <div class="row mb-3" id="produk_akhir_row_{{ $index }}">
                                                         <div class="col-sm-4">
                                                             <label class="col-form-label" for="produk_akhir_{{ $index }}">
@@ -68,7 +68,7 @@
                                                             <select class="produk_akhir form-control" id="produk_akhir_{{ $index }}" name="produk_akhirs[]" required>
                                                                 <option disabled>Pilih {{ ucReplaceUnderscoreToSpace('produk_akhir') }}</option>
                                                                 @foreach ($produk_akhirs as $produk_akhirItem)
-                                                                    <option value="{{ $produk_akhirItem->id }}" {{ $produk_akhirItem->id == $produk_akhir ? 'selected' : '' }}>
+                                                                    <option value="{{ $produk_akhirItem->id }}" {{ $produk_akhirItem->id == $produk_akhir->produk_akhir_id ? 'selected' : '' }}>
                                                                         {{ ucwords(str_replace('_', ' ', $produk_akhirItem->kode)) }} | {{ ucwords(str_replace('_', ' ', $produk_akhirItem->nama)) }}
                                                                     </option>
                                                                 @endforeach
@@ -78,14 +78,14 @@
                                                             <label class="col-form-label" for="jumlah_{{ $index }}">
                                                                 {{ ucReplaceUnderscoreToSpace('jumlah') }}
                                                             </label>
-                                                            <input type="number" class="form-control jumlah" id="jumlah_{{ $index }}" name="jumlahs[]" placeholder="Masukkan {{ ucReplaceUnderscoreToSpace('jumlah') }}" value="{{ old('jumlahs')[$index] }}" required>
+                                                            <input type="number" class="form-control jumlah" id="jumlah_{{ $index }}" name="jumlahs[]" placeholder="Masukkan {{ ucReplaceUnderscoreToSpace('jumlah') }}" value="{{ old('jumlahs')[$index] ?? $produk_akhir->jumlah }}" required>
                                                         </div>
                                                         <div class="col-sm-2">
                                                             <label class="col-form-label" for="satuan_besar_nama_{{ $index }}">
                                                                 Satuan
                                                             </label>
                                                             <span class="satuan_besar_nama form-control" id="satuan_besar_nama_{{ $index }}">
-                                                                {{ $produk_akhirs->find($produk_akhir)->satuan_besar->nama }}
+                                                                {{ $produk_akhirs->find($produk_akhir->produk_akhir_id)->satuan_besar->nama }}
                                                             </span>
                                                         </div>
                                                         <div class="col-sm-2">
@@ -141,7 +141,7 @@
             }));
 
             // Counter for unique IDs
-            let produk_akhirCounter = {{ old('produk_akhirs') ? count(old('produk_akhirs')) : 0 }};
+            let produk_akhirCounter = {{ old('produk_akhirs', $permintaan_produk_akhir_detail ) ? count(old('produk_akhirs', $permintaan_produk_akhir_detail )) : 0 }};
 
             // Function to add a new Select2 produk_akhir dropdown with jumlah input
             function addProductDropdown() {

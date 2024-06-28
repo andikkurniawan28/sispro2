@@ -1,7 +1,7 @@
 @extends('template.kaiadmin.master')
 
 @section('title')
-    {{ ucReplaceUnderscoreToSpace('permintaan') }}
+    {{ ucReplaceUnderscoreToSpace('permintaan_produk_akhir') }}
 @endsection
 
 @section('akses-aktif')
@@ -19,7 +19,7 @@
             <i class="icon-arrow-right"></i>
         </li>
         <li class="nav-item">
-            <a href="{{ route('permintaan.index') }}">@yield('title')</a>
+            <a href="{{ route('permintaan_produk_akhir.index') }}">@yield('title')</a>
         </li>
     </ul>
 @endsection
@@ -36,19 +36,21 @@
                     <div class="card">
                         <div class="card-header">
                             <div class="card-title text-white text-right">
-                                <a href="{{ route('permintaan.create') }}" class="btn btn-sm btn-primary text-white">Tambah</a>
+                                <a href="{{ route('permintaan_produk_akhir.create') }}" class="btn btn-sm btn-primary text-white">Tambah</a>
                             </div>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-bordered mt-4" id="permintaan-table" width="100%">
+                                <table class="table table-bordered mt-4" id="permintaan_produk_akhir-table" width="100%">
                                     <thead>
                                         <tr>
-                                            <th>{{ ucReplaceUnderscoreToSpace('kode_permintaan') }}</th>
-                                            <th>{{ ucReplaceUnderscoreToSpace('kode_produk') }}</th>
+                                            <th>{{ ucReplaceUnderscoreToSpace('dibuat_pada') }}</th>
+                                            <th>{{ ucReplaceUnderscoreToSpace('berlaku_sampai') }}</th>
+                                            <th>{{ ucReplaceUnderscoreToSpace('kode') }}</th>
+                                            {{-- <th>{{ ucReplaceUnderscoreToSpace('kode_produk') }}</th>
                                             <th>{{ ucReplaceUnderscoreToSpace('produk') }}</th>
                                             <th>{{ ucReplaceUnderscoreToSpace('jumlah') }}</th>
-                                            <th>{{ ucReplaceUnderscoreToSpace('satuan_besar') }}</th>
+                                            <th>{{ ucReplaceUnderscoreToSpace('satuan_besar') }}</th> --}}
                                             <th>{{ ucReplaceUnderscoreToSpace('user') }}</th>
                                             <th>{{ ucReplaceUnderscoreToSpace('tindakan') }}</th>
                                         </tr>
@@ -65,19 +67,21 @@
     </div>
     <script type="text/javascript">
         $(function () {
-            $('#permintaan-table').DataTable({
+            $('#permintaan_produk_akhir-table').DataTable({
                 order: [
                     [0, 'desc']
                 ],
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('permintaan.index') }}",
+                ajax: "{{ route('permintaan_produk_akhir.index') }}",
                 columns: [
-                    { data: 'permintaan_kode', name: 'permintaan.kode' },
-                    { data: 'produk_akhir_kode', name: 'produk_akhir.kode' },
-                    { data: 'produk_akhir_nama', name: 'produk_akhir.nama' },
-                    { data: 'jumlah', name: 'jumlah' },
-                    { data: 'satuan_besar', name: 'satuan_besar' },
+                    { data: 'created_at', name: 'created_at' },
+                    { data: 'berlaku_sampai', name: 'berlaku_sampai' },
+                    { data: 'kode', name: 'kode' },
+                    // { data: 'produk_akhir_kode', name: 'produk_akhir.kode' },
+                    // { data: 'produk_akhir_nama', name: 'produk_akhir.nama' },
+                    // { data: 'jumlah', name: 'jumlah' },
+                    // { data: 'satuan_besar', name: 'satuan_besar' },
                     { data: 'user_nama', name: 'user_nama' },
                     { data: 'tindakan', name: 'tindakan', orderable: false, searchable: false },
                 ]
@@ -89,8 +93,8 @@
                 if (event.target.classList.contains('delete-btn')) {
                     event.preventDefault();
                     const button = event.target;
-                    const permintaan_id = button.getAttribute('data-id');
-                    const permintaan_nama = button.getAttribute('data-nama');
+                    const permintaan_produk_akhir_id = button.getAttribute('data-id');
+                    const permintaan_produk_akhir_nama = button.getAttribute('data-nama');
                     const csrfTokenElement = document.querySelector('meta[name="csrf-token"]');
                     if (!csrfTokenElement) {
                         console.error('CSRF token not found!');
@@ -110,7 +114,7 @@
                         if (result.isConfirmed) {
                             const form = document.createElement('form');
                             form.setAttribute('method', 'POST');
-                            form.setAttribute('action', `{{ url('permintaan') }}/${permintaan_id}`);
+                            form.setAttribute('action', `{{ url('permintaan_produk_akhir') }}/${permintaan_produk_akhir_id}`);
                             form.setAttribute('style', 'display: none;'); // Optional: Hide the form
 
                             const hiddenMethod = document.createElement('input');
