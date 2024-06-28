@@ -73,18 +73,38 @@
                     <div class="collapse" id="master">
                         <ul class="nav nav-collapse">
                             <li>
-                                <a href="#">
+                                <a href="{{ route('satuan.index') }}">
                                     <span class="sub-item">{{ ucReplaceUnderscoreToSpace('satuan') }}</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="#">
+                                <a href="{{ route('gudang.index') }}">
                                     <span class="sub-item">{{ ucReplaceUnderscoreToSpace('gudang') }}</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="#">
+                                <a href="{{ route('jenis_transaksi.index') }}">
                                     <span class="sub-item">{{ ucReplaceUnderscoreToSpace('jenis_transaksi') }}</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('jenis_bahan_baku.index') }}">
+                                    <span class="sub-item">{{ ucReplaceUnderscoreToSpace('jenis_bahan_baku') }}</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('jenis_produk_reproses.index') }}">
+                                    <span class="sub-item">{{ ucReplaceUnderscoreToSpace('jenis_produk_reproses') }}</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('jenis_produk_samping.index') }}">
+                                    <span class="sub-item">{{ ucReplaceUnderscoreToSpace('jenis_produk_samping') }}</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('jenis_produk_akhir.index') }}">
+                                    <span class="sub-item">{{ ucReplaceUnderscoreToSpace('jenis_produk_akhir') }}</span>
                                 </a>
                             </li>
                             <li>
@@ -104,7 +124,12 @@
                             </li>
                             <li>
                                 <a href="#">
-                                    <span class="sub-item">{{ ucReplaceUnderscoreToSpace('produk') }}</span>
+                                    <span class="sub-item">{{ ucReplaceUnderscoreToSpace('produk_akhir') }}</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <span class="sub-item">{{ ucReplaceUnderscoreToSpace('parameter_proses_produksi') }}</span>
                                 </a>
                             </li>
                             <li>
@@ -177,7 +202,7 @@
 
                 <li class="nav-item">
                     <a data-bs-toggle="collapse" href="#kualitas">
-                        <i class="fas fa-industry"></i>
+                        <i class="fas fa-flask"></i>
                         <p>{{ ucReplaceUnderscoreToSpace('kualitas') }}</p>
                         <span class="caret"></span>
                     </a>

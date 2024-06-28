@@ -1,13 +1,21 @@
 <?php
 
+use App\Models\JenisTransaksi;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SetupController;
 use App\Http\Controllers\DivisiController;
+use App\Http\Controllers\GudangController;
+use App\Http\Controllers\SatuanController;
 use App\Http\Controllers\JabatanController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ActivityLogController;
+use App\Http\Controllers\JenisBahanBakuController;
+use App\Http\Controllers\JenisTransaksiController;
+use App\Http\Controllers\JenisProdukAkhirController;
+use App\Http\Controllers\JenisProdukSampingController;
+use App\Http\Controllers\JenisProdukReprosesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,3 +38,10 @@ Route::resource('/divisi', DivisiController::class)->middleware(['auth']);
 Route::resource('/jabatan', JabatanController::class)->middleware(['auth']);
 Route::resource('/user', UserController::class)->middleware(['auth']);
 Route::get('/log_aktifitas', ActivityLogController::class)->name('log_aktifitas')->middleware(['auth']);
+Route::resource('/satuan', SatuanController::class)->middleware(['auth']);
+Route::resource('/gudang', GudangController::class)->middleware(['auth']);
+Route::resource('/jenis_transaksi', JenisTransaksiController::class)->middleware(['auth']);
+Route::resource('/jenis_bahan_baku', JenisBahanBakuController::class)->middleware(['auth']);
+Route::resource('/jenis_produk_reproses', JenisProdukReprosesController::class)->middleware(['auth']);
+Route::resource('/jenis_produk_samping', JenisProdukSampingController::class)->middleware(['auth']);
+Route::resource('/jenis_produk_akhir', JenisProdukAkhirController::class)->middleware(['auth']);

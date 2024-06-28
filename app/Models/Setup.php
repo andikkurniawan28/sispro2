@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Permission;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -14,7 +15,9 @@ class Setup extends Model
     public static function init()
     {
         $setup = self::get()->last();
-        // $setup->permission = Permission::where("role_id", Auth()->user()->role_id)->with('feature')->get();
+        if(Auth()->check()) {
+            $setup->permission = Permission::where("jabatan_id", Auth()->user()->jabatan_id)->with('fitur')->get();
+        }
         return $setup;
     }
 }
