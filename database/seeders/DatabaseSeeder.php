@@ -16,6 +16,7 @@ use App\Models\JenisTransaksi;
 use Illuminate\Database\Seeder;
 use App\Models\JenisProdukAkhir;
 use App\Models\JenisProdukSamping;
+use Illuminate\Support\Facades\DB;
 use App\Models\JenisProdukReproses;
 
 class DatabaseSeeder extends Seeder
@@ -190,6 +191,21 @@ class DatabaseSeeder extends Seeder
             ["nama" => ucReplaceUnderscoreToSpace('saus')],
         ];
         JenisProdukAkhir::insert($jenis_produk_akhir);
+
+        $gudangs = Gudang::all();
+        foreach ($gudangs as $gudang) {
+            $column_name = str_replace(' ', '_', $gudang->nama);
+            $queries = [
+                "ALTER TABLE bahan_bakus ADD COLUMN `{$column_name}` FLOAT NULL",
+                "ALTER TABLE produk_reproses ADD COLUMN `{$column_name}` FLOAT NULL",
+                "ALTER TABLE produk_sampings ADD COLUMN `{$column_name}` FLOAT NULL",
+                "ALTER TABLE produk_akhirs ADD COLUMN `{$column_name}` FLOAT NULL",
+            ];
+
+            foreach ($queries as $query) {
+                DB::statement($query);
+            }
+        }
 
     }
 }

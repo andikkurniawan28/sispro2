@@ -11,6 +11,7 @@ use App\Http\Controllers\SatuanController;
 use App\Http\Controllers\JabatanController;
 use App\Http\Controllers\BahanBakuController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PermintaanController;
 use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\ProdukAkhirController;
 use App\Http\Controllers\ProdukSampingController;
@@ -53,3 +54,4 @@ Route::resource('/bahan_baku', BahanBakuController::class)->middleware(['auth'])
 Route::resource('/produk_reproses', ProdukReprosesController::class)->middleware(['auth']);
 Route::resource('/produk_samping', ProdukSampingController::class)->middleware(['auth']);
 Route::resource('/produk_akhir', ProdukAkhirController::class)->middleware(['auth']);
+Route::resource('/permintaan', PermintaanController::class)->middleware(['auth']);

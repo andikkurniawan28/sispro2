@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Gudang;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\DB;
 
 class GudangController extends Controller
 {
@@ -65,6 +66,7 @@ class GudangController extends Controller
         $validated = $request->validate([
             'nama' => 'required|unique:gudangs,nama,' . $gudang->id,
         ]);
+        self::updateColumn($gudang, $request);
         $gudang->update($validated);
         return redirect()->route('gudang.index')->with("success", "Gudang berhasil dirubah.");
     }
@@ -98,5 +100,20 @@ class GudangController extends Controller
                 'data-searchable' => 'true'
             ])
             ->make(true);
+    }
+
+    public static function updateColumn($gudang, $request)
+    {
+        $old_column_name = str_replace(' ', '_', $gudang->nama);
+        $new_column_name = str_replace(' ', '_', $request->nama);
+        $queries = [
+            "ALTER TABLE bahan_bakus CHANGE COLUMN `{$old_column_name}` `{$new_column_name}` FLOAT NULL",
+            "ALTER TABLE produk_reproses CHANGE COLUMN `{$old_column_name}` `{$new_column_name}` FLOAT NULL",
+            "ALTER TABLE produk_sampings CHANGE COLUMN `{$old_column_name}` `{$new_column_name}` FLOAT NULL",
+            "ALTER TABLE produk_akhirs CHANGE COLUMN `{$old_column_name}` `{$new_column_name}` FLOAT NULL",
+        ];
+        foreach ($queries as $query) {
+            DB::statement($query);
+        }
     }
 }

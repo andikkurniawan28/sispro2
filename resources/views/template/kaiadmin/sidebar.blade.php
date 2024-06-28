@@ -140,7 +140,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="#">
+                                <a href="{{ route('permintaan.index') }}">
                                     <span class="sub-item">{{ ucReplaceUnderscoreToSpace('permintaan') }}</span>
                                 </a>
                             </li>
