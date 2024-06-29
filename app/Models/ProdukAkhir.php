@@ -27,6 +27,16 @@ class ProdukAkhir extends Model
         return $this->belongsTo(Satuan::class, 'satuan_kecil_id');
     }
 
+    public function kebutuhan_bahan_baku_untuk_produk_akhir()
+    {
+        return $this->hasMany(KebutuhanBahanBakuUntukProdukAkhir::class);
+    }
+
+    public function kebutuhan_produk_reproses_untuk_produk_akhir()
+    {
+        return $this->hasMany(KebutuhanProdukReprosesUntukProdukAkhir::class);
+    }
+
     protected static function booted()
     {
         static::created(function ($produk_akhir) {

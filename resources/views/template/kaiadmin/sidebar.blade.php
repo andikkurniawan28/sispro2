@@ -150,6 +150,16 @@
                                 </a>
                             </li>
                             <li>
+                                <a href="{{ route('kbbupa.index') }}">
+                                    <span class="sub-item">{{ ucReplaceUnderscoreToSpace('kebutuhan_bahan_baku_untuk_produk_akhir') }}</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('kprupa.index') }}">
+                                    <span class="sub-item">{{ ucReplaceUnderscoreToSpace('kebutuhan_produk_reproses_untuk_produk_akhir') }}</span>
+                                </a>
+                            </li>
+                            <li>
                                 <a href="#">
                                     <span class="sub-item">{{ ucReplaceUnderscoreToSpace('transaksi') }}</span>
                                 </a>

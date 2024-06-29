@@ -11,8 +11,6 @@ use App\Http\Controllers\SatuanController;
 use App\Http\Controllers\JabatanController;
 use App\Http\Controllers\BahanBakuController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\PermintaanProdukAkhirController;
-use App\Http\Controllers\PermintaanProdukReprosesController;
 use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\ProdukAkhirController;
 use App\Http\Controllers\ProdukSampingController;
@@ -22,6 +20,10 @@ use App\Http\Controllers\ProdukReprosesController;
 use App\Http\Controllers\JenisProdukAkhirController;
 use App\Http\Controllers\JenisProdukSampingController;
 use App\Http\Controllers\JenisProdukReprosesController;
+use App\Http\Controllers\PermintaanProdukAkhirController;
+use App\Http\Controllers\PermintaanProdukReprosesController;
+use App\Http\Controllers\KebutuhanBahanBakuUntukProdukAkhirController;
+use App\Http\Controllers\KebutuhanProdukReprosesUntukProdukAkhirController;
 
 /*
 |--------------------------------------------------------------------------
@@ -57,3 +59,5 @@ Route::resource('/produk_samping', ProdukSampingController::class)->middleware([
 Route::resource('/produk_akhir', ProdukAkhirController::class)->middleware(['auth']);
 Route::resource('/permintaan_produk_akhir', PermintaanProdukAkhirController::class)->middleware(['auth']);
 Route::resource('/permintaan_produk_reproses', PermintaanProdukReprosesController::class)->middleware(['auth']);
+Route::resource('/kbbupa', KebutuhanBahanBakuUntukProdukAkhirController::class)->middleware(['auth']);
+Route::resource('/kprupa', KebutuhanProdukReprosesUntukProdukAkhirController::class)->middleware(['auth']);

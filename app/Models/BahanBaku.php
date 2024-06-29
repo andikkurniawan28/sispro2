@@ -27,6 +27,11 @@ class BahanBaku extends Model
         return $this->belongsTo(Satuan::class, 'satuan_kecil_id');
     }
 
+    public function kebutuhan_bahan_baku_untuk_produk_akhir()
+    {
+        return $this->hasMany(KebutuhanBahanBakuUntukProdukAkhir::class);
+    }
+
     protected static function booted()
     {
         static::created(function ($bahan_baku) {

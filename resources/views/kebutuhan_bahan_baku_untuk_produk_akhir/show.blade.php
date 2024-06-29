@@ -1,7 +1,7 @@
 @extends('template.kaiadmin.master')
 
 @section('title')
-    Detail {{ ucReplaceUnderscoreToSpace('permintaan_produk_akhir') }}
+    Detail {{ ucReplaceUnderscoreToSpace('kebutuhan_bahan_baku_untuk_produk_akhir') }}
 @endsection
 
 @section('navigation')
@@ -15,13 +15,13 @@
             <i class="icon-arrow-right"></i>
         </li>
         <li class="nav-item">
-            <a href="{{ route('permintaan_produk_akhir.index') }}">{{ ucReplaceUnderscoreToSpace('permintaan_produk_akhir') }}</a>
+            <a href="{{ route('kbbupa.index') }}">{{ ucReplaceUnderscoreToSpace('kebutuhan_bahan_baku_untuk_produk_akhir') }}</a>
         </li>
         <li class="separator">
             <i class="icon-arrow-right"></i>
         </li>
         <li class="nav-item">
-            <a href="{{ route('permintaan_produk_akhir.index') }}">@yield('title')</a>
+            <a href="{{ route('kbbupa.index') }}">@yield('title')</a>
         </li>
     </ul>
 @endsection
@@ -38,58 +38,51 @@
                     <div class="card" id="invoice-section">
                         <div class="card-body">
                             <div class="invoice-header">
-                                <h4 class="invoice-title">Faktur {{ ucReplaceUnderscoreToSpace('permintaan_produk_akhir') }}</h4>
+                                <h4 class="invoice-title">{{ ucReplaceUnderscoreToSpace('kebutuhan_bahan_baku_untuk_produk_akhir') }}</h4>
                                 <div class="invoice-info">
                                     <div>
-                                        <strong>Kode:</strong> {{ $permintaan_produk_akhir->kode }}
+                                        <strong>Kode Produk:</strong> {{ $produk_akhir->kode }}
                                     </div>
                                     <div>
-                                        <strong>Dibuat pada:</strong>
-                                        {{ date('d-m-Y H:i:s', strtotime($permintaan_produk_akhir->created_at)) }}
+                                        <strong>Nama Produk:</strong> {{ $produk_akhir->nama }}
                                     </div>
                                     <div>
-                                        <strong>Berlaku sampai:</strong>
-                                        {{ date('d-m-Y H:i:s', strtotime($permintaan_produk_akhir->berlaku_sampai)) }}
-                                    </div>
-                                    <div>
-                                        <strong>Diajukan Oleh:</strong> {{ $permintaan_produk_akhir->user->nama }}
-                                        ({{ $permintaan_produk_akhir->user->jabatan->nama }})
+                                        <strong>Dibuat pada:</strong> {{ date('d-m-Y H:i:s', strtotime($produk_akhir->created_at)) }}
                                     </div>
                                 </div>
                             </div>
                             <hr>
                             <div class="invoice-body">
-                                <h5>Detail Produk Akhir:</h5>
+                                <h5>Detail Kebutuhan Bahan Baku:</h5>
                                 <br>
                                 <table class="table table-bordered">
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>Kode</th>
-                                            <th>Nama</th>
+                                            <th>Kode Bahan Baku</th>
+                                            <th>Nama Bahan Baku</th>
+                                            <th>Jumlah</th>
+                                            <th>Satuan</th>
                                             <th>Jumlah</th>
                                             <th>Satuan</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($permintaan_produk_akhir_detail as $index => $produk_akhir)
+                                        @foreach ($kebutuhan_bahan_baku_untuk_produk_akhir as $index => $kebutuhan)
                                             <tr>
                                                 <td>{{ $index + 1 }}</td>
-                                                <td>{{ ucReplaceUnderscoreToSpace($produk_akhir->produk_akhir->kode) }}</td>
-                                                <td>{{ ucReplaceUnderscoreToSpace($produk_akhir->produk_akhir->nama) }}</td>
-                                                <td>{{ $produk_akhir->jumlah }}</td>
-                                                <td>{{ $produk_akhir->produk_akhir->satuan_besar->nama }}</td>
+                                                <td>{{ ucReplaceUnderscoreToSpace($kebutuhan->bahan_baku->kode) }}</td>
+                                                <td>{{ ucReplaceUnderscoreToSpace($kebutuhan->bahan_baku->nama) }}</td>
+                                                <td>{{ $kebutuhan->jumlah_dalam_satuan_kecil }}</td>
+                                                <td>{{ $kebutuhan->bahan_baku->satuan_kecil->nama }}</td>
+                                                <td>{{ $kebutuhan->jumlah_dalam_satuan_besar }}</td>
+                                                <td>{{ $kebutuhan->bahan_baku->satuan_besar->nama }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
                             </div>
                             <div class="invoice-footer">
-                                <div style="margin-top: 20px;">
-                                    <p style="text-align: right;">Mengetahui,</p>
-                                    <br><br><br>
-                                    <p style="text-align: right;">(_____________________)</p>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -138,7 +131,7 @@
                 .from(element)
                 .set({
                     margin: [0.5, 0.5, 0.5, 0.5], // top, left, bottom, right margins
-                    filename: "Faktur {{ ucReplaceUnderscoreToSpace('permintaan_produk_akhir') }}.pdf",
+                    filename: "Faktur {{ ucReplaceUnderscoreToSpace('kebutuhan_bahan_baku_untuk_produk_akhir') }}.pdf",
                     image: { type: 'png', quality: 1 },
                     html2canvas: { scale: 4, logging: true },
                     jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } // Changed to portrait
