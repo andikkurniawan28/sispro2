@@ -78,8 +78,8 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="{{ route('jenis_transaksi.index') }}">
-                                    <span class="sub-item">{{ ucReplaceUnderscoreToSpace('jenis_transaksi') }}</span>
+                                <a href="{{ route('jenis_jurnal_gudang.index') }}">
+                                    <span class="sub-item">{{ ucReplaceUnderscoreToSpace('jenis_jurnal_gudang') }}</span>
                                 </a>
                             </li>
                             <li>
@@ -155,13 +155,18 @@
                                 </a>
                             </li>
                             <li>
+                                <a href="{{ route('kbbupr.index') }}">
+                                    <span class="sub-item">{{ ucReplaceUnderscoreToSpace('kebutuhan_bahan_baku_untuk_produk_reproses') }}</span>
+                                </a>
+                            </li>
+                            <li>
                                 <a href="{{ route('kprupa.index') }}">
                                     <span class="sub-item">{{ ucReplaceUnderscoreToSpace('kebutuhan_produk_reproses_untuk_produk_akhir') }}</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="#">
-                                    <span class="sub-item">{{ ucReplaceUnderscoreToSpace('transaksi') }}</span>
+                                <a href="{{ route('jurnal_gudang.index') }}">
+                                    <span class="sub-item">{{ ucReplaceUnderscoreToSpace('jurnal_gudang') }}</span>
                                 </a>
                             </li>
                         </ul>
@@ -193,7 +198,7 @@
                             </li>
                             <li>
                                 <a href="#">
-                                    <span class="sub-item">{{ ucReplaceUnderscoreToSpace('proses_produksi') }}</span>
+                                    <span class="sub-item">{{ ucReplaceUnderscoreToSpace('jurnal_produksi') }}</span>
                                 </a>
                             </li>
                         </ul>

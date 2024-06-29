@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class JenisTransaksi extends Model
+class JenisJurnalGudang extends Model
 {
     use HasFactory;
 
@@ -15,24 +15,24 @@ class JenisTransaksi extends Model
 
     protected static function booted()
     {
-        static::created(function ($jenis_transaksi) {
+        static::created(function ($jenis_jurnal_gudang) {
             ActivityLog::create([
                 'user_id' => Auth::id(),
-                'description' => "Jenis Transaksi '{$jenis_transaksi->nama}' dibuat.",
+                'description' => "Jenis Jurnal Gudang '{$jenis_jurnal_gudang->nama}' dibuat.",
             ]);
         });
 
-        static::updated(function ($jenis_transaksi) {
+        static::updated(function ($jenis_jurnal_gudang) {
             ActivityLog::create([
                 'user_id' => Auth::id(),
-                'description' => "Jenis Transaksi '{$jenis_transaksi->nama}' dirubah.",
+                'description' => "Jenis Jurnal Gudang '{$jenis_jurnal_gudang->nama}' dirubah.",
             ]);
         });
 
-        static::deleted(function ($jenis_transaksi) {
+        static::deleted(function ($jenis_jurnal_gudang) {
             ActivityLog::create([
                 'user_id' => Auth::id(),
-                'description' => "Jenis Transaksi '{$jenis_transaksi->nama}' dihapus.",
+                'description' => "Jenis Jurnal Gudang '{$jenis_jurnal_gudang->nama}' dihapus.",
             ]);
         });
     }

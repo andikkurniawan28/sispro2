@@ -5,17 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class KebutuhanBahanBakuUntukProdukAkhir extends Model
+class KebutuhanBahanBakuUntukProdukReproses extends Model
 {
     use HasFactory;
 
-    protected $table = "kbbupas";
+    protected $table = "kbbuprs";
 
     protected $guarded = [];
 
-    public function produk_akhir()
+    public function produk_reproses()
     {
-        return $this->belongsTo(ProdukAkhir::class);
+        return $this->belongsTo(ProdukReproses::class);
     }
 
     public function bahan_baku()

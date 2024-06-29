@@ -13,16 +13,18 @@ use App\Http\Controllers\BahanBakuController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\ProdukAkhirController;
+use App\Http\Controllers\JurnalGudangController;
 use App\Http\Controllers\ProdukSampingController;
 use App\Http\Controllers\JenisBahanBakuController;
-use App\Http\Controllers\JenisTransaksiController;
 use App\Http\Controllers\ProdukReprosesController;
 use App\Http\Controllers\JenisProdukAkhirController;
+use App\Http\Controllers\JenisJurnalGudangController;
 use App\Http\Controllers\JenisProdukSampingController;
 use App\Http\Controllers\JenisProdukReprosesController;
 use App\Http\Controllers\PermintaanProdukAkhirController;
 use App\Http\Controllers\PermintaanProdukReprosesController;
 use App\Http\Controllers\KebutuhanBahanBakuUntukProdukAkhirController;
+use App\Http\Controllers\KebutuhanBahanBakuUntukProdukReprosesController;
 use App\Http\Controllers\KebutuhanProdukReprosesUntukProdukAkhirController;
 
 /*
@@ -48,7 +50,7 @@ Route::resource('/user', UserController::class)->middleware(['auth']);
 Route::get('/log_aktifitas', ActivityLogController::class)->name('log_aktifitas')->middleware(['auth']);
 Route::resource('/satuan', SatuanController::class)->middleware(['auth']);
 Route::resource('/gudang', GudangController::class)->middleware(['auth']);
-Route::resource('/jenis_transaksi', JenisTransaksiController::class)->middleware(['auth']);
+Route::resource('/jenis_jurnal_gudang', JenisJurnalGudangController::class)->middleware(['auth']);
 Route::resource('/jenis_bahan_baku', JenisBahanBakuController::class)->middleware(['auth']);
 Route::resource('/jenis_produk_reproses', JenisProdukReprosesController::class)->middleware(['auth']);
 Route::resource('/jenis_produk_samping', JenisProdukSampingController::class)->middleware(['auth']);
@@ -61,3 +63,5 @@ Route::resource('/permintaan_produk_akhir', PermintaanProdukAkhirController::cla
 Route::resource('/permintaan_produk_reproses', PermintaanProdukReprosesController::class)->middleware(['auth']);
 Route::resource('/kbbupa', KebutuhanBahanBakuUntukProdukAkhirController::class)->middleware(['auth']);
 Route::resource('/kprupa', KebutuhanProdukReprosesUntukProdukAkhirController::class)->middleware(['auth']);
+Route::resource('/kbbupr', KebutuhanBahanBakuUntukProdukReprosesController::class)->middleware(['auth']);
+Route::resource('/jurnal_gudang', JurnalGudangController::class)->middleware(['auth']);

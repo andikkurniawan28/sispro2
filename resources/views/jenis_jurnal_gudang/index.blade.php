@@ -1,7 +1,7 @@
 @extends('template.kaiadmin.master')
 
 @section('title')
-    {{ ucReplaceUnderscoreToSpace('jenis_transaksi') }}
+    {{ ucReplaceUnderscoreToSpace('jenis_jurnal_gudang') }}
 @endsection
 
 @section('akses-aktif')
@@ -19,7 +19,7 @@
             <i class="icon-arrow-right"></i>
         </li>
         <li class="nav-item">
-            <a href="{{ route('jenis_transaksi.index') }}">@yield('title')</a>
+            <a href="{{ route('jenis_jurnal_gudang.index') }}">@yield('title')</a>
         </li>
     </ul>
 @endsection
@@ -36,12 +36,12 @@
                     <div class="card">
                         <div class="card-header">
                             <div class="card-title text-white text-right">
-                                <a href="{{ route('jenis_transaksi.create') }}" class="btn btn-sm btn-primary text-white">Tambah</a>
+                                <a href="{{ route('jenis_jurnal_gudang.create') }}" class="btn btn-sm btn-primary text-white">Tambah</a>
                             </div>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-bordered mt-4" id="jenis_transaksi-table" width="100%">
+                                <table class="table table-bordered mt-4" id="jenis_jurnal_gudang-table" width="100%">
                                     <thead>
                                         <tr>
                                             <th>{{ ucReplaceUnderscoreToSpace('nama') }}</th>
@@ -61,13 +61,13 @@
     </div>
     <script type="text/javascript">
         $(function () {
-            $('#jenis_transaksi-table').DataTable({
+            $('#jenis_jurnal_gudang-table').DataTable({
                 order: [
                     [0, 'desc']
                 ],
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('jenis_transaksi.index') }}",
+                ajax: "{{ route('jenis_jurnal_gudang.index') }}",
                 columns: [
                     { data: 'nama', name: 'nama' },
                     { data: 'saldo', name: 'saldo' },
@@ -81,8 +81,8 @@
                 if (event.target.classList.contains('delete-btn')) {
                     event.preventDefault();
                     const button = event.target;
-                    const jenis_transaksi_id = button.getAttribute('data-id');
-                    const jenis_transaksi_nama = button.getAttribute('data-nama');
+                    const jenis_jurnal_gudang_id = button.getAttribute('data-id');
+                    const jenis_jurnal_gudang_nama = button.getAttribute('data-nama');
                     const csrfTokenElement = document.querySelector('meta[name="csrf-token"]');
                     if (!csrfTokenElement) {
                         console.error('CSRF token not found!');
@@ -102,7 +102,7 @@
                         if (result.isConfirmed) {
                             const form = document.createElement('form');
                             form.setAttribute('method', 'POST');
-                            form.setAttribute('action', `{{ url('jenis_transaksi') }}/${jenis_transaksi_id}`);
+                            form.setAttribute('action', `{{ url('jenis_jurnal_gudang') }}/${jenis_jurnal_gudang_id}`);
                             form.setAttribute('style', 'display: none;'); // Optional: Hide the form
 
                             const hiddenMethod = document.createElement('input');

@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('jenis_transaksis', function (Blueprint $table) {
+        Schema::create('kbbuprs', function (Blueprint $table) {
             $table->id();
-            $table->string('nama')->unique();
-            $table->string('saldo');
+            $table->foreignId('produk_reproses_id')->constrained();
+            $table->foreignId('bahan_baku_id')->constrained();
+            $table->float('jumlah_dalam_satuan_besar');
+            $table->float('jumlah_dalam_satuan_kecil');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });
@@ -25,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('jenis_transaksis');
+        Schema::dropIfExists('kbbuprs');
     }
 };

@@ -24,15 +24,9 @@ class PermintaanProdukAkhir extends Model
 
     public static function kode_faktur()
     {
-        // Mendapatkan tanggal saat ini
         $tanggal = now()->format('d/m/y'); // Format tanggal dd/mm/yy
-
-        // Mendapatkan urutan permintaan pada tanggal tersebut
         $urutan = PermintaanProdukAkhir::whereDate('created_at', today())->count() + 1;
-
-        // Format kode faktur sesuai dengan yang diminta
         $kode = "PPA-{$tanggal}-" . str_pad($urutan, 6, '0', STR_PAD_LEFT);
-
         return $kode;
     }
 

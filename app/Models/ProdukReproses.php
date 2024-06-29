@@ -27,6 +27,11 @@ class ProdukReproses extends Model
         return $this->belongsTo(Satuan::class, 'satuan_kecil_id');
     }
 
+    public function kebutuhan_bahan_baku_untuk_produk_reproses()
+    {
+        return $this->hasMany(KebutuhanBahanBakuUntukProdukReproses::class);
+    }
+
     protected static function booted()
     {
         static::created(function ($produk_reproses) {
