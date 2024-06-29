@@ -9,6 +9,8 @@ use App\Models\JurnalGudang;
 use Illuminate\Http\Request;
 use App\Models\ProdukSamping;
 use App\Models\ProdukReproses;
+use App\Models\Gudang;
+use App\Models\JenisJurnalGudang;
 use Yajra\DataTables\DataTables;
 use App\Models\JurnalGudangDetail;
 use Illuminate\Support\Facades\Auth;
@@ -31,12 +33,17 @@ class JurnalGudangController extends Controller
      */
     public function create()
     {
-        $produk_akhirs = ProdukAkhir::all();
-        $produk_reproses = ProdukReproses::all();
-        $produk_sampings = ProdukSamping::all();
-        $bahan_bakus = BahanBaku::all();
+        $gudangs = Gudang::all();
+        $jenis_jurnal_gudangs = JenisJurnalGudang::all();
+        $produk_akhirs = ProdukAkhir::with('satuan_besar', 'satuan_kecil')->get();
+        $produk_reproses = ProdukReproses::with('satuan_besar', 'satuan_kecil')->get();
+        $produk_sampings = ProdukSamping::with('satuan_besar', 'satuan_kecil')->get();
+        $bahan_bakus = BahanBaku::with('satuan_besar', 'satuan_kecil')->get();
         $kode = JurnalGudang::kode_faktur();
-        return view('jurnal_gudang.create', compact('produk_akhirs', 'produk_reproses', 'produk_sampings', 'bahan_bakus', 'kode'));
+        return view('jurnal_gudang.create',
+            compact('produk_akhirs', 'produk_reproses', 'produk_sampings', 'bahan_bakus', 'kode',
+                    'gudangs', 'jenis_jurnal_gudangs',
+        ));
     }
 
     /**
@@ -44,42 +51,7 @@ class JurnalGudangController extends Controller
      */
     public function store(Request $request)
     {
-        // Validasi input
-        $request->validate([
-            'kode' => 'required|string|max:255',
-            'berlaku_sampai' => 'required|date',
-            'produk_akhirs' => 'required|array',
-            'produk_akhirs.*' => 'required|distinct|exists:produk_akhirs,id', // distinct untuk memastikan produk_akhir tidak duplikat
-            'jumlahs' => 'required|array',
-            'jumlahs.*' => 'required|integer|min:1',
-        ]);
-
-        // Buat data jurnal_gudang
-        $jurnal_gudang = JurnalGudang::create([
-            'user_id' => Auth::id(),
-            'kode' => $request->kode,
-            'berlaku_sampai' => $request->berlaku_sampai,
-        ]);
-
-        // Validasi produk akhir harus unik
-        $existingProdukAkhir = [];
-        foreach ($request->produk_akhirs as $index => $produk_akhir_id) {
-            // Validasi jika produk akhir sudah pernah dimasukkan sebelumnya
-            if (in_array($produk_akhir_id, $existingProdukAkhir)) {
-                $jurnal_gudang->delete(); // Hapus jurnal_gudang yang sudah dibuat jika ada duplikasi
-                return redirect()->back()->with('error', 'Produk Akhir harus unik dalam satu permintaan.');
-            }
-            $existingProdukAkhir[] = $produk_akhir_id;
-
-            JurnalGudangDetail::create([
-                'permintaan_id' => $jurnal_gudang->id,
-                'produk_akhir_id' => $produk_akhir_id,
-                'jumlah' => $request->jumlahs[$index],
-            ]);
-        }
-
-        // Redirect dengan pesan sukses
-        return redirect()->route('jurnal_gudang.index')->with('success', 'Permintaan Produk Akhir berhasil dibuat.');
+        return $request;
     }
 
     /**

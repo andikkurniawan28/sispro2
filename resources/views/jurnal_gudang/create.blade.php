@@ -46,57 +46,43 @@
                                             <input type="text" class="form-control" id="kode" name="kode"
                                                 value="{{ $kode }}" placeholder="Masukkan kode ..." readonly>
                                         </div>
+                                        <div class="form-group">
+                                            <label for="gudang_id">{{ ucReplaceUnderscoreToSpace('gudang') }}</label>
+                                            <select class="form-control select2" id="gudang_id" name="gudang_id" required>
+                                                <option disabled selected>Pilih {{ ucReplaceUnderscoreToSpace('gudang') }}</option>
+                                                @foreach ($gudangs as $gudang)
+                                                    <option value="{{ $gudang->id }}">{{ $gudang->nama }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="jenis_jurnal_gudang_id">{{ ucReplaceUnderscoreToSpace('jenis_jurnal_gudang') }}</label>
+                                            <select class="form-control select2" id="jenis_jurnal_gudang_id" name="jenis_jurnal_gudang_id" required>
+                                                <option disabled selected>Pilih {{ ucReplaceUnderscoreToSpace('jenis_jurnal_gudang') }}</option>
+                                                @foreach ($jenis_jurnal_gudangs as $jenis_jurnal_gudang)
+                                                    <option value="{{ $jenis_jurnal_gudang->id }}">{{ $jenis_jurnal_gudang->nama }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <br>
                                         <button type="submit" class="btn btn-primary">Simpan</button>
                                     </div>
                                     <div class="col-md-8">
-                                        <div id="produk_akhirs_container">
-                                            @if (old('produk_akhirs'))
-                                                @foreach (old('produk_akhirs') as $index => $produk_akhir)
-                                                    <div class="row mb-3" id="produk_akhir_row_{{ $index }}">
-                                                        <div class="col-sm-4">
-                                                            <label class="col-form-label" for="produk_akhir_{{ $index }}">
-                                                                {{ ucReplaceUnderscoreToSpace('produk_akhir') }}
-                                                            </label>
-                                                            <select class="produk_akhir form-control" id="produk_akhir_{{ $index }}" name="produk_akhirs[]" required>
-                                                                <option disabled>Pilih {{ ucReplaceUnderscoreToSpace('produk_akhir') }}</option>
-                                                                @foreach ($produk_akhirs as $produk_akhirItem)
-                                                                    <option value="{{ $produk_akhirItem->id }}" {{ $produk_akhirItem->id == $produk_akhir ? 'selected' : '' }}>
-                                                                        {{ ucwords(str_replace('_', ' ', $produk_akhirItem->kode)) }} | {{ ucwords(str_replace('_', ' ', $produk_akhirItem->nama)) }}
-                                                                    </option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
-                                                        <div class="col-sm-3">
-                                                            <label class="col-form-label" for="jumlah_{{ $index }}">
-                                                                {{ ucReplaceUnderscoreToSpace('jumlah') }}
-                                                            </label>
-                                                            <input type="number" class="form-control jumlah" id="jumlah_{{ $index }}" name="jumlahs[]" placeholder="Masukkan {{ ucReplaceUnderscoreToSpace('jumlah') }}" value="{{ old('jumlahs')[$index] }}" required>
-                                                        </div>
-                                                        <div class="col-sm-2">
-                                                            <label class="col-form-label" for="satuan_besar_nama_{{ $index }}">
-                                                                Satuan
-                                                            </label>
-                                                            <span class="satuan_besar_nama form-control" id="satuan_besar_nama_{{ $index }}">
-                                                                {{ $produk_akhirs->find($produk_akhir)->satuan_besar->nama }}
-                                                            </span>
-                                                        </div>
-                                                        <div class="col-sm-2">
-                                                            <label class="col-form-label" for="remove_{{ $index }}">
-                                                                {{ ucReplaceUnderscoreToSpace('hapus') }}
-                                                            </label>
-                                                            <br>
-                                                            <button type="button" class="btn btn-danger btn-sm btn-block remove-produk_akhir">{{ ucReplaceUnderscoreToSpace('hapus') }}</button>
-                                                        </div>
-                                                    </div>
-                                                @endforeach
-                                            @endif
+                                        <div id="dynamic_form_container">
+                                            <!-- Container for dynamically added fields -->
                                         </div>
 
                                         <div class="row mt-3">
-                                            <div class="col-sm-10 offset-sm-2">
-                                                <button type="button" class="btn btn-success" id="add_produk_akhir">{{ ucReplaceUnderscoreToSpace('tambah_produk') }}</button>
+                                            <div class="col-sm-12">
+                                                <div class="btn-group" role="group" aria-label="Tambah Produk dan Bahan">
+                                                    <button type="button" class="btn btn-success btn-sm" id="add_produk_akhir">{{ ucReplaceUnderscoreToSpace('tambah_produk_akhir') }}</button>
+                                                    <button type="button" class="btn btn-success btn-sm" id="add_produk_reproses">{{ ucReplaceUnderscoreToSpace('tambah_produk_reproses') }}</button>
+                                                    <button type="button" class="btn btn-success btn-sm" id="add_produk_samping">{{ ucReplaceUnderscoreToSpace('tambah_produk_samping') }}</button>
+                                                    <button type="button" class="btn btn-success btn-sm" id="add_bahan_baku">{{ ucReplaceUnderscoreToSpace('tambah_bahan_baku') }}</button>
+                                                </div>
                                             </div>
                                         </div>
+
                                     </div>
                                 </div>
                             </form>
@@ -108,101 +94,127 @@
     </div>
     <script>
         $(document).ready(function() {
+            const produkAkhirs = @json($produk_akhirs);
+            const produkReproses = @json($produk_reproses);
+            const produkSampings = @json($produk_sampings);
+            const bahanBakus = @json($bahan_bakus);
+
+            function ucReplaceUnderscoreToSpace(text) {
+                // Replace underscores with spaces
+                let replacedText = text.replace(/_/g, ' ');
+
+                // Capitalize the first letter of each word
+                replacedText = replacedText.replace(/\b\w/g, function(char) {
+                    return char.toUpperCase();
+                });
+
+                return replacedText;
+            }
+
             function initializeSelect2() {
-                $('.produk_akhir').select2({
+                $('.select2').select2({
                     theme: 'bootstrap',
                     width: '100%',
                 });
             }
 
-            function initialize{{ ucReplaceUnderscoreToSpace('hapus') }}Button() {
-                $('.remove-produk_akhir').click(function() {
+            function initializeRemoveButton() {
+                $('.remove-item').click(function() {
                     $(this).closest('.row').remove();
                 });
             }
 
-            // Initialize Select2 for existing rows
-            initializeSelect2();
+            function createSelectOptions(data, placeholder) {
+                let options = `<option disabled selected>${placeholder}</option>`;
+                data.forEach(item => {
+                    options += `<option value="${item.id}" data-satuan-besar="${item.satuan_besar.nama}" data-satuan-kecil="${item.satuan_kecil.nama}" data-sejumlah="${item.sejumlah}">${item.kode} | ${item.nama}</option>`;
+                });
+                return options;
+            }
 
-            // Initialize {{ ucReplaceUnderscoreToSpace('hapus') }} button for existing rows
-            initialize{{ ucReplaceUnderscoreToSpace('hapus') }}Button();
+            function addField(type, data) {
+                const placeholder = `Pilih ${ucReplaceUnderscoreToSpace(type)}`;
+                const options = createSelectOptions(data, placeholder);
+                const rowId = `${type}_${Math.random().toString(36).substring(7)}`;
 
-            // Products data with satuan_besar namas
-            const produk_akhirsData = @json($produk_akhirs->mapWithKeys(function($item) {
-                return [$item->id => $item->satuan_besar->nama];
-            }));
-
-            // Counter for unique IDs
-            let produk_akhirCounter = {{ old('produk_akhirs') ? count(old('produk_akhirs')) : 0 }};
-
-            // Function to add a new Select2 produk_akhir dropdown with jumlah input
-            function addProductDropdown() {
-                produk_akhirCounter++;
-                const newDropdownId = 'produk_akhir_' + produk_akhirCounter;
-
-                // Create new row with Select2 dropdown and jumlah input
                 const newRow = `
-                    <div class="row mb-3" id="produk_akhir_row_${produk_akhirCounter}">
+                    <div class="row mb-3" id="${rowId}">
                         <div class="col-sm-4">
-                            <label class="col-form-label" for="${newDropdownId}">
-                                {{ ucReplaceUnderscoreToSpace('produk_akhir') }}
+                            <label class="col-form-label" for="${rowId}_select">
+                                ${ucReplaceUnderscoreToSpace(type)}
                             </label>
-                            <select class="produk_akhir form-control" id="${newDropdownId}" name="produk_akhirs[]" required>
-                                <option disabled selected>Pilih {{ ucReplaceUnderscoreToSpace('produk_akhir') }}</option>
-                                @foreach ($produk_akhirs as $produk_akhir)
-                                    <option value="{{ $produk_akhir->id }}">
-                                        {{ ucwords(str_replace('_', ' ', $produk_akhir->kode)) }} |
-                                        {{ ucwords(str_replace('_', ' ', $produk_akhir->nama)) }}
-                                    </option>
-                                @endforeach
+                            <select class="form-control select2" id="${rowId}_select" name="${type}_id[]" required>
+                                ${options}
                             </select>
                         </div>
                         <div class="col-sm-3">
-                            <label class="col-form-label" for="jumlah_${newDropdownId}">
-                                {{ ucReplaceUnderscoreToSpace('jumlah') }}
-                            </label>
-                            <input type="number" class="form-control jumlah" id="jumlah_${newDropdownId}" name="jumlahs[]" placeholder="Masukkan {{ ucReplaceUnderscoreToSpace('jumlah') }}" required>
+                            <label class="col-form-label satuan-besar-label" for="jumlah_besar_${rowId}"></label>
+                            <input type="number" class="form-control jumlah-besar" id="jumlah_besar_${rowId}" name="jumlah_besar[]" required>
+                        </div>
+                        <div class="col-sm-3">
+                            <label class="col-form-label satuan-kecil-label" for="jumlah_kecil_${rowId}"></label>
+                            <input type="number" class="form-control jumlah-kecil" id="jumlah_kecil_${rowId}" name="jumlah_kecil[]" required>
                         </div>
                         <div class="col-sm-2">
-                            <label class="col-form-label" for="satuan_besar_nama_${newDropdownId}">
-                                Satuan
-                            </label>
-                            <span class="satuan_besar_nama form-control" id="satuan_besar_nama_${newDropdownId}"></span>
-                        </div>
-                        <div class="col-sm-2">
-                            <label class="col-form-label" for="remove_${newDropdownId}">
+                            <label class="col-form-label" for="remove_${rowId}">
                                 {{ ucReplaceUnderscoreToSpace('hapus') }}
                             </label>
                             <br>
-                            <button type="button" class="btn btn-danger btn-sm btn-block remove-produk_akhir">{{ ucReplaceUnderscoreToSpace('hapus') }}</button>
+                            <button type="button" class="btn btn-danger btn-sm btn-block remove-item">{{ ucReplaceUnderscoreToSpace('hapus') }}</button>
                         </div>
                     </div>
                 `;
 
-                // Append the new row to the container
-                $('#produk_akhirs_container').append(newRow);
-
-                // Initialize Select2 for the new dropdown
-                $('#' + newDropdownId).select2({
-                    theme: 'bootstrap',
-                    width: '100%',
-                });
-
-                // Add change event listener to update satuan_besar nama
-                $('#' + newDropdownId).on('change', function() {
-                    const selectedProductId = $(this).val();
-                    const satuan_besarSymbol = produk_akhirsData[selectedProductId];
-                    $('#satuan_besar_nama_' + newDropdownId).text(satuan_besarSymbol);
-                });
-
-                // Initialize {{ ucReplaceUnderscoreToSpace('hapus') }} button for new row
-                initialize{{ ucReplaceUnderscoreToSpace('hapus') }}Button();
+                $('#dynamic_form_container').append(newRow);
+                initializeSelect2();
+                initializeRemoveButton();
+                initializeSatuanChange(rowId);
             }
 
-            // Add produk_akhir button click event
+            function initializeSatuanChange(rowId) {
+                $(`#${rowId}_select`).change(function() {
+                    const selectedOption = $(this).find('option:selected');
+                    const satuanBesar = selectedOption.data('satuan-besar');
+                    const satuanKecil = selectedOption.data('satuan-kecil');
+                    const sejumlah = selectedOption.data('sejumlah');
+
+                    $(`#${rowId} .satuan-besar-label`).text(satuanBesar);
+                    $(`#${rowId} .satuan-kecil-label`).text(satuanKecil);
+
+                    $(`#jumlah_besar_${rowId}, #jumlah_kecil_${rowId}`).off('input').on('input', function() {
+                        const jumlahBesar = $(`#jumlah_besar_${rowId}`).val();
+                        const jumlahKecil = $(`#jumlah_kecil_${rowId}`).val();
+
+                        if ($(this).attr('id') === `jumlah_besar_${rowId}`) {
+                            $(`#jumlah_kecil_${rowId}`).val(jumlahBesar * sejumlah);
+                        } else {
+                            $(`#jumlah_besar_${rowId}`).val(jumlahKecil / sejumlah);
+                        }
+                    });
+                });
+            }
+
             $('#add_produk_akhir').click(function() {
-                addProductDropdown();
+                addField('produk_akhir', produkAkhirs);
             });
+
+            $('#add_produk_reproses').click(function() {
+                addField('produk_reproses', produkReproses);
+            });
+
+            $('#add_produk_samping').click(function() {
+                addField('produk_samping', produkSampings);
+            });
+
+            $('#add_bahan_baku').click(function() {
+                addField('bahan_baku', bahanBakus);
+            });
+
+            // Initialize Select2 for existing rows
+            initializeSelect2();
+
+            // Initialize remove button for existing rows
+            initializeRemoveButton();
         });
     </script>
 @endsection

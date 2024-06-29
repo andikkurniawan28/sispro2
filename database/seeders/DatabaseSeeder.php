@@ -13,11 +13,13 @@ use App\Models\Jabatan;
 use App\Models\BahanBaku;
 use App\Models\Permission;
 use App\Models\ProdukAkhir;
+use App\Models\JenisMaterial;
+use App\Models\FungsiMaterial;
 use App\Models\JenisBahanBaku;
-use App\Models\JenisJurnalGudang;
 use App\Models\ProdukReproses;
 use Illuminate\Database\Seeder;
 use App\Models\JenisProdukAkhir;
+use App\Models\JenisJurnalGudang;
 use App\Models\JenisProdukSamping;
 use Illuminate\Support\Facades\DB;
 use App\Models\JenisProdukReproses;
@@ -146,8 +148,12 @@ class DatabaseSeeder extends Seeder
         }
 
         $satuan = [
+            ["nama" => ucReplaceUnderscoreToSpace('sak')],
             ["nama" => ucReplaceUnderscoreToSpace('pack')],
             ["nama" => ucReplaceUnderscoreToSpace('box')],
+            ["nama" => ucReplaceUnderscoreToSpace('botol')],
+            ["nama" => ucReplaceUnderscoreToSpace('jar')],
+            ["nama" => ucReplaceUnderscoreToSpace('sachet')],
             ["nama" => ucReplaceUnderscoreToSpace('kuintal')],
             ["nama" => ucReplaceUnderscoreToSpace('kilogram')],
             ["nama" => ucReplaceUnderscoreToSpace('ons')],
@@ -168,53 +174,71 @@ class DatabaseSeeder extends Seeder
         ];
         JenisJurnalGudang::insert($jenis_jurnal_gudang);
 
-        $jenis_bahan_baku = [
-            ["nama" => ucReplaceUnderscoreToSpace('tepung')],
-            ["nama" => ucReplaceUnderscoreToSpace('seasoning')],
-            ["nama" => ucReplaceUnderscoreToSpace('plastik_kemasan')],
-            ["nama" => ucReplaceUnderscoreToSpace('tray')],
-        ];
-        JenisBahanBaku::insert($jenis_bahan_baku);
+        FungsiMaterial::insert([
+            ["nama" => ucReplaceUnderscoreToSpace('bahan_baku')],
+            ["nama" => ucReplaceUnderscoreToSpace('premix')],
+            ["nama" => ucReplaceUnderscoreToSpace('produk_reproses')],
+            ["nama" => ucReplaceUnderscoreToSpace('produk')],
+            ["nama" => ucReplaceUnderscoreToSpace('produk_samping')],
+        ]);
 
-        $jenis_produk_reproses = [
-            ["nama" => ucReplaceUnderscoreToSpace('filling')],
-            ["nama" => ucReplaceUnderscoreToSpace('sambal')],
-        ];
-        JenisProdukReproses::insert($jenis_produk_reproses);
-
-        $jenis_produk_samping = [
-            ["nama" => ucReplaceUnderscoreToSpace('tetes')],
-            ["nama" => ucReplaceUnderscoreToSpace('ampas')],
-        ];
-        JenisProdukSamping::insert($jenis_produk_samping);
-
-        $jenis_produk_akhir = [
+        JenisMaterial::insert([
             ["nama" => ucReplaceUnderscoreToSpace('meat')],
             ["nama" => ucReplaceUnderscoreToSpace('bakery')],
-            ["nama" => ucReplaceUnderscoreToSpace('saus')],
-        ];
-        JenisProdukAkhir::insert($jenis_produk_akhir);
+            ["nama" => ucReplaceUnderscoreToSpace('sauce')],
+            ["nama" => ucReplaceUnderscoreToSpace('filling')],
+            ["nama" => ucReplaceUnderscoreToSpace('tepung')],
+            ["nama" => ucReplaceUnderscoreToSpace('daging_mentah')],
+            ["nama" => ucReplaceUnderscoreToSpace('sambal_sachet')],
+        ]);
 
-        $bahan_baku = [
-            ["nama" => ucReplaceUnderscoreToSpace('tepung_tapioka'), 'kode' => strtoupper('m1'), 'jenis_bahan_baku_id' => 1, 'satuan_kecil_id' => 1, 'satuan_besar_id' => 2, 'sejumlah' => 10],
-            ["nama" => ucReplaceUnderscoreToSpace('tepung_panir'), 'kode' => strtoupper('m2'), 'jenis_bahan_baku_id' => 1, 'satuan_kecil_id' => 1, 'satuan_besar_id' => 2, 'sejumlah' => 10],
-            ["nama" => ucReplaceUnderscoreToSpace('tepung_jagung'), 'kode' => strtoupper('m3'), 'jenis_bahan_baku_id' => 1, 'satuan_kecil_id' => 1, 'satuan_besar_id' => 2, 'sejumlah' => 10],
-        ];
-        BahanBaku::insert($bahan_baku);
+        // $jenis_bahan_baku = [
+        //     ["nama" => ucReplaceUnderscoreToSpace('tepung')],
+        //     ["nama" => ucReplaceUnderscoreToSpace('seasoning')],
+        //     ["nama" => ucReplaceUnderscoreToSpace('plastik_kemasan')],
+        //     ["nama" => ucReplaceUnderscoreToSpace('tray')],
+        // ];
+        // JenisBahanBaku::insert($jenis_bahan_baku);
 
-        $produk_reproses = [
-            ["nama" => ucReplaceUnderscoreToSpace('sambal_tapioka'), 'kode' => strtoupper('s1'), 'jenis_produk_reproses_id' => 2, 'satuan_kecil_id' => 1, 'satuan_besar_id' => 2, 'sejumlah' => 10],
-            ["nama" => ucReplaceUnderscoreToSpace('sambal_panir'), 'kode' => strtoupper('s2'), 'jenis_produk_reproses_id' => 2, 'satuan_kecil_id' => 1, 'satuan_besar_id' => 2, 'sejumlah' => 10],
-            ["nama" => ucReplaceUnderscoreToSpace('sambal_jagung'), 'kode' => strtoupper('s3'), 'jenis_produk_reproses_id' => 2, 'satuan_kecil_id' => 1, 'satuan_besar_id' => 2, 'sejumlah' => 10],
-        ];
-        ProdukReproses::insert($produk_reproses);
+        // $jenis_produk_reproses = [
+        //     ["nama" => ucReplaceUnderscoreToSpace('filling')],
+        //     ["nama" => ucReplaceUnderscoreToSpace('sambal')],
+        // ];
+        // JenisProdukReproses::insert($jenis_produk_reproses);
 
-        $produk_akhir = [
-            ["nama" => ucReplaceUnderscoreToSpace('nugget_tapioka'), 'kode' => strtoupper('x1'), 'jenis_produk_akhir_id' => 2, 'satuan_kecil_id' => 1, 'satuan_besar_id' => 2, 'sejumlah' => 10],
-            ["nama" => ucReplaceUnderscoreToSpace('nugget_panir'), 'kode' => strtoupper('x2'), 'jenis_produk_akhir_id' => 2, 'satuan_kecil_id' => 1, 'satuan_besar_id' => 2, 'sejumlah' => 10],
-            ["nama" => ucReplaceUnderscoreToSpace('nugget_jagung'), 'kode' => strtoupper('x3'), 'jenis_produk_akhir_id' => 2, 'satuan_kecil_id' => 1, 'satuan_besar_id' => 2, 'sejumlah' => 10],
-        ];
-        ProdukAkhir::insert($produk_akhir);
+        // $jenis_produk_samping = [
+        //     ["nama" => ucReplaceUnderscoreToSpace('tetes')],
+        //     ["nama" => ucReplaceUnderscoreToSpace('ampas')],
+        // ];
+        // JenisProdukSamping::insert($jenis_produk_samping);
+
+        // $jenis_produk_akhir = [
+        //     ["nama" => ucReplaceUnderscoreToSpace('meat')],
+        //     ["nama" => ucReplaceUnderscoreToSpace('bakery')],
+        //     ["nama" => ucReplaceUnderscoreToSpace('saus')],
+        // ];
+        // JenisProdukAkhir::insert($jenis_produk_akhir);
+
+        // $bahan_baku = [
+        //     ["nama" => ucReplaceUnderscoreToSpace('tepung_tapioka'), 'kode' => strtoupper('m1'), 'jenis_bahan_baku_id' => 1, 'satuan_kecil_id' => 1, 'satuan_besar_id' => 2, 'sejumlah' => 10],
+        //     ["nama" => ucReplaceUnderscoreToSpace('tepung_panir'), 'kode' => strtoupper('m2'), 'jenis_bahan_baku_id' => 1, 'satuan_kecil_id' => 1, 'satuan_besar_id' => 2, 'sejumlah' => 10],
+        //     ["nama" => ucReplaceUnderscoreToSpace('tepung_jagung'), 'kode' => strtoupper('m3'), 'jenis_bahan_baku_id' => 1, 'satuan_kecil_id' => 1, 'satuan_besar_id' => 2, 'sejumlah' => 10],
+        // ];
+        // BahanBaku::insert($bahan_baku);
+
+        // $produk_reproses = [
+        //     ["nama" => ucReplaceUnderscoreToSpace('sambal_tapioka'), 'kode' => strtoupper('s1'), 'jenis_produk_reproses_id' => 2, 'satuan_kecil_id' => 1, 'satuan_besar_id' => 2, 'sejumlah' => 10],
+        //     ["nama" => ucReplaceUnderscoreToSpace('sambal_panir'), 'kode' => strtoupper('s2'), 'jenis_produk_reproses_id' => 2, 'satuan_kecil_id' => 1, 'satuan_besar_id' => 2, 'sejumlah' => 10],
+        //     ["nama" => ucReplaceUnderscoreToSpace('sambal_jagung'), 'kode' => strtoupper('s3'), 'jenis_produk_reproses_id' => 2, 'satuan_kecil_id' => 1, 'satuan_besar_id' => 2, 'sejumlah' => 10],
+        // ];
+        // ProdukReproses::insert($produk_reproses);
+
+        // $produk_akhir = [
+        //     ["nama" => ucReplaceUnderscoreToSpace('nugget_tapioka'), 'kode' => strtoupper('x1'), 'jenis_produk_akhir_id' => 2, 'satuan_kecil_id' => 1, 'satuan_besar_id' => 2, 'sejumlah' => 10],
+        //     ["nama" => ucReplaceUnderscoreToSpace('nugget_panir'), 'kode' => strtoupper('x2'), 'jenis_produk_akhir_id' => 2, 'satuan_kecil_id' => 1, 'satuan_besar_id' => 2, 'sejumlah' => 10],
+        //     ["nama" => ucReplaceUnderscoreToSpace('nugget_jagung'), 'kode' => strtoupper('x3'), 'jenis_produk_akhir_id' => 2, 'satuan_kecil_id' => 1, 'satuan_besar_id' => 2, 'sejumlah' => 10],
+        // ];
+        // ProdukAkhir::insert($produk_akhir);
 
         $gudangs = Gudang::all();
         foreach ($gudangs as $gudang) {

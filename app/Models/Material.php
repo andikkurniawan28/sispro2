@@ -1,0 +1,58 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
+class Material extends Model
+{
+    use HasFactory;
+
+    protected $guarded = [];
+
+    public function fungsi_material()
+    {
+        return $this->belongsTo(FungsiMaterial::class);
+    }
+
+    public function jenis_material()
+    {
+        return $this->belongsTo(JenisMaterial::class);
+    }
+
+    public function satuan_besar()
+    {
+        return $this->belongsTo(Satuan::class, 'satuan_besar_id');
+    }
+
+    public function satuan_kecil()
+    {
+        return $this->belongsTo(Satuan::class, 'satuan_kecil_id');
+    }
+
+    protected static function booted()
+    {
+        static::created(function ($material) {
+            ActivityLog::create([
+                'user_id' => Auth::id(),
+                'description' => "Material '{$material->nama}' dibuat.",
+            ]);
+        });
+
+        static::updated(function ($material) {
+            ActivityLog::create([
+                'user_id' => Auth::id(),
+                'description' => "Material '{$material->nama}' dirubah.",
+            ]);
+        });
+
+        static::deleted(function ($material) {
+            ActivityLog::create([
+                'user_id' => Auth::id(),
+                'description' => "Material '{$material->nama}' dihapus.",
+            ]);
+        });
+    }
+}
