@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('permintaan_details', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('permintaan_id')->constrained('permintaans')->onDelete('cascade');
+            $table->foreignId('permintaan_id')->constrained()->onDelete('cascade');
             $table->foreignId('material_id')->constrained();
             $table->float('jumlah');
             $table->timestamp('created_at')->useCurrent();

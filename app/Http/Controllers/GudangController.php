@@ -107,10 +107,7 @@ class GudangController extends Controller
         $old_column_name = str_replace(' ', '_', $gudang->nama);
         $new_column_name = str_replace(' ', '_', $request->nama);
         $queries = [
-            "ALTER TABLE bahan_bakus CHANGE COLUMN `{$old_column_name}` `{$new_column_name}` FLOAT NULL",
-            "ALTER TABLE produk_reproses CHANGE COLUMN `{$old_column_name}` `{$new_column_name}` FLOAT NULL",
-            "ALTER TABLE produk_sampings CHANGE COLUMN `{$old_column_name}` `{$new_column_name}` FLOAT NULL",
-            "ALTER TABLE produk_akhirs CHANGE COLUMN `{$old_column_name}` `{$new_column_name}` FLOAT NULL",
+            "ALTER TABLE materials CHANGE COLUMN `{$old_column_name}` `{$new_column_name}` FLOAT NULL",
         ];
         foreach ($queries as $query) {
             DB::statement($query);

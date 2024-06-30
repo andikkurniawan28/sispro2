@@ -23,10 +23,7 @@ class Gudang extends Model
             ]);
             $column_name = str_replace(' ', '_', $gudang->nama);
             $queries = [
-                "ALTER TABLE bahan_bakus ADD COLUMN `{$column_name}` FLOAT NULL",
-                "ALTER TABLE produk_reproses ADD COLUMN `{$column_name}` FLOAT NULL",
-                "ALTER TABLE produk_sampings ADD COLUMN `{$column_name}` FLOAT NULL",
-                "ALTER TABLE produk_akhirs ADD COLUMN `{$column_name}` FLOAT NULL",
+                "ALTER TABLE materials ADD COLUMN `{$column_name}` FLOAT NULL",
             ];
             foreach ($queries as $query) {
                 DB::statement($query);
@@ -47,10 +44,7 @@ class Gudang extends Model
             ]);
             $column_name = str_replace(' ', '_', $gudang->nama);
             $queries = [
-                "ALTER TABLE bahan_bakus DROP COLUMN `{$column_name}`",
-                "ALTER TABLE produk_reproses DROP COLUMN `{$column_name}`",
-                "ALTER TABLE produk_sampings DROP COLUMN `{$column_name}`",
-                "ALTER TABLE produk_akhirs DROP COLUMN `{$column_name}`",
+                "ALTER TABLE materials DROP COLUMN `{$column_name}`",
             ];
             foreach ($queries as $query) {
                 DB::statement($query);
