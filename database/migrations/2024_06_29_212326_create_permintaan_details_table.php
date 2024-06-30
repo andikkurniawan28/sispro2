@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('permintaan_id')->constrained()->onDelete('cascade');
             $table->foreignId('material_id')->constrained();
-            $table->float('jumlah');
+            $table->float('jumlah_dalam_satuan_besar');
+            $table->float('jumlah_dalam_satuan_kecil');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });

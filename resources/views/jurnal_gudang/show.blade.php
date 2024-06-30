@@ -38,7 +38,7 @@
                     <div class="card" id="invoice-section">
                         <div class="card-body">
                             <div class="invoice-header">
-                                <h4 class="invoice-title">Faktur {{ ucReplaceUnderscoreToSpace('jurnal_gudang') }}</h4>
+                                <h4 class="invoice-title">Faktur {{ $jurnal_gudang->jenis_jurnal_gudang->nama }}</h4>
                                 <div class="invoice-info">
                                     <div>
                                         <strong>Kode:</strong> {{ $jurnal_gudang->kode }}
@@ -48,18 +48,18 @@
                                         {{ date('d-m-Y H:i:s', strtotime($jurnal_gudang->created_at)) }}
                                     </div>
                                     <div>
-                                        <strong>Berlaku sampai:</strong>
-                                        {{ date('d-m-Y H:i:s', strtotime($jurnal_gudang->berlaku_sampai)) }}
+                                        <strong>Gudang:</strong>
+                                        {{ $jurnal_gudang->gudang->nama }}
                                     </div>
                                     <div>
-                                        <strong>Diajukan Oleh:</strong> {{ $jurnal_gudang->user->nama }}
+                                        <strong>Dicatat Oleh:</strong> {{ $jurnal_gudang->user->nama }}
                                         ({{ $jurnal_gudang->user->jabatan->nama }})
                                     </div>
                                 </div>
                             </div>
                             <hr>
                             <div class="invoice-body">
-                                <h5>Detail Produk Akhir:</h5>
+                                <h5>Detail {{ ucReplaceUnderscoreToSpace('jurnal_gudang') }}:</h5>
                                 <br>
                                 <table class="table table-bordered">
                                     <thead>
@@ -67,18 +67,18 @@
                                             <th>#</th>
                                             <th>Kode</th>
                                             <th>Nama</th>
-                                            <th>Jumlah</th>
-                                            <th>Satuan</th>
+                                            <th>Jumlah Kecil</th>
+                                            <th>Jumlah Besar</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($jurnal_gudang_detail as $index => $produk_akhir)
+                                        @foreach ($jurnal_gudang_detail as $index => $material)
                                             <tr>
                                                 <td>{{ $index + 1 }}</td>
-                                                <td>{{ ucReplaceUnderscoreToSpace($produk_akhir->produk_akhir->kode) }}</td>
-                                                <td>{{ ucReplaceUnderscoreToSpace($produk_akhir->produk_akhir->nama) }}</td>
-                                                <td>{{ $produk_akhir->jumlah }}</td>
-                                                <td>{{ $produk_akhir->produk_akhir->satuan_besar->nama }}</td>
+                                                <td>{{ ucReplaceUnderscoreToSpace($material->material->kode) }}</td>
+                                                <td>{{ ucReplaceUnderscoreToSpace($material->material->nama) }}</td>
+                                                <td>{{ $material->jumlah_dalam_satuan_kecil }} {{ $material->material->satuan_kecil->nama }}</td>
+                                                <td>{{ $material->jumlah_dalam_satuan_besar }} {{ $material->material->satuan_besar->nama }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>

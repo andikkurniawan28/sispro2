@@ -43,6 +43,10 @@
                                     @csrf
                                     @method('PUT')
                                     <div class="form-group">
+                                        <label for="nama">{{ ucReplaceUnderscoreToSpace('kode') }}</label>
+                                        <input type="text" class="form-control" id="kode" name="kode" value="{{ $jenis_jurnal_gudang->kode }}" placeholder="Masukkan kode ..." required autofocus>
+                                    </div>
+                                    <div class="form-group">
                                         <label for="nama">{{ ucReplaceUnderscoreToSpace('nama') }}</label>
                                         <input type="text" class="form-control" id="nama" name="nama" value="{{ $jenis_jurnal_gudang->nama }}" placeholder="Masukkan nama ..." required autofocus>
                                     </div>

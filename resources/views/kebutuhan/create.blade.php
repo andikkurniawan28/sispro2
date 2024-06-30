@@ -43,10 +43,13 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="produk_id">{{ ucReplaceUnderscoreToSpace('produk') }}</label>
-                                            <select class="produk form-control @error('produk_id') is-invalid @enderror" id="produk_id" name="produk_id" required>
-                                                <option disabled selected>Pilih {{ ucReplaceUnderscoreToSpace('produk') }}</option>
+                                            <select class="produk form-control @error('produk_id') is-invalid @enderror"
+                                                id="produk_id" name="produk_id" required>
+                                                <option disabled selected>Pilih {{ ucReplaceUnderscoreToSpace('produk') }}
+                                                </option>
                                                 @foreach ($produks as $produk)
-                                                    <option value="{{ $produk->id }}" {{ old('produk_id') == $produk->id ? 'selected' : '' }}>
+                                                    <option value="{{ $produk->id }}"
+                                                        {{ old('produk_id') == $produk->id ? 'selected' : '' }}>
                                                         {{ ucwords(str_replace('_', ' ', $produk->kode)) }} |
                                                         {{ ucwords(str_replace('_', ' ', $produk->nama)) }}
                                                     </option>
@@ -62,10 +65,14 @@
                                             <table class="table table-bordered">
                                                 <thead>
                                                     <tr>
-                                                        <th style="width: 50%">{{ ucReplaceUnderscoreToSpace('bahan') }}</th>
-                                                        <th style="width: 20%">{{ ucReplaceUnderscoreToSpace('jumlah_kecil') }}</th>
-                                                        <th style="width: 20%">{{ ucReplaceUnderscoreToSpace('jumlah_besar') }}</th>
-                                                        <th style="width: 20%">{{ ucReplaceUnderscoreToSpace('hapus') }}</th>
+                                                        <th style="width: 50%">{{ ucReplaceUnderscoreToSpace('bahan') }}
+                                                        </th>
+                                                        <th style="width: 20%">
+                                                            {{ ucReplaceUnderscoreToSpace('jumlah_kecil') }}</th>
+                                                        <th style="width: 20%">
+                                                            {{ ucReplaceUnderscoreToSpace('jumlah_besar') }}</th>
+                                                        <th style="width: 20%">{{ ucReplaceUnderscoreToSpace('hapus') }}
+                                                        </th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="bahans_container">
@@ -74,26 +81,49 @@
                                                         @foreach (old('bahans') as $index => $bahan)
                                                             <tr id="bahan_row_{{ $index }}">
                                                                 <td>
-                                                                    <select class="bahan form-control" id="bahan_{{ $index }}" name="bahans[]" required>
-                                                                        <option disabled selected>Pilih {{ ucReplaceUnderscoreToSpace('bahan') }}</option>
+                                                                    <select class="bahan form-control"
+                                                                        id="bahan_{{ $index }}" name="bahans[]"
+                                                                        required>
+                                                                        <option disabled selected>Pilih
+                                                                            {{ ucReplaceUnderscoreToSpace('bahan') }}
+                                                                        </option>
                                                                         @foreach ($bahans as $item)
-                                                                            <option value="{{ $item->id }}" data-satuan-kecil="{{ $item->satuan_kecil->nama }}" data-satuan-besar="{{ $item->satuan_besar->nama }}" data-sejumlah="{{ $item->sejumlah }}">
-                                                                                {{ ucwords(str_replace('_', ' ', $item->kode)) }} |
+                                                                            <option value="{{ $item->id }}"
+                                                                                data-satuan-kecil="{{ $item->satuan_kecil->nama }}"
+                                                                                data-satuan-besar="{{ $item->satuan_besar->nama }}"
+                                                                                data-sejumlah="{{ $item->sejumlah }}">
+                                                                                {{ ucwords(str_replace('_', ' ', $item->kode)) }}
+                                                                                |
                                                                                 {{ ucwords(str_replace('_', ' ', $item->nama)) }}
                                                                             </option>
                                                                         @endforeach
                                                                     </select>
                                                                 </td>
                                                                 <td>
-                                                                    <input type="number" class="form-control jumlah_dalam_satuan_kecil" id="jumlah_dalam_satuan_kecil_{{ $index }}" name="jumlah_dalam_satuan_kecil[]" placeholder="Jumlah Kecil" value="{{ old('jumlah_dalam_satuan_kecil')[$index] }}" step="any" required>
-                                                                    <span id="satuan_kecil_{{ $index }}" class="satuan_kecil"></span>
+                                                                    <input type="number"
+                                                                        class="form-control jumlah_dalam_satuan_kecil"
+                                                                        id="jumlah_dalam_satuan_kecil_{{ $index }}"
+                                                                        name="jumlah_dalam_satuan_kecil[]"
+                                                                        placeholder="Jumlah Kecil"
+                                                                        value="{{ old('jumlah_dalam_satuan_kecil')[$index] }}"
+                                                                        step="any" required>
+                                                                    <span id="satuan_kecil_{{ $index }}"
+                                                                        class="satuan_kecil"></span>
                                                                 </td>
                                                                 <td>
-                                                                    <input type="number" class="form-control jumlah_dalam_satuan_besar" id="jumlah_dalam_satuan_besar_{{ $index }}" name="jumlah_dalam_satuan_besar[]" placeholder="Jumlah Besar" value="{{ old('jumlah_dalam_satuan_besar')[$index] }}" step="any" readonly>
-                                                                    <span id="satuan_besar_{{ $index }}" class="satuan_besar"></span>
+                                                                    <input type="number"
+                                                                        class="form-control jumlah_dalam_satuan_besar"
+                                                                        id="jumlah_dalam_satuan_besar_{{ $index }}"
+                                                                        name="jumlah_dalam_satuan_besar[]"
+                                                                        placeholder="Jumlah Besar"
+                                                                        value="{{ old('jumlah_dalam_satuan_besar')[$index] }}"
+                                                                        step="any" required>
+                                                                    <span id="satuan_besar_{{ $index }}"
+                                                                        class="satuan_besar"></span>
                                                                 </td>
                                                                 <td>
-                                                                    <button type="button" class="btn btn-danger btn-sm btn-block remove-bahan">{{ ucReplaceUnderscoreToSpace('hapus') }}</button>
+                                                                    <button type="button"
+                                                                        class="btn btn-danger btn-sm btn-block remove-bahan">{{ ucReplaceUnderscoreToSpace('hapus') }}</button>
                                                                 </td>
                                                             </tr>
                                                         @endforeach
@@ -104,7 +134,8 @@
                                         <div class="row mt-3">
                                             <div class="col-sm-10 offset-sm-2">
                                                 <button type="submit" class="btn btn-primary">Simpan</button>
-                                                <button type="button" class="btn btn-success" id="add_bahan">{{ ucReplaceUnderscoreToSpace('tambah_bahan') }}</button>
+                                                <button type="button" class="btn btn-success"
+                                                    id="add_bahan">{{ ucReplaceUnderscoreToSpace('tambah_bahan') }}</button>
                                             </div>
                                         </div>
                                     </div>
@@ -147,7 +178,9 @@
 
                 // Update jumlah besar based on jumlah kecil and sejumlah
                 const jumlahKecilInput = row.find('.jumlah_dalam_satuan_kecil');
+                const jumlahBesarInput = row.find('.jumlah_dalam_satuan_besar');
                 calculateJumlahBesar(jumlahKecilInput);
+                calculateJumlahKecil(jumlahBesarInput);
             }
 
             function calculateJumlahBesar(inputElement) {
@@ -162,6 +195,18 @@
                 }
             }
 
+            function calculateJumlahKecil(inputElement) {
+                const row = inputElement.closest('tr');
+                const jumlahBesar = parseFloat(inputElement.val());
+                const selectElement = row.find('.bahan');
+                const sejumlah = parseFloat(selectElement.find('option:selected').data('sejumlah'));
+
+                if (!isNaN(jumlahBesar) && !isNaN(sejumlah)) {
+                    const jumlahKecil = jumlahBesar * sejumlah;
+                    row.find('.jumlah_dalam_satuan_kecil').val(jumlahKecil.toFixed(2));
+                }
+            }
+
             // Initialize Select2 for existing rows
             initializeSelect2();
 
@@ -171,6 +216,11 @@
             // Calculate jumlah besar when jumlah kecil changes
             $(document).on('input', '.jumlah_dalam_satuan_kecil', function() {
                 calculateJumlahBesar($(this));
+            });
+
+            // Calculate jumlah kecil when jumlah besar changes
+            $(document).on('input', '.jumlah_dalam_satuan_besar', function() {
+                calculateJumlahKecil($(this));
             });
 
             // Counter for unique IDs
@@ -199,7 +249,7 @@
                             <span class="satuan_kecil"></span>
                         </td>
                         <td>
-                            <input type="number" class="form-control jumlah_dalam_satuan_besar" id="jumlah_dalam_satuan_besar_${bahanCounter}" name="jumlah_dalam_satuan_besar[]" placeholder="Jumlah Besar" step="any" readonly>
+                            <input type="number" class="form-control jumlah_dalam_satuan_besar" id="jumlah_dalam_satuan_besar_${bahanCounter}" name="jumlah_dalam_satuan_besar[]" placeholder="Jumlah Besar" step="any" required>
                             <span class="satuan_besar"></span>
                         </td>
                         <td>

@@ -62,9 +62,6 @@
                                             <th>Kode Bahan</th>
                                             <th>Nama Bahan</th>
                                             <th>Jumlah</th>
-                                            <th>Satuan</th>
-                                            <th>Jumlah</th>
-                                            <th>Satuan</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -73,10 +70,13 @@
                                                 <td>{{ $index + 1 }}</td>
                                                 <td>{{ ucReplaceUnderscoreToSpace($kebutuhan->bahan->kode) }}</td>
                                                 <td>{{ ucReplaceUnderscoreToSpace($kebutuhan->bahan->nama) }}</td>
-                                                <td>{{ $kebutuhan->jumlah_dalam_satuan_kecil }}</td>
-                                                <td>{{ $kebutuhan->bahan->satuan_kecil->nama }}</td>
-                                                <td>{{ $kebutuhan->jumlah_dalam_satuan_besar }}</td>
-                                                <td>{{ $kebutuhan->bahan->satuan_besar->nama }}</td>
+                                                <td>
+                                                    {{ $kebutuhan->jumlah_dalam_satuan_kecil }}
+                                                    {{ $kebutuhan->bahan->satuan_kecil->nama }}
+                                                    /
+                                                    {{ $kebutuhan->jumlah_dalam_satuan_besar }}
+                                                    {{ $kebutuhan->bahan->satuan_besar->nama }}
+                                                </td>
                                             </tr>
                                         @endforeach
                                     </tbody>

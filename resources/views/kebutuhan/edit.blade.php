@@ -96,7 +96,6 @@
                                                             </td>
                                                             <td>
                                                                 <button type="button" class="btn btn-danger btn-sm btn-block remove-bahan">{{ ucReplaceUnderscoreToSpace('hapus') }}</button>
-
                                                             </td>
                                                         </tr>
                                                     @endforeach
@@ -163,6 +162,18 @@
                 }
             }
 
+            function calculateJumlahKecil(inputElement) {
+                const row = inputElement.closest('tr');
+                const jumlahBesar = parseFloat(inputElement.val());
+                const selectElement = row.find('.bahan');
+                const sejumlah = parseFloat(selectElement.find('option:selected').data('sejumlah'));
+
+                if (!isNaN(jumlahBesar) && !isNaN(sejumlah)) {
+                    const jumlahKecil = jumlahBesar * sejumlah;
+                    row.find('.jumlah_dalam_satuan_kecil').val(jumlahKecil.toFixed(2));
+                }
+            }
+
             // Initialize Select2 and remove button for existing rows
             initializeSelect2();
             initializeRemoveButton();
@@ -170,6 +181,11 @@
             // Handle input change for jumlah dalam satuan kecil
             $(document).on('input', '.jumlah_dalam_satuan_kecil', function() {
                 calculateJumlahBesar($(this));
+            });
+
+            // Handle input change for jumlah dalam satuan besar
+            $(document).on('input', '.jumlah_dalam_satuan_besar', function() {
+                calculateJumlahKecil($(this));
             });
 
             // Counter for unique IDs
@@ -201,7 +217,7 @@
                             <span class="satuan_kecil"></span>
                         </td>
                         <td>
-                            <input type="number" class="form-control jumlah_dalam_satuan_besar" id="jumlah_dalam_satuan_besar_${bahanCounter}" name="jumlah_dalam_satuan_besar[]" placeholder="Jumlah Besar" step="any" readonly>
+                            <input type="number" class="form-control jumlah_dalam_satuan_besar" id="jumlah_dalam_satuan_besar_${bahanCounter}" name="jumlah_dalam_satuan_besar[]" placeholder="Jumlah Besar" step="any">
                             <span class="satuan_besar"></span>
                         </td>
                         <td>
@@ -227,19 +243,6 @@
             // Add bahan button click event
             $('#add_bahan').click(function() {
                 addBahanRow();
-            });
-
-            // Handle input change for jumlah dalam satuan besar
-            $(document).on('input', '.jumlah_dalam_satuan_besar', function() {
-                const row = $(this).closest('tr');
-                const jumlahBesar = parseFloat($(this).val());
-                const selectElement = row.find('.bahan');
-                const sejumlah = parseFloat(selectElement.find('option:selected').data('sejumlah'));
-
-                if (!isNaN(jumlahBesar) && !isNaN(sejumlah)) {
-                    const jumlahKecil = jumlahBesar * sejumlah;
-                    row.find('.jumlah_dalam_satuan_kecil').val(jumlahKecil.toFixed(2));
-                }
             });
         });
     </script>

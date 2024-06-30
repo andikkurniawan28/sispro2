@@ -67,8 +67,8 @@
                                             <th>#</th>
                                             <th>Kode</th>
                                             <th>Nama</th>
-                                            <th>Jumlah</th>
-                                            <th>Satuan</th>
+                                            <th>Jumlah Kecil</th>
+                                            <th>Jumlah Besar</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -77,8 +77,8 @@
                                                 <td>{{ $index + 1 }}</td>
                                                 <td>{{ ucReplaceUnderscoreToSpace($material->material->kode) }}</td>
                                                 <td>{{ ucReplaceUnderscoreToSpace($material->material->nama) }}</td>
-                                                <td>{{ $material->jumlah }}</td>
-                                                <td>{{ $material->material->satuan_besar->nama }}</td>
+                                                <td>{{ $material->jumlah_dalam_satuan_kecil }} {{ $material->material->satuan_kecil->nama }}</td>
+                                                <td>{{ $material->jumlah_dalam_satuan_besar }} {{ $material->material->satuan_besar->nama }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>

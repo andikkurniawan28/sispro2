@@ -43,9 +43,11 @@ class PermintaanController extends Controller
             'kode' => 'required|string|max:255',
             'berlaku_sampai' => 'required|date',
             'materials' => 'required|array',
-            'materials.*' => 'required|distinct|exists:materials,id', // distinct untuk memastikan material tidak duplikat
-            'jumlahs' => 'required|array',
-            'jumlahs.*' => 'required|min:1',
+            'materials.*' => 'required|distinct|exists:materials,id',
+            'jumlah_kecil' => 'required|array',
+            'jumlah_kecil.*' => 'required|numeric|min:0', // Mengganti "jumlahs" dengan "jumlah_kecil" sesuai dengan form Anda
+            'jumlah_besar' => 'required|array',
+            'jumlah_besar.*' => 'required|numeric|min:0', // Menambahkan validasi untuk "jumlah_besar"
         ]);
 
         // Buat data permintaan
@@ -68,7 +70,9 @@ class PermintaanController extends Controller
             PermintaanDetail::create([
                 'permintaan_id' => $permintaan->id,
                 'material_id' => $material_id,
-                'jumlah' => $request->jumlahs[$index],
+                'jumlah_dalam_satuan_kecil' => $request->jumlah_kecil[$index], // Sesuaikan dengan nama input di form Anda
+                'jumlah_dalam_satuan_besar' => $request->jumlah_besar[$index], // Sesuaikan dengan nama input di form Anda
+
             ]);
         }
 
@@ -91,10 +95,10 @@ class PermintaanController extends Controller
      */
     public function edit($id)
     {
-        $permintaan = Permintaan::findOrFail($id);
+        $data = Permintaan::findOrFail($id);
         $permintaan_detail = PermintaanDetail::where('permintaan_id', $id)->get();
         $materials = Material::all();
-        return view('permintaan.edit', compact('permintaan', 'permintaan_detail', 'materials'));
+        return view('permintaan.edit', compact('data', 'permintaan_detail', 'materials'));
     }
 
     /**
@@ -105,8 +109,11 @@ class PermintaanController extends Controller
         $request->validate([
             'kode' => 'required|string|max:255',
             'berlaku_sampai' => 'required|date',
-            'materials.*' => 'required|distinct|exists:materials,id', // distinct untuk memastikan material tidak duplikat
-            'jumlahs.*' => 'required|min:1',
+            'materials.*' => 'required|distinct|exists:materials,id',
+            'jumlah_kecil' => 'required|array',
+            'jumlah_kecil.*' => 'required|numeric|min:0', // Mengganti "jumlahs" dengan "jumlah_kecil" sesuai dengan form Anda
+            'jumlah_besar' => 'required|array',
+            'jumlah_besar.*' => 'required|numeric|min:0', // Menambahkan validasi untuk "jumlah_besar"
         ]);
 
         $permintaan = Permintaan::findOrFail($id);
@@ -123,10 +130,11 @@ class PermintaanController extends Controller
             }
             $existingMaterial[] = $material_id;
 
-            $jumlah = $request->jumlahs[$index];
+            $jumlah_kecil = $request->jumlah_kecil[$index];
+            $jumlah_besar = $request->jumlah_besar[$index];
             PermintaanDetail::updateOrCreate(
                 ['permintaan_id' => $id, 'material_id' => $material_id],
-                ['jumlah' => $jumlah]
+                ['jumlah_dalam_satuan_kecil' => $jumlah_kecil, 'jumlah_dalam_satuan_besar' => $jumlah_besar]
             );
         }
 

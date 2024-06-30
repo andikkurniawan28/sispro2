@@ -10,6 +10,7 @@ use App\Models\Divisi;
 use App\Models\Gudang;
 use App\Models\Satuan;
 use App\Models\Jabatan;
+use App\Models\Material;
 use App\Models\Permission;
 use App\Models\JenisMaterial;
 use App\Models\FungsiMaterial;
@@ -162,8 +163,8 @@ class DatabaseSeeder extends Seeder
         Gudang::insert($gudang);
 
         $jenis_jurnal_gudang = [
-            ["nama" => ucReplaceUnderscoreToSpace('serah_terima_hasil_produksi'), 'saldo' => 'plus'],
-            ["nama" => ucReplaceUnderscoreToSpace('kebutuhan_bahan_produksi'), 'saldo' => 'minus'],
+            ["nama" => ucReplaceUnderscoreToSpace('serah_terima_hasil_produksi'), 'saldo' => 'plus', 'kode' => 'STP'],
+            ["nama" => ucReplaceUnderscoreToSpace('kebutuhan_bahan_produksi'), 'saldo' => 'minus', 'kode' => 'KBP'],
         ];
         JenisJurnalGudang::insert($jenis_jurnal_gudang);
 
@@ -196,6 +197,13 @@ class DatabaseSeeder extends Seeder
                 DB::statement($query);
             }
         }
+
+        Material::insert([
+            ["nama" => ucReplaceUnderscoreToSpace('tepung_tapioka_segitiga_biru'), "kode" => "M1", "barcode" => "M1", "fungsi_material_id" => 1, "jenis_material_id" => 5, "satuan_besar_id" => 1, "satuan_kecil_id" => 8, "sejumlah" => 50],
+            ["nama" => ucReplaceUnderscoreToSpace('tepung_tapioka_cakra_merah'), "kode" => "M2", "barcode" => "M2", "fungsi_material_id" => 1, "jenis_material_id" => 5, "satuan_besar_id" => 1, "satuan_kecil_id" => 8, "sejumlah" => 50],
+            ["nama" => ucReplaceUnderscoreToSpace('weiwang_minipao_coklat'), "kode" => "MPC", "barcode" => "MPC", "fungsi_material_id" => 4, "jenis_material_id" => 2, "satuan_besar_id" => 3, "satuan_kecil_id" => 2, "sejumlah" => 10],
+            ["nama" => ucReplaceUnderscoreToSpace('weiwang_minipao_ayam'), "kode" => "MPA", "barcode" => "MPA", "fungsi_material_id" => 4, "jenis_material_id" => 2, "satuan_besar_id" => 3, "satuan_kecil_id" => 2, "sejumlah" => 10],
+        ]);
 
     }
 }

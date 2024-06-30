@@ -47,8 +47,7 @@
                                                 value="{{ $kode }}" placeholder="Masukkan kode ..." readonly>
                                         </div>
                                         <div class="form-group">
-                                            <label
-                                                for="berlaku_sampai">{{ ucReplaceUnderscoreToSpace('berlaku_sampai') }}</label>
+                                            <label for="berlaku_sampai">{{ ucReplaceUnderscoreToSpace('berlaku_sampai') }}</label>
                                             <input type="datetime-local" class="form-control" id="berlaku_sampai"
                                                 name="berlaku_sampai" value="{{ old('berlaku_sampai') }}"
                                                 placeholder="Masukkan {{ ucReplaceUnderscoreToSpace('berlaku_sampai') }} ..." required autofocus>
@@ -61,8 +60,8 @@
                                                 <thead>
                                                     <tr>
                                                         <th style="width: 50%">{{ ucReplaceUnderscoreToSpace('material') }}</th>
-                                                        <th style="width: 20%">{{ ucReplaceUnderscoreToSpace('jumlah') }}</th>
-                                                        <th style="width: 20%">{{ ucReplaceUnderscoreToSpace('satuan_besar') }}</th>
+                                                        <th style="width: 20%">{{ ucReplaceUnderscoreToSpace('jumlah_kecil') }}</th>
+                                                        <th style="width: 20%">{{ ucReplaceUnderscoreToSpace('jumlah_besar') }}</th>
                                                         <th style="width: 10%">{{ ucReplaceUnderscoreToSpace('hapus') }}</th>
                                                     </tr>
                                                 </thead>
@@ -74,19 +73,19 @@
                                                                     <select class="form-control material" id="material_{{ $index }}" name="materials[]" required>
                                                                         <option disabled selected>Pilih {{ ucReplaceUnderscoreToSpace('material') }}</option>
                                                                         @foreach ($materials as $materialItem)
-                                                                            <option value="{{ $materialItem->id }}" data-satuan-besar="{{ $materialItem->satuan_besar->nama }}" {{ $materialItem->id == $material ? 'selected' : '' }}>
+                                                                            <option value="{{ $materialItem->id }}" data-satuan-kecil="{{ $materialItem->satuan_kecil->nama }}" data-satuan-besar="{{ $materialItem->satuan_besar->nama }}" data-sejumlah="{{ $materialItem->sejumlah }}" {{ $materialItem->id == $material ? 'selected' : '' }}>
                                                                                 {{ ucwords(str_replace('_', ' ', $materialItem->kode)) }} | {{ ucwords(str_replace('_', ' ', $materialItem->nama)) }}
                                                                             </option>
                                                                         @endforeach
                                                                     </select>
                                                                 </td>
                                                                 <td>
-                                                                    <input type="number" class="form-control jumlah" id="jumlah_{{ $index }}" name="jumlahs[]" placeholder="Masukkan {{ ucReplaceUnderscoreToSpace('jumlah') }}" value="{{ old('jumlahs')[$index] }}" step="any" required>
+                                                                    <input type="number" class="form-control jumlah_dalam_satuan_kecil" id="jumlah_dalam_satuan_kecil_{{ $index }}" name="jumlah_kecil[]" placeholder="Masukkan {{ ucReplaceUnderscoreToSpace('jumlah_kecil') }}" value="{{ old('jumlah_kecil')[$index] }}" step="any" required>
+                                                                    <span class="satuan_kecil" id="satuan_kecil_{{ $index }}">{{ $materials->find($material)->satuan_kecil->nama }}</span>
                                                                 </td>
                                                                 <td>
-                                                                    <span class="form-control satuan_besar_nama" id="satuan_besar_nama_{{ $index }}">
-                                                                        {{ $materials->find($material)->satuan_besar->nama }}
-                                                                    </span>
+                                                                    <input type="number" class="form-control jumlah_dalam_satuan_besar" id="jumlah_dalam_satuan_besar_{{ $index }}" name="jumlah_besar[]" placeholder="Masukkan {{ ucReplaceUnderscoreToSpace('jumlah_besar') }}" value="{{ old('jumlah_besar')[$index] }}" step="any" required>
+                                                                    <span class="satuan_besar" id="satuan_besar_{{ $index }}">{{ $materials->find($material)->satuan_besar->nama }}</span>
                                                                 </td>
                                                                 <td>
                                                                     <button type="button" class="btn btn-danger btn-sm btn-block remove-material">{{ ucReplaceUnderscoreToSpace('hapus') }}</button>
@@ -114,83 +113,107 @@
     </div>
     <script>
         $(document).ready(function() {
-            // Function to initialize Select2 for material dropdowns
             function initializeSelect2() {
                 $('.material').select2({
                     theme: 'bootstrap',
                     width: '100%',
                 }).on('change', function() {
-                    var index = $(this).attr('id').split('_')[1]; // Ambil indeks dari id dropdown
-                    var satuanBesar = $(this).find(':selected').data('satuan-besar'); // Ambil data satuan-besar dari opsi terpilih
-
-                    // Update teks pada span satuan_besar_nama
-                    $('#satuan_besar_nama_' + index).text(satuanBesar);
+                    var index = $(this).attr('id').split('_')[1];
+                    updateSatuan($(this));
                 });
             }
 
-            // Initialize Select2 for existing materials
-            initializeSelect2();
+            function initializeRemoveButton() {
+                $('.remove-material').click(function() {
+                    $(this).closest('tr').remove();
+                });
+            }
 
-            // Initialize remove button for existing materials
-            $('.remove-material').click(function() {
-                $(this).closest('tr').remove();
+            function updateSatuan(selectElement) {
+                const row = selectElement.closest('tr');
+                const satuanKecil = selectElement.find('option:selected').data('satuan-kecil');
+                const satuanBesar = selectElement.find('option:selected').data('satuan-besar');
+                row.find('.satuan_kecil').text(satuanKecil);
+                row.find('.satuan_besar').text(satuanBesar);
+                const jumlahKecilInput = row.find('.jumlah_dalam_satuan_kecil');
+                const jumlahBesarInput = row.find('.jumlah_dalam_satuan_besar');
+                calculateJumlahBesar(jumlahKecilInput);
+                calculateJumlahKecil(jumlahBesarInput);
+            }
+
+            function calculateJumlahBesar(inputElement) {
+                const row = inputElement.closest('tr');
+                const jumlahKecil = parseFloat(inputElement.val());
+                const selectElement = row.find('.material');
+                const sejumlah = parseFloat(selectElement.find('option:selected').data('sejumlah'));
+                if (!isNaN(jumlahKecil) && !isNaN(sejumlah)) {
+                    const jumlahBesar = jumlahKecil / sejumlah;
+                    row.find('.jumlah_dalam_satuan_besar').val(jumlahBesar.toFixed(2));
+                }
+            }
+
+            function calculateJumlahKecil(inputElement) {
+                const row = inputElement.closest('tr');
+                const jumlahBesar = parseFloat(inputElement.val());
+                const selectElement = row.find('.material');
+                const sejumlah = parseFloat(selectElement.find('option:selected').data('sejumlah'));
+                if (!isNaN(jumlahBesar) && !isNaN(sejumlah)) {
+                    const jumlahKecil = jumlahBesar * sejumlah;
+                    row.find('.jumlah_dalam_satuan_kecil').val(jumlahKecil.toFixed(2));
+                }
+            }
+
+            initializeSelect2();
+            initializeRemoveButton();
+
+            $(document).on('input', '.jumlah_dalam_satuan_kecil', function() {
+                calculateJumlahBesar($(this));
             });
 
-            // Counter for unique IDs
+            $(document).on('input', '.jumlah_dalam_satuan_besar', function() {
+                calculateJumlahKecil($(this));
+            });
+
             let materialCounter = {{ old('materials') ? count(old('materials')) : 0 }};
 
-            // Function to add a new row for material selection
             function addMaterialRow() {
                 materialCounter++;
                 const newRowId = 'material_row_' + materialCounter;
-
                 const newRow = `
                     <tr id="${newRowId}">
                         <td>
                             <select class="form-control material" id="material_${materialCounter}" name="materials[]" required>
                                 <option disabled selected>Pilih {{ ucReplaceUnderscoreToSpace('material') }}</option>
                                 @foreach ($materials as $material)
-                                    <option value="{{ $material->id }}" data-satuan-besar="{{ $material->satuan_besar->nama }}">
-                                        {{ ucwords(str_replace('_', ' ', $material->kode)) }} |
-                                        {{ ucwords(str_replace('_', ' ', $material->nama)) }}
+                                    <option value="{{ $material->id }}" data-satuan-kecil="{{ $material->satuan_kecil->nama }}" data-satuan-besar="{{ $material->satuan_besar->nama }}" data-sejumlah="{{ $material->sejumlah }}">
+                                        {{ ucwords(str_replace('_', ' ', $material->kode)) }} | {{ ucwords(str_replace('_', ' ', $material->nama)) }}
                                     </option>
                                 @endforeach
                             </select>
                         </td>
                         <td>
-                            <input type="number" class="form-control jumlah" id="jumlah_${materialCounter}" name="jumlahs[]" placeholder="Masukkan {{ ucReplaceUnderscoreToSpace('jumlah') }}" step="any" required>
+                            <input type="number" class="form-control jumlah_dalam_satuan_kecil" id="jumlah_dalam_satuan_kecil_${materialCounter}" name="jumlah_kecil[]" placeholder="Masukkan {{ ucReplaceUnderscoreToSpace('jumlah_kecil') }}" step="any" required>
+                            <span class="satuan_kecil" id="satuan_kecil_${materialCounter}"></span>
                         </td>
                         <td>
-                            <span class="form-control satuan_besar_nama" id="satuan_besar_nama_${materialCounter}"></span>
+                            <input type="number" class="form-control jumlah_dalam_satuan_besar" id="jumlah_dalam_satuan_besar_${materialCounter}" name="jumlah_besar[]" placeholder="Masukkan {{ ucReplaceUnderscoreToSpace('jumlah_besar') }}" step="any" required>
+                            <span class="satuan_besar" id="satuan_besar_${materialCounter}"></span>
                         </td>
                         <td>
                             <button type="button" class="btn btn-danger btn-sm btn-block remove-material">{{ ucReplaceUnderscoreToSpace('hapus') }}</button>
                         </td>
                     </tr>
                 `;
-
-                // Append the new row to the materials table
                 $('#materials_table').append(newRow);
-
-                // Initialize Select2 for the new dropdown
                 $('#material_' + materialCounter).select2({
                     theme: 'bootstrap',
                     width: '100%',
                 }).on('change', function() {
-                    var index = $(this).attr('id').split('_')[1]; // Ambil indeks dari id dropdown
-                    var satuanBesar = $(this).find(':selected').data('satuan-besar'); // Ambil data satuan-besar dari opsi terpilih
-
-                    // Update teks pada span satuan_besar_nama
-                    $('#satuan_besar_nama_' + index).text(satuanBesar);
+                    updateSatuan($(this));
                 });
-
-                // Initialize remove button for new row
-                $('.remove-material').click(function() {
-                    $(this).closest('tr').remove();
-                });
+                initializeRemoveButton();
             }
 
-            // Add material button click event
             $('#add_material').click(function() {
                 addMaterialRow();
             });
