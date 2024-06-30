@@ -32,6 +32,11 @@ class Material extends Model
         return $this->belongsTo(Satuan::class, 'satuan_kecil_id');
     }
 
+    public function kebutuhan()
+    {
+        return $this->hasMany(Kebutuhan::class, 'produk_id');
+    }
+
     protected static function booted()
     {
         static::created(function ($material) {

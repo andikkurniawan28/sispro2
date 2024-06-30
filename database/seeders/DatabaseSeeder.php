@@ -10,19 +10,12 @@ use App\Models\Divisi;
 use App\Models\Gudang;
 use App\Models\Satuan;
 use App\Models\Jabatan;
-use App\Models\BahanBaku;
 use App\Models\Permission;
-use App\Models\ProdukAkhir;
 use App\Models\JenisMaterial;
 use App\Models\FungsiMaterial;
-use App\Models\JenisBahanBaku;
-use App\Models\ProdukReproses;
 use Illuminate\Database\Seeder;
-use App\Models\JenisProdukAkhir;
 use App\Models\JenisJurnalGudang;
-use App\Models\JenisProdukSamping;
 use Illuminate\Support\Facades\DB;
-use App\Models\JenisProdukReproses;
 
 class DatabaseSeeder extends Seeder
 {
@@ -192,62 +185,11 @@ class DatabaseSeeder extends Seeder
             ["nama" => ucReplaceUnderscoreToSpace('sambal_sachet')],
         ]);
 
-        // $jenis_bahan_baku = [
-        //     ["nama" => ucReplaceUnderscoreToSpace('tepung')],
-        //     ["nama" => ucReplaceUnderscoreToSpace('seasoning')],
-        //     ["nama" => ucReplaceUnderscoreToSpace('plastik_kemasan')],
-        //     ["nama" => ucReplaceUnderscoreToSpace('tray')],
-        // ];
-        // JenisBahanBaku::insert($jenis_bahan_baku);
-
-        // $jenis_produk_reproses = [
-        //     ["nama" => ucReplaceUnderscoreToSpace('filling')],
-        //     ["nama" => ucReplaceUnderscoreToSpace('sambal')],
-        // ];
-        // JenisProdukReproses::insert($jenis_produk_reproses);
-
-        // $jenis_produk_samping = [
-        //     ["nama" => ucReplaceUnderscoreToSpace('tetes')],
-        //     ["nama" => ucReplaceUnderscoreToSpace('ampas')],
-        // ];
-        // JenisProdukSamping::insert($jenis_produk_samping);
-
-        // $jenis_produk_akhir = [
-        //     ["nama" => ucReplaceUnderscoreToSpace('meat')],
-        //     ["nama" => ucReplaceUnderscoreToSpace('bakery')],
-        //     ["nama" => ucReplaceUnderscoreToSpace('saus')],
-        // ];
-        // JenisProdukAkhir::insert($jenis_produk_akhir);
-
-        // $bahan_baku = [
-        //     ["nama" => ucReplaceUnderscoreToSpace('tepung_tapioka'), 'kode' => strtoupper('m1'), 'jenis_bahan_baku_id' => 1, 'satuan_kecil_id' => 1, 'satuan_besar_id' => 2, 'sejumlah' => 10],
-        //     ["nama" => ucReplaceUnderscoreToSpace('tepung_panir'), 'kode' => strtoupper('m2'), 'jenis_bahan_baku_id' => 1, 'satuan_kecil_id' => 1, 'satuan_besar_id' => 2, 'sejumlah' => 10],
-        //     ["nama" => ucReplaceUnderscoreToSpace('tepung_jagung'), 'kode' => strtoupper('m3'), 'jenis_bahan_baku_id' => 1, 'satuan_kecil_id' => 1, 'satuan_besar_id' => 2, 'sejumlah' => 10],
-        // ];
-        // BahanBaku::insert($bahan_baku);
-
-        // $produk_reproses = [
-        //     ["nama" => ucReplaceUnderscoreToSpace('sambal_tapioka'), 'kode' => strtoupper('s1'), 'jenis_produk_reproses_id' => 2, 'satuan_kecil_id' => 1, 'satuan_besar_id' => 2, 'sejumlah' => 10],
-        //     ["nama" => ucReplaceUnderscoreToSpace('sambal_panir'), 'kode' => strtoupper('s2'), 'jenis_produk_reproses_id' => 2, 'satuan_kecil_id' => 1, 'satuan_besar_id' => 2, 'sejumlah' => 10],
-        //     ["nama" => ucReplaceUnderscoreToSpace('sambal_jagung'), 'kode' => strtoupper('s3'), 'jenis_produk_reproses_id' => 2, 'satuan_kecil_id' => 1, 'satuan_besar_id' => 2, 'sejumlah' => 10],
-        // ];
-        // ProdukReproses::insert($produk_reproses);
-
-        // $produk_akhir = [
-        //     ["nama" => ucReplaceUnderscoreToSpace('nugget_tapioka'), 'kode' => strtoupper('x1'), 'jenis_produk_akhir_id' => 2, 'satuan_kecil_id' => 1, 'satuan_besar_id' => 2, 'sejumlah' => 10],
-        //     ["nama" => ucReplaceUnderscoreToSpace('nugget_panir'), 'kode' => strtoupper('x2'), 'jenis_produk_akhir_id' => 2, 'satuan_kecil_id' => 1, 'satuan_besar_id' => 2, 'sejumlah' => 10],
-        //     ["nama" => ucReplaceUnderscoreToSpace('nugget_jagung'), 'kode' => strtoupper('x3'), 'jenis_produk_akhir_id' => 2, 'satuan_kecil_id' => 1, 'satuan_besar_id' => 2, 'sejumlah' => 10],
-        // ];
-        // ProdukAkhir::insert($produk_akhir);
-
         $gudangs = Gudang::all();
         foreach ($gudangs as $gudang) {
             $column_name = str_replace(' ', '_', $gudang->nama);
             $queries = [
-                "ALTER TABLE bahan_bakus ADD COLUMN `{$column_name}` FLOAT NULL",
-                "ALTER TABLE produk_reproses ADD COLUMN `{$column_name}` FLOAT NULL",
-                "ALTER TABLE produk_sampings ADD COLUMN `{$column_name}` FLOAT NULL",
-                "ALTER TABLE produk_akhirs ADD COLUMN `{$column_name}` FLOAT NULL",
+                "ALTER TABLE materials ADD COLUMN `{$column_name}` FLOAT NULL",
             ];
 
             foreach ($queries as $query) {

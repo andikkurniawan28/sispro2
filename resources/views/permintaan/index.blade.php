@@ -1,7 +1,7 @@
 @extends('template.kaiadmin.master')
 
 @section('title')
-    {{ ucReplaceUnderscoreToSpace('material') }}
+    {{ ucReplaceUnderscoreToSpace('permintaan') }}
 @endsection
 
 @section('akses-aktif')
@@ -19,7 +19,7 @@
             <i class="icon-arrow-right"></i>
         </li>
         <li class="nav-item">
-            <a href="{{ route('material.index') }}">@yield('title')</a>
+            <a href="{{ route('permintaan.index') }}">@yield('title')</a>
         </li>
     </ul>
 @endsection
@@ -36,21 +36,22 @@
                     <div class="card">
                         <div class="card-header">
                             <div class="card-title text-white text-right">
-                                <a href="{{ route('material.create') }}" class="btn btn-sm btn-primary text-white">Tambah</a>
+                                <a href="{{ route('permintaan.create') }}" class="btn btn-sm btn-primary text-white">Tambah</a>
                             </div>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-bordered mt-4" id="material-table" width="100%">
+                                <table class="table table-bordered mt-4" id="permintaan-table" width="100%">
                                     <thead>
                                         <tr>
+                                            <th>{{ ucReplaceUnderscoreToSpace('dibuat_pada') }}</th>
+                                            <th>{{ ucReplaceUnderscoreToSpace('berlaku_sampai') }}</th>
                                             <th>{{ ucReplaceUnderscoreToSpace('kode') }}</th>
-                                            <th>{{ ucReplaceUnderscoreToSpace('barcode') }}</th>
-                                            <th>{{ ucReplaceUnderscoreToSpace('nama') }}</th>
-                                            <th>{{ ucReplaceUnderscoreToSpace('fungsi') }}</th>
-                                            <th>{{ ucReplaceUnderscoreToSpace('jenis') }}</th>
-                                            {{-- <th>{{ ucReplaceUnderscoreToSpace('satuan_besar') }}</th>
-                                            <th>{{ ucReplaceUnderscoreToSpace('satuan_kecil') }}</th> --}}
+                                            {{-- <th>{{ ucReplaceUnderscoreToSpace('kode_produk') }}</th>
+                                            <th>{{ ucReplaceUnderscoreToSpace('produk') }}</th>
+                                            <th>{{ ucReplaceUnderscoreToSpace('jumlah') }}</th>
+                                            <th>{{ ucReplaceUnderscoreToSpace('satuan_besar') }}</th> --}}
+                                            <th>{{ ucReplaceUnderscoreToSpace('user') }}</th>
                                             <th>{{ ucReplaceUnderscoreToSpace('tindakan') }}</th>
                                         </tr>
                                     </thead>
@@ -66,21 +67,24 @@
     </div>
     <script type="text/javascript">
         $(function () {
-            $('#material-table').DataTable({
+            $('#permintaan-table').DataTable({
                 order: [
                     [0, 'desc']
                 ],
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('material.index') }}",
+                ajax: "{{ route('permintaan.index') }}",
                 columns: [
+                    { data: 'created_at', name: 'created_at' },
+                    { data: 'berlaku_sampai', name: 'berlaku_sampai' },
                     { data: 'kode', name: 'kode' },
-                    { data: 'barcode', name: 'barcode' },
-                    { data: 'nama', name: 'nama' },
-                    {data: 'fungsi_material_nama', name: 'fungsi_material.nama'},
-                    {data: 'jenis_material_nama', name: 'jenis_material.nama'},
+                    // { data: 'material_kode', name: 'material.kode' },
+                    // { data: 'material_nama', name: 'material.nama' },
+                    // { data: 'jumlah', name: 'jumlah' },
+                    // { data: 'satuan_besar', name: 'satuan_besar' },
+                    { data: 'user_nama', name: 'user_nama' },
                     { data: 'tindakan', name: 'tindakan', orderable: false, searchable: false },
-                ],
+                ]
             });
         });
 
@@ -89,8 +93,8 @@
                 if (event.target.classList.contains('delete-btn')) {
                     event.preventDefault();
                     const button = event.target;
-                    const material_id = button.getAttribute('data-id');
-                    const material_nama = button.getAttribute('data-nama');
+                    const permintaan_id = button.getAttribute('data-id');
+                    const permintaan_nama = button.getAttribute('data-nama');
                     const csrfTokenElement = document.querySelector('meta[name="csrf-token"]');
                     if (!csrfTokenElement) {
                         console.error('CSRF token not found!');
@@ -110,7 +114,7 @@
                         if (result.isConfirmed) {
                             const form = document.createElement('form');
                             form.setAttribute('method', 'POST');
-                            form.setAttribute('action', `{{ url('material') }}/${material_id}`);
+                            form.setAttribute('action', `{{ url('permintaan') }}/${permintaan_id}`);
                             form.setAttribute('style', 'display: none;'); // Optional: Hide the form
 
                             const hiddenMethod = document.createElement('input');

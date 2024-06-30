@@ -55,9 +55,10 @@ class MaterialController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Material $material)
+    public function show($id)
     {
-        //
+        $material = Material::findOrFail($id);
+        return view('material.show', compact('material'));
     }
 
     /**
@@ -104,40 +105,27 @@ class MaterialController extends Controller
 
     public static function dataTable()
     {
-        $data = Material::with('fungsi_material', 'jenis_material', 'satuan_besar', 'satuan_kecil')->get();
+        $data = Material::with('fungsi_material', 'jenis_material')->get();
         return Datatables::of($data)
             ->addIndexColumn()
-            ->addColumn('fungsi_material', function ($row) {
-                return $row->fungsi_material ? $row->fungsi_material->nama : null;
+            ->addColumn('fungsi_material_nama', function ($row) {
+                return $row->fungsi_material ? $row->fungsi_material->nama : 'N/A';
             })
-            ->addColumn('jenis_material', function ($row) {
-                return $row->jenis_material ? $row->jenis_material->nama : null;
-            })
-            ->addColumn('satuan_besar', function ($row) {
-                return $row->satuan_besar->nama;
-            })
-            ->addColumn('satuan_kecil', function ($row) {
-                return $row->satuan_kecil->nama;
+            ->addColumn('jenis_material_nama', function ($row) {
+                return $row->jenis_material ? $row->jenis_material->nama : 'N/A';
             })
             ->addColumn('tindakan', function ($row) {
                 $editUrl = route('material.edit', $row->id);
+                $showUrl = route('material.show', $row->id);
                 return '
                     <div class="btn-group" role="group" aria-label="Action Buttons">
                         <a href="' . $editUrl . '" class="btn btn-secondary btn-sm">Edit</a>
+                        <a href="' . $showUrl . '" class="btn btn-info btn-sm">Detail</a>
                         <button class="btn btn-danger btn-sm delete-btn" data-id="' . $row->id . '" data-name="' . $row->name . '">Hapus</button>
                     </div>
                 ';
             })
             ->rawColumns(['tindakan'])
-            ->setRowAttr([
-                'data-searchable' => 'true',
-                'data-fungsi-material' => function ($row) {
-                    return $row->fungsi_material ? $row->fungsi_material->nama : '';
-                },
-                'data-jenis-material' => function ($row) {
-                    return $row->jenis_material ? $row->jenis_material->nama : '';
-                }
-            ])
             ->make(true);
     }
 
