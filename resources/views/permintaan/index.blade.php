@@ -44,13 +44,9 @@
                                 <table class="table table-bordered mt-4" id="permintaan-table" width="100%">
                                     <thead>
                                         <tr>
+                                            <th>{{ ucReplaceUnderscoreToSpace('kode') }}</th>
                                             <th>{{ ucReplaceUnderscoreToSpace('dibuat_pada') }}</th>
                                             <th>{{ ucReplaceUnderscoreToSpace('berlaku_sampai') }}</th>
-                                            <th>{{ ucReplaceUnderscoreToSpace('kode') }}</th>
-                                            {{-- <th>{{ ucReplaceUnderscoreToSpace('kode_produk') }}</th>
-                                            <th>{{ ucReplaceUnderscoreToSpace('produk') }}</th>
-                                            <th>{{ ucReplaceUnderscoreToSpace('jumlah') }}</th>
-                                            <th>{{ ucReplaceUnderscoreToSpace('satuan_besar') }}</th> --}}
                                             <th>{{ ucReplaceUnderscoreToSpace('user') }}</th>
                                             <th>{{ ucReplaceUnderscoreToSpace('tindakan') }}</th>
                                         </tr>
@@ -75,13 +71,9 @@
                 serverSide: true,
                 ajax: "{{ route('permintaan.index') }}",
                 columns: [
+                    { data: 'kode', name: 'kode' },
                     { data: 'created_at', name: 'created_at' },
                     { data: 'berlaku_sampai', name: 'berlaku_sampai' },
-                    { data: 'kode', name: 'kode' },
-                    // { data: 'material_kode', name: 'material.kode' },
-                    // { data: 'material_nama', name: 'material.nama' },
-                    // { data: 'jumlah', name: 'jumlah' },
-                    // { data: 'satuan_besar', name: 'satuan_besar' },
                     { data: 'user_nama', name: 'user_nama' },
                     { data: 'tindakan', name: 'tindakan', orderable: false, searchable: false },
                 ]

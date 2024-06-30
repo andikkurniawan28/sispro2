@@ -59,7 +59,7 @@
                             </div>
                             <hr>
                             <div class="invoice-body">
-                                <h5>Detail Produk Akhir:</h5>
+                                <h5>Detail {{ ucReplaceUnderscoreToSpace('permintaan') }}:</h5>
                                 <br>
                                 <table class="table table-bordered">
                                     <thead>

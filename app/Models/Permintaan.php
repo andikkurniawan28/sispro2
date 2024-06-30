@@ -26,7 +26,7 @@ class Permintaan extends Model
     {
         $tanggal = now()->format('d/m/y'); // Format tanggal dd/mm/yy
         $urutan = Permintaan::whereDate('created_at', today())->count() + 1;
-        $kode = "PPA-{$tanggal}-" . str_pad($urutan, 6, '0', STR_PAD_LEFT);
+        $kode = "REQ-{$tanggal}-" . str_pad($urutan, 6, '0', STR_PAD_LEFT);
         return $kode;
     }
 

@@ -15,13 +15,13 @@
             <i class="icon-arrow-right"></i>
         </li>
         <li class="nav-item">
-            <a href="{{ route('kbbupa.index') }}">{{ ucReplaceUnderscoreToSpace('kebutuhan') }}</a>
+            <a href="{{ route('kebutuhan.index') }}">{{ ucReplaceUnderscoreToSpace('kebutuhan') }}</a>
         </li>
         <li class="separator">
             <i class="icon-arrow-right"></i>
         </li>
         <li class="nav-item">
-            <a href="{{ route('kbbupa.index') }}">@yield('title')</a>
+            <a href="{{ route('kebutuhan.index') }}">@yield('title')</a>
         </li>
     </ul>
 @endsection

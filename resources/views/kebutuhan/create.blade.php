@@ -40,7 +40,7 @@
                             <form action="{{ route('kebutuhan.store') }}" method="POST">
                                 @csrf
                                 <div class="row">
-                                    <div class="col-md-12">
+                                    <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="produk_id">{{ ucReplaceUnderscoreToSpace('produk') }}</label>
                                             <select class="produk form-control @error('produk_id') is-invalid @enderror" id="produk_id" name="produk_id" required>

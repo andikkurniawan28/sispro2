@@ -44,8 +44,8 @@
                                 <table class="table table-bordered mt-4" id="jurnal_gudang-table" width="100%">
                                     <thead>
                                         <tr>
-                                            <th>{{ ucReplaceUnderscoreToSpace('dibuat_pada') }}</th>
                                             <th>{{ ucReplaceUnderscoreToSpace('kode') }}</th>
+                                            <th>{{ ucReplaceUnderscoreToSpace('dibuat_pada') }}</th>
                                             <th>{{ ucReplaceUnderscoreToSpace('user') }}</th>
                                             <th>{{ ucReplaceUnderscoreToSpace('tindakan') }}</th>
                                         </tr>
@@ -70,8 +70,8 @@
                 serverSide: true,
                 ajax: "{{ route('jurnal_gudang.index') }}",
                 columns: [
-                    { data: 'created_at', name: 'created_at' },
                     { data: 'kode', name: 'kode' },
+                    { data: 'created_at', name: 'created_at' },
                     { data: 'user_nama', name: 'user_nama' },
                     { data: 'tindakan', name: 'tindakan', orderable: false, searchable: false },
                 ]

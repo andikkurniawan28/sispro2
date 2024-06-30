@@ -3,15 +3,12 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
-use App\Models\BahanBaku;
-use App\Models\ProdukAkhir;
+use App\Models\Gudang;
+use App\Models\Material;
 use App\Models\JurnalGudang;
 use Illuminate\Http\Request;
-use App\Models\ProdukSamping;
-use App\Models\ProdukReproses;
-use App\Models\Gudang;
-use App\Models\JenisJurnalGudang;
 use Yajra\DataTables\DataTables;
+use App\Models\JenisJurnalGudang;
 use App\Models\JurnalGudangDetail;
 use Illuminate\Support\Facades\Auth;
 
@@ -35,14 +32,10 @@ class JurnalGudangController extends Controller
     {
         $gudangs = Gudang::all();
         $jenis_jurnal_gudangs = JenisJurnalGudang::all();
-        $produk_akhirs = ProdukAkhir::with('satuan_besar', 'satuan_kecil')->get();
-        $produk_reproses = ProdukReproses::with('satuan_besar', 'satuan_kecil')->get();
-        $produk_sampings = ProdukSamping::with('satuan_besar', 'satuan_kecil')->get();
-        $bahan_bakus = BahanBaku::with('satuan_besar', 'satuan_kecil')->get();
+        $materials = Material::all();
         $kode = JurnalGudang::kode_faktur();
         return view('jurnal_gudang.create',
-            compact('produk_akhirs', 'produk_reproses', 'produk_sampings', 'bahan_bakus', 'kode',
-                    'gudangs', 'jenis_jurnal_gudangs',
+            compact('materials', 'kode', 'gudangs', 'jenis_jurnal_gudangs',
         ));
     }
 

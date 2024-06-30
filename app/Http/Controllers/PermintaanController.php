@@ -28,7 +28,7 @@ class PermintaanController extends Controller
      */
     public function create()
     {
-        $materials = Material::all();
+        $materials = Material::with('satuan_besar')->get();
         $kode = Permintaan::kode_faktur();
         return view('permintaan.create', compact('materials', 'kode'));
     }
@@ -45,7 +45,7 @@ class PermintaanController extends Controller
             'materials' => 'required|array',
             'materials.*' => 'required|distinct|exists:materials,id', // distinct untuk memastikan material tidak duplikat
             'jumlahs' => 'required|array',
-            'jumlahs.*' => 'required|integer|min:1',
+            'jumlahs.*' => 'required|min:1',
         ]);
 
         // Buat data permintaan
@@ -106,7 +106,7 @@ class PermintaanController extends Controller
             'kode' => 'required|string|max:255',
             'berlaku_sampai' => 'required|date',
             'materials.*' => 'required|distinct|exists:materials,id', // distinct untuk memastikan material tidak duplikat
-            'jumlahs.*' => 'required|integer|min:1',
+            'jumlahs.*' => 'required|min:1',
         ]);
 
         $permintaan = Permintaan::findOrFail($id);
