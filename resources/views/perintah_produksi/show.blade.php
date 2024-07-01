@@ -1,7 +1,7 @@
 @extends('template.kaiadmin.master')
 
 @section('title')
-    Detail {{ ucReplaceUnderscoreToSpace('jurnal_produksi') }}
+    Detail {{ ucReplaceUnderscoreToSpace('perintah_produksi') }}
 @endsection
 
 @section('navigation')
@@ -15,13 +15,13 @@
             <i class="icon-arrow-right"></i>
         </li>
         <li class="nav-item">
-            <a href="{{ route('jurnal_produksi.index') }}">{{ ucReplaceUnderscoreToSpace('jurnal_produksi') }}</a>
+            <a href="{{ route('perintah_produksi.index') }}">{{ ucReplaceUnderscoreToSpace('perintah_produksi') }}</a>
         </li>
         <li class="separator">
             <i class="icon-arrow-right"></i>
         </li>
         <li class="nav-item">
-            <a href="{{ route('jurnal_produksi.index') }}">@yield('title')</a>
+            <a href="{{ route('perintah_produksi.index') }}">@yield('title')</a>
         </li>
     </ul>
 @endsection
@@ -38,21 +38,18 @@
                     <div class="card" id="invoice-section">
                         <div class="card-body">
                             <div class="invoice-header">
-                                <h4 class="invoice-title">Faktur {{ ucReplaceUnderscoreToSpace('jurnal_produksi') }}</h4>
+                                <h4 class="invoice-title">Faktur {{ ucReplaceUnderscoreToSpace('perintah_produksi') }}</h4>
                                 <div class="invoice-info">
                                     <div>
-                                        <strong>Kode:</strong> {{ $jurnal_produksi->kode }}
-                                    </div>
-                                    <div>
-                                        <strong>Permintaan:</strong> {{ $jurnal_produksi->permintaan->kode }}
+                                        <strong>Kode:</strong> {{ $perintah_produksi->kode }}
                                     </div>
                                     <div>
                                         <strong>Dibuat pada:</strong>
-                                        {{ date('d-m-Y H:i:s', strtotime($jurnal_produksi->created_at)) }}
+                                        {{ date('d-m-Y H:i:s', strtotime($perintah_produksi->created_at)) }}
                                     </div>
                                     <div>
-                                        <strong>Dibuat Oleh:</strong> {{ $jurnal_produksi->user->nama }}
-                                        ({{ $jurnal_produksi->user->jabatan->nama }})
+                                        <strong>Dibuat Oleh:</strong> {{ $perintah_produksi->user->nama }}
+                                        ({{ $perintah_produksi->user->jabatan->nama }})
                                     </div>
                                 </div>
                             </div>
@@ -137,7 +134,7 @@
                 .from(element)
                 .set({
                     margin: [0.5, 0.5, 0.5, 0.5], // top, left, bottom, right margins
-                    filename: "Faktur {{ ucReplaceUnderscoreToSpace('jurnal_produksi') }}.pdf",
+                    filename: "Faktur {{ ucReplaceUnderscoreToSpace('perintah_produksi') }}.pdf",
                     image: { type: 'png', quality: 1 },
                     html2canvas: { scale: 4, logging: true },
                     jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } // Changed to portrait

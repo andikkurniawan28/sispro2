@@ -146,6 +146,11 @@
                     </a>
                     <div class="collapse" id="produksi">
                         <ul class="nav nav-collapse">
+                            {{-- <li>
+                                <a href="{{ route('perintah_produksi.index') }}">
+                                    <span class="sub-item">{{ ucReplaceUnderscoreToSpace('perintah_produksi') }}</span>
+                                </a>
+                            </li> --}}
                             <li>
                                 <a href="{{ route('jurnal_produksi.index') }}">
                                     <span class="sub-item">{{ ucReplaceUnderscoreToSpace('jurnal_produksi') }}</span>

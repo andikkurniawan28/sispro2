@@ -199,10 +199,10 @@ class DatabaseSeeder extends Seeder
         }
 
         Material::insert([
-            ["nama" => ucReplaceUnderscoreToSpace('tepung_tapioka_segitiga_biru'), "kode" => "M1", "barcode" => "M1", "fungsi_material_id" => 1, "jenis_material_id" => 5, "satuan_besar_id" => 1, "satuan_kecil_id" => 8, "sejumlah" => 50],
-            ["nama" => ucReplaceUnderscoreToSpace('tepung_tapioka_cakra_merah'), "kode" => "M2", "barcode" => "M2", "fungsi_material_id" => 1, "jenis_material_id" => 5, "satuan_besar_id" => 1, "satuan_kecil_id" => 8, "sejumlah" => 50],
-            ["nama" => ucReplaceUnderscoreToSpace('weiwang_minipao_coklat'), "kode" => "MPC", "barcode" => "MPC", "fungsi_material_id" => 4, "jenis_material_id" => 2, "satuan_besar_id" => 3, "satuan_kecil_id" => 2, "sejumlah" => 10],
-            ["nama" => ucReplaceUnderscoreToSpace('weiwang_minipao_ayam'), "kode" => "MPA", "barcode" => "MPA", "fungsi_material_id" => 4, "jenis_material_id" => 2, "satuan_besar_id" => 3, "satuan_kecil_id" => 2, "sejumlah" => 10],
+            ["nama" => ucReplaceUnderscoreToSpace('tepung_tapioka_segitiga_biru'), "kode" => "M1", "barcode" => "M1", "fungsi_material_id" => 1, "jenis_material_id" => 5, "satuan_besar_id" => 1, "satuan_kecil_id" => 8, "sejumlah" => 50, "hasil_per_batch_dalam_satuan_besar" => null, "hasil_per_batch_dalam_satuan_kecil" => null],
+            ["nama" => ucReplaceUnderscoreToSpace('tepung_tapioka_cakra_merah'), "kode" => "M2", "barcode" => "M2", "fungsi_material_id" => 1, "jenis_material_id" => 5, "satuan_besar_id" => 1, "satuan_kecil_id" => 8, "sejumlah" => 50, "hasil_per_batch_dalam_satuan_besar" => null, "hasil_per_batch_dalam_satuan_kecil" => null],
+            ["nama" => ucReplaceUnderscoreToSpace('weiwang_minipao_coklat'), "kode" => "MPC", "barcode" => "MPC", "fungsi_material_id" => 4, "jenis_material_id" => 2, "satuan_besar_id" => 3, "satuan_kecil_id" => 2, "sejumlah" => 10, "hasil_per_batch_dalam_satuan_besar" => 100, "hasil_per_batch_dalam_satuan_kecil" => 1000],
+            ["nama" => ucReplaceUnderscoreToSpace('weiwang_minipao_ayam'), "kode" => "MPA", "barcode" => "MPA", "fungsi_material_id" => 4, "jenis_material_id" => 2, "satuan_besar_id" => 3, "satuan_kecil_id" => 2, "sejumlah" => 10, "hasil_per_batch_dalam_satuan_besar" => 100, "hasil_per_batch_dalam_satuan_kecil" => 1000],
         ]);
 
     }

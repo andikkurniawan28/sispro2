@@ -36,11 +36,12 @@
                     <div class="card">
                         <div class="card-header">
                             <div class="card-title text-white text-right">
+                                <button id="exportExcel" class="btn btn-sm btn-success">Export Excel</button>
                             </div>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-bordered mt-4" id="saldo_material-table" width="100%">
+                                <table class="table table-bordered table-hover mt-4" id="saldo_material-table" width="100%">
                                     <thead>
                                         <tr>
                                             <th>{{ ucReplaceUnderscoreToSpace('kode') }}</th>
@@ -62,9 +63,17 @@
             </div>
         </div>
     </div>
+
+    <!-- Tambahkan CDN untuk SheetJS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+
+    <!-- Tambahkan CDN untuk jQuery dan DataTables -->
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
+
     <script type="text/javascript">
         $(function () {
-            $('#saldo_material-table').DataTable({
+            var table = $('#saldo_material-table').DataTable({
                 order: [
                     [0, 'desc']
                 ],
@@ -80,6 +89,14 @@
                     @endforeach
                     { data: 'tindakan', name: 'tindakan', orderable: false, searchable: false },
                 ]
+            });
+
+            $('#exportExcel').on('click', function() {
+                var data = table.rows().data().toArray();
+                var ws = XLSX.utils.json_to_sheet(data);
+                var wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+                XLSX.writeFile(wb, 'Saldo_Material.xlsx');
             });
         });
     </script>

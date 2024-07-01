@@ -37,7 +37,6 @@ class SaldoMaterialController extends Controller
     {
         $data = SaldoMaterial::data();
         return Datatables::of($data)
-            ->addIndexColumn()
             ->addColumn('tindakan', function ($row) {
                 $penyesuaian = route('saldo_material.penyesuaian', $row['id']);
                 return '

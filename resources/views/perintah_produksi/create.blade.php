@@ -1,7 +1,7 @@
 @extends('template.kaiadmin.master')
 
 @section('title')
-    Tambah {{ ucReplaceUnderscoreToSpace('jurnal_produksi') }}
+    Tambah {{ ucReplaceUnderscoreToSpace('perintah_produksi') }}
 @endsection
 
 @section('navigation')
@@ -15,13 +15,13 @@
             <i class="icon-arrow-right"></i>
         </li>
         <li class="nav-item">
-            <a href="{{ route('jurnal_produksi.index') }}">{{ ucReplaceUnderscoreToSpace('jurnal_produksi') }}</a>
+            <a href="{{ route('perintah_produksi.index') }}">{{ ucReplaceUnderscoreToSpace('perintah_produksi') }}</a>
         </li>
         <li class="separator">
             <i class="icon-arrow-right"></i>
         </li>
         <li class="nav-item">
-            <a href="{{ route('jurnal_produksi.index') }}">@yield('title')</a>
+            <a href="{{ route('perintah_produksi.index') }}">@yield('title')</a>
         </li>
     </ul>
 @endsection
@@ -37,7 +37,7 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
-                            <form action="{{ route('jurnal_produksi.store') }}" method="POST">
+                            <form action="{{ route('perintah_produksi.store') }}" method="POST">
                                 @csrf
                                 <div class="row">
                                     <div class="col-md-4">
@@ -46,79 +46,55 @@
                                             <input type="text" class="form-control" id="kode" name="kode"
                                                 value="{{ $kode }}" placeholder="Masukkan kode ..." readonly>
                                         </div>
-                                        <div class="form-group">
-                                            <label for="permintaan_id">{{ ucReplaceUnderscoreToSpace('permintaan') }}</label>
-                                            <select class="form-control permintaan_id" id="permintaan_id" name="permintaan_id" required>
-                                                <option disabled selected>Pilih {{ ucReplaceUnderscoreToSpace('permintaan') }}</option>
-                                                @foreach ($permintaans as $permintaan)
-                                                    <option value="{{ $permintaan->id }}">{{ $permintaan->kode }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-8">
                                         {{-- <div class="form-group">
-                                            <label for="permintaan_id">{{ ucReplaceUnderscoreToSpace('detail_permintaan') }}</label>
-                                            <div class="table-responsive">
-                                                <table class="table table-bordered" id="detail-permintaan">
-                                                    <thead>
-                                                        <tr>
-                                                            <th style="width: 50%">{{ ucReplaceUnderscoreToSpace('material') }}</th>
-                                                            <th style="width: 25%">{{ ucReplaceUnderscoreToSpace('jumlah_kecil') }}</th>
-                                                            <th style="width: 25%">{{ ucReplaceUnderscoreToSpace('jumlah_besar') }}</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    </tbody>
-                                                </table>
-                                            </div>
+                                            <label for="berlaku_sampai">{{ ucReplaceUnderscoreToSpace('berlaku_sampai') }}</label>
+                                            <input type="datetime-local" class="form-control" id="berlaku_sampai"
+                                                name="berlaku_sampai" value="{{ old('berlaku_sampai') }}"
+                                                placeholder="Masukkan {{ ucReplaceUnderscoreToSpace('berlaku_sampai') }} ..." required autofocus>
                                         </div> --}}
                                     </div>
                                     <div class="col-md-12">
                                         <br>
-                                        <div class="form-group">
-                                            <label for="permintaan_id">{{ ucReplaceUnderscoreToSpace('hasil_produksi') }}</label>
-                                            <div class="table-responsive">
-                                                <table class="table table-bordered">
-                                                    <thead>
-                                                        <tr>
-                                                            <th style="width: 50%">{{ ucReplaceUnderscoreToSpace('material') }}</th>
-                                                            <th style="width: 20%">{{ ucReplaceUnderscoreToSpace('jumlah_kecil') }}</th>
-                                                            <th style="width: 20%">{{ ucReplaceUnderscoreToSpace('jumlah_besar') }}</th>
-                                                            <th style="width: 10%">{{ ucReplaceUnderscoreToSpace('hapus') }}</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody id="materials_table">
-                                                        @if (old('materials'))
-                                                            @foreach (old('materials') as $index => $material)
-                                                                <tr id="material_row_{{ $index }}">
-                                                                    <td>
-                                                                        <select class="form-control material" id="material_{{ $index }}" name="materials[]" required>
-                                                                            <option disabled selected>Pilih {{ ucReplaceUnderscoreToSpace('material') }}</option>
-                                                                            @foreach ($materials as $materialItem)
-                                                                                <option value="{{ $materialItem->id }}" data-satuan-kecil="{{ $materialItem->satuan_kecil->nama }}" data-satuan-besar="{{ $materialItem->satuan_besar->nama }}" data-sejumlah="{{ $materialItem->sejumlah }}" {{ $materialItem->id == $material ? 'selected' : '' }}>
-                                                                                    {{ ucwords(str_replace('_', ' ', $materialItem->kode)) }} | {{ ucwords(str_replace('_', ' ', $materialItem->nama)) }}
-                                                                                </option>
-                                                                            @endforeach
-                                                                        </select>
-                                                                    </td>
-                                                                    <td>
-                                                                        <input type="number" class="form-control jumlah_dalam_satuan_kecil" id="jumlah_dalam_satuan_kecil_{{ $index }}" name="jumlah_kecil[]" placeholder="Masukkan {{ ucReplaceUnderscoreToSpace('jumlah_kecil') }}" value="{{ old('jumlah_kecil')[$index] }}" step="any" required>
-                                                                        <span class="satuan_kecil" id="satuan_kecil_{{ $index }}">{{ $materials->find($material)->satuan_kecil->nama }}</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <input type="number" class="form-control jumlah_dalam_satuan_besar" id="jumlah_dalam_satuan_besar_{{ $index }}" name="jumlah_besar[]" placeholder="Masukkan {{ ucReplaceUnderscoreToSpace('jumlah_besar') }}" value="{{ old('jumlah_besar')[$index] }}" step="any" required>
-                                                                        <span class="satuan_besar" id="satuan_besar_{{ $index }}">{{ $materials->find($material)->satuan_besar->nama }}</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <button type="button" class="btn btn-danger btn-sm btn-block remove-material">{{ ucReplaceUnderscoreToSpace('hapus') }}</button>
-                                                                    </td>
-                                                                </tr>
-                                                            @endforeach
-                                                        @endif
-                                                    </tbody>
-                                                </table>
-                                            </div>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width: 50%">{{ ucReplaceUnderscoreToSpace('material') }}</th>
+                                                        <th style="width: 20%">{{ ucReplaceUnderscoreToSpace('jumlah_kecil') }}</th>
+                                                        <th style="width: 20%">{{ ucReplaceUnderscoreToSpace('jumlah_besar') }}</th>
+                                                        <th style="width: 10%">{{ ucReplaceUnderscoreToSpace('hapus') }}</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="materials_table">
+                                                    @if (old('materials'))
+                                                        @foreach (old('materials') as $index => $material)
+                                                            <tr id="material_row_{{ $index }}">
+                                                                <td>
+                                                                    <select class="form-control material" id="material_{{ $index }}" name="materials[]" required>
+                                                                        <option disabled selected>Pilih {{ ucReplaceUnderscoreToSpace('material') }}</option>
+                                                                        @foreach ($materials as $materialItem)
+                                                                            <option value="{{ $materialItem->id }}" data-satuan-kecil="{{ $materialItem->satuan_kecil->nama }}" data-satuan-besar="{{ $materialItem->satuan_besar->nama }}" data-sejumlah="{{ $materialItem->sejumlah }}" {{ $materialItem->id == $material ? 'selected' : '' }}>
+                                                                                {{ ucwords(str_replace('_', ' ', $materialItem->kode)) }} | {{ ucwords(str_replace('_', ' ', $materialItem->nama)) }}
+                                                                            </option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                </td>
+                                                                <td>
+                                                                    <input type="number" class="form-control jumlah_dalam_satuan_kecil" id="jumlah_dalam_satuan_kecil_{{ $index }}" name="jumlah_kecil[]" placeholder="Masukkan {{ ucReplaceUnderscoreToSpace('jumlah_kecil') }}" value="{{ old('jumlah_kecil')[$index] }}" step="any" required>
+                                                                    <span class="satuan_kecil" id="satuan_kecil_{{ $index }}">{{ $materials->find($material)->satuan_kecil->nama }}</span>
+                                                                </td>
+                                                                <td>
+                                                                    <input type="number" class="form-control jumlah_dalam_satuan_besar" id="jumlah_dalam_satuan_besar_{{ $index }}" name="jumlah_besar[]" placeholder="Masukkan {{ ucReplaceUnderscoreToSpace('jumlah_besar') }}" value="{{ old('jumlah_besar')[$index] }}" step="any" required>
+                                                                    <span class="satuan_besar" id="satuan_besar_{{ $index }}">{{ $materials->find($material)->satuan_besar->nama }}</span>
+                                                                </td>
+                                                                <td>
+                                                                    <button type="button" class="btn btn-danger btn-sm btn-block remove-material">{{ ucReplaceUnderscoreToSpace('hapus') }}</button>
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
+                                                    @endif
+                                                </tbody>
+                                            </table>
                                         </div>
                                         <div class="row mt-3">
                                             <div class="col-sm-12 offset-sm-2">
@@ -138,10 +114,6 @@
     <script>
         $(document).ready(function() {
             function initializeSelect2() {
-                $('.permintaan_id').select2({
-                    theme: 'bootstrap',
-                    width: '100%',
-                });
                 $('.material').select2({
                     theme: 'bootstrap',
                     width: '100%',

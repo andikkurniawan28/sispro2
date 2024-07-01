@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\JurnalProduksi;
+use App\Models\PerintahProduksi;
 use App\Models\Material;
 use Illuminate\Http\Request;
 use App\Models\HasilProduksi;
-use App\Models\Permintaan;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
-class JurnalProduksiController extends Controller
+class PerintahProduksiController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -21,7 +20,7 @@ class JurnalProduksiController extends Controller
         if ($request->ajax()) {
             return self::dataTable();
         }
-        return view('jurnal_produksi.index');
+        return view('perintah_produksi.index');
     }
 
     /**
@@ -29,10 +28,9 @@ class JurnalProduksiController extends Controller
      */
     public function create()
     {
-        $permintaans = Permintaan::with('detail')->get();
         $materials = Material::all();
-        $kode = JurnalProduksi::kode_faktur();
-        return view('jurnal_produksi.create', compact('permintaans', 'materials', 'kode'));
+        $kode = PerintahProduksi::kode_faktur();
+        return view('perintah_produksi.create', compact('materials', 'kode'));
     }
 
     /**
@@ -42,7 +40,6 @@ class JurnalProduksiController extends Controller
     {
         // Validasi input
         $request->validate([
-            'permintaan_id' => 'required|exists:permintaans,id',
             'kode' => 'required|string|max:255',
             'materials' => 'required|array',
             'materials.*' => 'required|distinct|exists:materials,id',
@@ -52,11 +49,10 @@ class JurnalProduksiController extends Controller
             'jumlah_besar.*' => 'required|numeric|min:0', // Menambahkan validasi untuk "jumlah_besar"
         ]);
 
-        // Buat data jurnal_produksi
-        $jurnal_produksi = JurnalProduksi::create([
+        // Buat data perintah_produksi
+        $perintah_produksi = PerintahProduksi::create([
             'user_id' => Auth::id(),
             'kode' => $request->kode,
-            'permintaan_id' => $request->permintaan_id,
         ]);
 
         // Validasi produk akhir harus unik
@@ -64,13 +60,13 @@ class JurnalProduksiController extends Controller
         foreach ($request->materials as $index => $material_id) {
             // Validasi jika produk akhir sudah pernah dimasukkan sebelumnya
             if (in_array($material_id, $existingMaterial)) {
-                $jurnal_produksi->delete(); // Hapus jurnal_produksi yang sudah dibuat jika ada duplikasi
-                return redirect()->back()->with('error', 'Material harus unik dalam satu jurnal_produksi.');
+                $perintah_produksi->delete(); // Hapus perintah_produksi yang sudah dibuat jika ada duplikasi
+                return redirect()->back()->with('error', 'Material harus unik dalam satu perintah_produksi.');
             }
             $existingMaterial[] = $material_id;
 
             HasilProduksi::create([
-                'jurnal_produksi_id' => $jurnal_produksi->id,
+                'perintah_produksi_id' => $perintah_produksi->id,
                 'material_id' => $material_id,
                 'jumlah_dalam_satuan_kecil' => $request->jumlah_kecil[$index], // Sesuaikan dengan nama input di form Anda
                 'jumlah_dalam_satuan_besar' => $request->jumlah_besar[$index], // Sesuaikan dengan nama input di form Anda
@@ -79,7 +75,7 @@ class JurnalProduksiController extends Controller
         }
 
         // Redirect dengan pesan sukses
-        return redirect()->route('jurnal_produksi.index')->with('success', 'Jurnal Produksi berhasil dibuat.');
+        return redirect()->route('perintah_produksi.index')->with('success', 'Perintah Produksi berhasil dibuat.');
     }
 
     /**
@@ -87,9 +83,9 @@ class JurnalProduksiController extends Controller
      */
     public function show($id)
     {
-        $jurnal_produksi = JurnalProduksi::findOrFail($id);
-        $hasil_produksi = HasilProduksi::where('jurnal_produksi_id', $id)->get();
-        return view('jurnal_produksi.show', compact('jurnal_produksi', 'hasil_produksi'));
+        $perintah_produksi = PerintahProduksi::findOrFail($id);
+        $hasil_produksi = HasilProduksi::where('perintah_produksi_id', $id)->get();
+        return view('perintah_produksi.show', compact('perintah_produksi', 'hasil_produksi'));
     }
 
     /**
@@ -97,11 +93,10 @@ class JurnalProduksiController extends Controller
      */
     public function edit($id)
     {
-        $permintaans = Permintaan::all();
-        $data = JurnalProduksi::findOrFail($id);
-        $hasil_produksi = HasilProduksi::where('jurnal_produksi_id', $id)->get();
+        $data = PerintahProduksi::findOrFail($id);
+        $hasil_produksi = HasilProduksi::where('perintah_produksi_id', $id)->get();
         $materials = Material::all();
-        return view('jurnal_produksi.edit', compact('permintaans', 'data', 'hasil_produksi', 'materials'));
+        return view('perintah_produksi.edit', compact('data', 'hasil_produksi', 'materials'));
     }
 
     /**
@@ -118,29 +113,29 @@ class JurnalProduksiController extends Controller
             'jumlah_besar.*' => 'required|numeric|min:0', // Menambahkan validasi untuk "jumlah_besar"
         ]);
 
-        $jurnal_produksi = JurnalProduksi::findOrFail($id);
-        $jurnal_produksi->kode = $request->kode;
-        $jurnal_produksi->berlaku_sampai = $request->berlaku_sampai;
-        $jurnal_produksi->save();
+        $perintah_produksi = PerintahProduksi::findOrFail($id);
+        $perintah_produksi->kode = $request->kode;
+        $perintah_produksi->berlaku_sampai = $request->berlaku_sampai;
+        $perintah_produksi->save();
 
         // Validasi produk akhir harus unik
         $existingMaterial = [];
         foreach ($request->materials as $index => $material_id) {
             // Validasi jika produk akhir sudah pernah dimasukkan sebelumnya
             if (in_array($material_id, $existingMaterial)) {
-                return redirect()->back()->with('error', 'Material harus unik dalam satu jurnal_produksi.');
+                return redirect()->back()->with('error', 'Material harus unik dalam satu perintah_produksi.');
             }
             $existingMaterial[] = $material_id;
 
             $jumlah_kecil = $request->jumlah_kecil[$index];
             $jumlah_besar = $request->jumlah_besar[$index];
             HasilProduksi::updateOrCreate(
-                ['jurnal_produksi_id' => $id, 'material_id' => $material_id],
+                ['perintah_produksi_id' => $id, 'material_id' => $material_id],
                 ['jumlah_dalam_satuan_kecil' => $jumlah_kecil, 'jumlah_dalam_satuan_besar' => $jumlah_besar]
             );
         }
 
-        return redirect()->route('jurnal_produksi.index')->with('success', 'Jurnal Produksi berhasil diupdate.');
+        return redirect()->route('perintah_produksi.index')->with('success', 'Perintah Produksi berhasil diupdate.');
     }
 
     /**
@@ -148,14 +143,14 @@ class JurnalProduksiController extends Controller
      */
     public function destroy($id)
     {
-        $jurnal_produksi = JurnalProduksi::findOrFail($id);
-        $jurnal_produksi->delete();
-        return redirect()->back()->with("success", "Jurnal Produksi berhasil dihapus.");
+        $perintah_produksi = PerintahProduksi::findOrFail($id);
+        $perintah_produksi->delete();
+        return redirect()->back()->with("success", "Perintah Produksi berhasil dihapus.");
     }
 
     public static function dataTable()
     {
-        $data = JurnalProduksi::with('user')->get();
+        $data = PerintahProduksi::with('user')->get();
         return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('created_at', function ($row) {
@@ -168,8 +163,8 @@ class JurnalProduksiController extends Controller
                 return $row->user->nama;
             })
             ->addColumn('tindakan', function ($row) {
-                $editUrl = route('jurnal_produksi.edit', $row->id);
-                $showUrl = route('jurnal_produksi.show', $row->id);
+                $editUrl = route('perintah_produksi.edit', $row->id);
+                $showUrl = route('perintah_produksi.show', $row->id);
                 return '
                     <div class="btn-group" role="group" aria-label="Action Buttons">
                         <a href="' . $editUrl . '" class="btn btn-secondary btn-sm">Edit</a>
