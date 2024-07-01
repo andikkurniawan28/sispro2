@@ -53,3 +53,5 @@ Route::resource('/material', MaterialController::class)->middleware(['auth']);
 Route::resource('/kebutuhan', KebutuhanController::class)->middleware(['auth']);
 Route::resource('/jurnal_produksi', JurnalProduksiController::class)->middleware(['auth']);
 Route::get('/saldo_material', [SaldoMaterialController::class, 'index'])->name('saldo_material.index')->middleware(['auth']);
+Route::post('/saldo_material', [SaldoMaterialController::class, 'proses'])->name('saldo_material.proses')->middleware(['auth']);
+Route::get('/saldo_material/{id}', [SaldoMaterialController::class, 'penyesuaian'])->name('saldo_material.penyesuaian')->middleware(['auth']);

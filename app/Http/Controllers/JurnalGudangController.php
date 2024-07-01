@@ -80,6 +80,10 @@ class JurnalGudangController extends Controller
                 'jumlah_dalam_satuan_besar' => $request->jumlah_besar[$index], // Sesuaikan dengan nama input di form Anda
 
             ]);
+
+            $arah_saldo = JenisJurnalGudang::whereId($request->jenis_jurnal_gudang_id)->get()->last()->saldo;
+            $gudang_nama = Gudang::whereId($request->gudang_id)->get()->last()->nama;
+            self::updateSaldoOnCreate($arah_saldo, $material_id, $gudang_nama, $request->jumlah_besar[$index]);
         }
 
         // Redirect dengan pesan sukses
@@ -116,7 +120,6 @@ class JurnalGudangController extends Controller
     {
         $request->validate([
             'kode' => 'required|string|max:255',
-            // 'jenis_jurnal_gudang_id' => 'required',
             'gudang_id' => 'required',
             'materials.*' => 'required|distinct|exists:materials,id',
             'jumlah_kecil' => 'required|array',
@@ -125,11 +128,17 @@ class JurnalGudangController extends Controller
             'jumlah_besar.*' => 'required|numeric|min:0', // Menambahkan validasi untuk "jumlah_besar"
         ]);
 
+        self::updateSaldoOnDelete($id);
+
+        JurnalGudangDetail::where('jurnal_gudang_id', $id)->delete();
+
         $jurnal_gudang = JurnalGudang::findOrFail($id);
         $jurnal_gudang->kode = $request->kode;
-        // $jurnal_gudang->jenis_jurnal_gudang_id = $request->jenis_jurnal_gudang_id;
         $jurnal_gudang->gudang_id = $request->gudang_id;
         $jurnal_gudang->save();
+
+        $arah_saldo = $jurnal_gudang->jenis_jurnal_gudang->saldo;
+        $gudang_nama = $jurnal_gudang->gudang->nama;
 
         // Validasi produk akhir harus unik
         $existingMaterial = [];
@@ -142,10 +151,19 @@ class JurnalGudangController extends Controller
 
             $jumlah_kecil = $request->jumlah_kecil[$index];
             $jumlah_besar = $request->jumlah_besar[$index];
-            JurnalGudangDetail::updateOrCreate(
-                ['jurnal_gudang_id' => $id, 'material_id' => $material_id],
-                ['jumlah_dalam_satuan_kecil' => $jumlah_kecil, 'jumlah_dalam_satuan_besar' => $jumlah_besar]
-            );
+
+            JurnalGudangDetail::create([
+                "jurnal_gudang_id" => $id,
+                "material_id" => $material_id,
+                "jumlah_dalam_satuan_kecil" => $jumlah_kecil,
+                "jumlah_dalam_satuan_besar" => $jumlah_besar,
+            ]);
+            self::updateSaldoOnCreate($arah_saldo, $material_id, $gudang_nama, $jumlah_besar);
+
+            // JurnalGudangDetail::updateOrCreate(
+            //     ['jurnal_gudang_id' => $id, 'material_id' => $material_id],
+            //     ['jumlah_dalam_satuan_kecil' => $jumlah_kecil, 'jumlah_dalam_satuan_besar' => $jumlah_besar]
+            // );
         }
 
         return redirect()->route('jurnal_gudang.index')->with('success', 'Jurnal Gudang berhasil diupdate.');
@@ -156,9 +174,10 @@ class JurnalGudangController extends Controller
      */
     public function destroy($id)
     {
+        self::updateSaldoOnDelete($id);
         $jurnal_gudang = JurnalGudang::findOrFail($id);
         $jurnal_gudang->delete();
-        return redirect()->back()->with("success", "JurnalGudang Produk Akhir berhasil dihapus.");
+        return redirect()->back()->with("success", "Jurnal Gudang berhasil dihapus.");
     }
 
     public static function dataTable()
@@ -188,5 +207,37 @@ class JurnalGudangController extends Controller
                 'data-searchable' => 'true'
             ])
             ->make(true);
+    }
+
+    public static function updateSaldoOnCreate($arah_saldo, $material_id, $gudang_nama, $jumlah_dalam_satuan_besar)
+    {
+        if($arah_saldo == "minus"){
+            $jumlah_dalam_satuan_besar = $jumlah_dalam_satuan_besar * -1;
+        }
+        $gudang_formatted = ucReplaceSpaceToUnderscore($gudang_nama);
+        $saldo_terakhir = Material::whereId($material_id)->get()->last()->$gudang_formatted ?? 0;
+        $saldo_baru = $saldo_terakhir + $jumlah_dalam_satuan_besar;
+        Material::whereId($material_id)->update([ $gudang_formatted => $saldo_baru]);
+    }
+
+    public static function updateSaldoOnDelete($id)
+    {
+        $jurnal_gudang = JurnalGudang::whereId($id)->get()->last();
+        $gudang_formatted = ucReplaceSpaceToUnderscore($jurnal_gudang->gudang->nama);
+        $details = JurnalGudangDetail::where('jurnal_gudang_id', $id)->get();
+        foreach($details as $detail)
+        {
+            if($jurnal_gudang->jenis_jurnal_gudang->saldo == 'plus')
+            {
+                $jumlah = $detail->jumlah_dalam_satuan_besar * -1;
+            }
+            else
+            {
+                $jumlah = $detail->jumlah_dalam_satuan_besar;
+            }
+            $saldo_terakhir = Material::whereId($detail->material_id)->get()->last()->$gudang_formatted ?? 0;
+            $saldo_baru = $saldo_terakhir + $jumlah;
+            Material::whereId($detail->material_id)->update([ $gudang_formatted => $saldo_baru ]);
+        }
     }
 }

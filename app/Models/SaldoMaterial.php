@@ -13,10 +13,7 @@ class SaldoMaterial extends Model
 
     public static function data()
     {
-        $field_yang_dicari = [];
-
-        $field_yang_dicari[0] = 'kode';
-        $field_yang_dicari[1] = 'nama';
+        $field_yang_dicari = ['id', 'kode', 'nama'];
 
         foreach(Gudang::all() as $gudang)
         {

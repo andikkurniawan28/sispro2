@@ -64,7 +64,7 @@
         $(function () {
             $('#jurnal_gudang-table').DataTable({
                 order: [
-                    [0, 'desc']
+                    [1, 'desc']
                 ],
                 processing: true,
                 serverSide: true,

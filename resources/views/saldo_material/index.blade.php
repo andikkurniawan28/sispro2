@@ -36,7 +36,6 @@
                     <div class="card">
                         <div class="card-header">
                             <div class="card-title text-white text-right">
-                                {{-- <a href="{{ route('saldo_material.create') }}" class="btn btn-sm btn-primary text-white">Tambah</a> --}}
                             </div>
                         </div>
                         <div class="card-body">
@@ -50,6 +49,7 @@
                                             @foreach ($gudangs as $gudang)
                                             <th>{{ ucReplaceUnderscoreToSpace($gudang->nama) }}</th>
                                             @endforeach
+                                            <th>{{ ucReplaceUnderscoreToSpace('tindakan') }}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -78,6 +78,7 @@
                     @foreach ($gudangs as $gudang)
                     { data: '{{ ucReplaceSpaceToUnderscore($gudang->nama) }}', name: '{{ ucReplaceSpaceToUnderscore($gudang->nama) }}' },
                     @endforeach
+                    { data: 'tindakan', name: 'tindakan', orderable: false, searchable: false },
                 ]
             });
         });
