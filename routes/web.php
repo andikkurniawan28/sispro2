@@ -16,6 +16,7 @@ use App\Http\Controllers\PermintaanController;
 use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\JurnalGudangController;
 use App\Http\Controllers\JenisMaterialController;
+use App\Http\Controllers\SaldoMaterialController;
 use App\Http\Controllers\FungsiMaterialController;
 use App\Http\Controllers\JurnalProduksiController;
 use App\Http\Controllers\JenisJurnalGudangController;
@@ -51,3 +52,4 @@ Route::resource('/fungsi_material', FungsiMaterialController::class)->middleware
 Route::resource('/material', MaterialController::class)->middleware(['auth']);
 Route::resource('/kebutuhan', KebutuhanController::class)->middleware(['auth']);
 Route::resource('/jurnal_produksi', JurnalProduksiController::class)->middleware(['auth']);
+Route::get('/saldo_material', [SaldoMaterialController::class, 'index'])->name('saldo_material.index')->middleware(['auth']);

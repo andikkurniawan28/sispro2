@@ -120,6 +120,11 @@
                     <div class="collapse" id="persediaan">
                         <ul class="nav nav-collapse">
                             <li>
+                                <a href="{{ route('saldo_material.index') }}">
+                                    <span class="sub-item">{{ ucReplaceUnderscoreToSpace('saldo_material') }}</span>
+                                </a>
+                            </li>
+                            <li>
                                 <a href="{{ route('permintaan.index') }}">
                                     <span class="sub-item">{{ ucReplaceUnderscoreToSpace('permintaan') }}</span>
                                 </a>

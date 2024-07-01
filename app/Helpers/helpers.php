@@ -7,10 +7,16 @@ if (!function_exists('ucReplaceUnderscoreToSpace')) {
     }
 }
 
-
 if (!function_exists('ucReplaceDotToSpace')) {
     function ucReplaceDotToSpace($string)
     {
         return ucwords(str_replace('.', ' ', $string));
+    }
+}
+
+if (!function_exists('ucReplaceSpaceToUnderscore')) {
+    function ucReplaceSpaceToUnderscore($string)
+    {
+        return ucwords(str_replace(' ', '_', $string));
     }
 }

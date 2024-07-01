@@ -66,7 +66,7 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody id="materials_container">
-                                                    @foreach ($jurnal_produksi_detail as $index => $jurnal_produksi)
+                                                    @foreach ($hasil_produksi as $index => $jurnal_produksi)
                                                         <tr id="material_row_{{ $index }}">
                                                             <td>
                                                                 <select class="material form-control" id="material_{{ $index }}" name="materials[]" required>
@@ -185,7 +185,7 @@
             });
 
             // Counter for unique IDs
-            let materialCounter = {{ $jurnal_produksi_detail->count() }};
+            let materialCounter = {{ $hasil_produksi->count() }};
 
             // Function to add a new row for material selection and jumlah input
             function addBahanRow() {
