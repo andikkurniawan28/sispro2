@@ -78,6 +78,16 @@
                                                 @endforeach
                                             </select>
                                         </div>
+                                        <div class="form-group">
+                                            <label for="harga_beli">{{ ucReplaceUnderscoreToSpace('harga_beli') }}</label>
+                                            <input type="number" class="form-control" id="harga_beli" name="harga_beli"
+                                                value="{{ old('harga_beli') }}" placeholder="Masukkan {{ ucReplaceUnderscoreToSpace('harga_beli') }} ..." step="any">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="harga_jual">{{ ucReplaceUnderscoreToSpace('harga_jual') }}</label>
+                                            <input type="number" class="form-control" id="harga_jual" name="harga_jual"
+                                                value="{{ old('harga_jual') }}" placeholder="Masukkan {{ ucReplaceUnderscoreToSpace('harga_jual') }} ..." step="any">
+                                        </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -113,6 +123,11 @@
                                                     <option value="{{ $satuan->id }}">{{ $satuan->nama }}</option>
                                                 @endforeach
                                             </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="hasil_per_batch_dalam_satuan_besar">{{ ucReplaceUnderscoreToSpace('hasil_per_batch_dalam_satuan_besar') }}</label>
+                                            <input type="number" class="form-control" id="hasil_per_batch_dalam_satuan_besar" name="hasil_per_batch_dalam_satuan_besar"
+                                                value="{{ old('hasil_per_batch_dalam_satuan_besar') }}" placeholder="Masukkan {{ ucReplaceUnderscoreToSpace('hasil_per_batch_dalam_satuan_besar') }} ..." step="any">
                                         </div>
                                     </div>
                                 </div>

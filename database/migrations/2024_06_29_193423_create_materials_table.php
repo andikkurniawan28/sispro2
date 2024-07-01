@@ -21,6 +21,11 @@ return new class extends Migration
             $table->foreignId('satuan_besar_id')->constrained('satuans');
             $table->foreignId('satuan_kecil_id')->constrained('satuans');
             $table->float('sejumlah');
+            $table->float('hasil_per_batch_dalam_satuan_besar')->nullable();
+            $table->float('hasil_per_batch_dalam_satuan_kecil')->nullable();
+            $table->float('harga_beli')->nullable();
+            $table->float('harga_jual')->nullable();
+            $table->float('harga_pokok')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });

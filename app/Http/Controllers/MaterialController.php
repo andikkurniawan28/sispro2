@@ -47,6 +47,9 @@ class MaterialController extends Controller
             "satuan_besar_id" => "required",
             "satuan_kecil_id" => "required",
             "sejumlah" => "required",
+            "harga_beli" => "nullable",
+            "harga_jual" => "nullable",
+            "hasil_per_batch_dalam_satuan_besar" => "nullable",
         ]);
         Material::create($validated);
         return redirect()->back()->with("success", "Material berhasil disimpan.");
@@ -88,6 +91,9 @@ class MaterialController extends Controller
             "satuan_besar_id" => "required",
             "satuan_kecil_id" => "required",
             "sejumlah" => "required",
+            "harga_beli" => "nullable",
+            "harga_jual" => "nullable",
+            "hasil_per_batch_dalam_satuan_besar" => "nullable",
         ]);
         $material->update($validated);
         return redirect()->route('material.index')->with("success", "Material berhasil dirubah.");
