@@ -45,8 +45,8 @@
                                     <thead>
                                         <tr>
                                             <th>{{ ucReplaceUnderscoreToSpace('kode') }}</th>
+                                            <th>{{ ucReplaceUnderscoreToSpace('permintaan') }}</th>
                                             <th>{{ ucReplaceUnderscoreToSpace('dibuat_pada') }}</th>
-                                            {{-- <th>{{ ucReplaceUnderscoreToSpace('berlaku_sampai') }}</th> --}}
                                             <th>{{ ucReplaceUnderscoreToSpace('user') }}</th>
                                             <th>{{ ucReplaceUnderscoreToSpace('tindakan') }}</th>
                                         </tr>
@@ -72,6 +72,7 @@
                 ajax: "{{ route('jurnal_produksi.index') }}",
                 columns: [
                     { data: 'kode', name: 'kode' },
+                    { data: 'permintaan_kode', name: 'permintaan_kode' },
                     { data: 'created_at', name: 'created_at' },
                     // { data: 'berlaku_sampai', name: 'berlaku_sampai' },
                     { data: 'user_nama', name: 'user_nama' },

@@ -26,6 +26,7 @@ return new class extends Migration
             $table->float('harga_beli')->nullable();
             $table->float('harga_jual')->nullable();
             $table->float('harga_pokok')->nullable();
+            $table->integer('masa_kadaluarsa_dalam_bulan')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });

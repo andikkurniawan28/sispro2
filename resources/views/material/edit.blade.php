@@ -90,6 +90,11 @@
                                             <input type="number" class="form-control" id="harga_jual" name="harga_jual"
                                                 value="{{ $material->harga_jual }}" placeholder="Masukkan {{ ucReplaceUnderscoreToSpace('harga_jual') }} ..." step="any">
                                         </div>
+                                        <div class="form-group">
+                                            <label for="masa_kadaluarsa_dalam_bulan">{{ ucReplaceUnderscoreToSpace('masa_kadaluarsa_dalam_bulan') }}</label>
+                                            <input type="number" class="form-control" id="masa_kadaluarsa_dalam_bulan" name="masa_kadaluarsa_dalam_bulan"
+                                                value="{{ $material->masa_kadaluarsa_dalam_bulan }}" placeholder="{{ ucReplaceUnderscoreToSpace('masa_kadaluarsa_dalam_bulan') }}">
+                                        </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">

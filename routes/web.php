@@ -47,6 +47,8 @@ Route::resource('/satuan', SatuanController::class)->middleware(['auth']);
 Route::resource('/gudang', GudangController::class)->middleware(['auth']);
 Route::resource('/jenis_jurnal_gudang', JenisJurnalGudangController::class)->middleware(['auth']);
 Route::resource('/permintaan', PermintaanController::class)->middleware(['auth']);
+Route::get('permintaan/api/{id}', [PermintaanController::class, 'api'])->name('permintaan.api');
+Route::get('permintaan/tutup/{id}', [PermintaanController::class, 'tutup'])->name('permintaan.tutup')->middleware(['auth']);
 Route::resource('/jurnal_gudang', JurnalGudangController::class)->middleware(['auth']);
 Route::resource('/jenis_material', JenisMaterialController::class)->middleware(['auth']);
 Route::resource('/fungsi_material', FungsiMaterialController::class)->middleware(['auth']);

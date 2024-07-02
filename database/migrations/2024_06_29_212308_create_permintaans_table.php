@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('kode')->unique();
             $table->timestamp('berlaku_sampai')->nullable();
             $table->foreignId('user_id')->constrained();
+            $table->boolean('status')->default(0);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });

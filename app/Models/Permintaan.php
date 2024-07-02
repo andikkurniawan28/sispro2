@@ -24,7 +24,7 @@ class Permintaan extends Model
 
     public static function kode_faktur()
     {
-        $tanggal = now()->format('d/m/y'); // Format tanggal dd/mm/yy
+        $tanggal = now()->format('d/m/y');
         $urutan = Permintaan::whereDate('created_at', today())->count() + 1;
         $kode = "REQ-{$tanggal}-" . str_pad($urutan, 6, '0', STR_PAD_LEFT);
         return $kode;
@@ -52,5 +52,13 @@ class Permintaan extends Model
                 'description' => "Permintaan '{$permintaan->kode}' dihapus.",
             ]);
         });
+    }
+
+    public static function yangTerbuka()
+    {
+        return self::with('detail')
+            ->where('status', 0)
+            ->where('berlaku_sampai', '>', date('Y-m-d H:i:s'))
+            ->get();
     }
 }

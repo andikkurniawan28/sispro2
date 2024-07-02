@@ -29,7 +29,7 @@ class JurnalProduksiController extends Controller
      */
     public function create()
     {
-        $permintaans = Permintaan::with('detail')->get();
+        $permintaans = Permintaan::yangTerbuka();
         $materials = Material::all();
         $kode = JurnalProduksi::kode_faktur();
         return view('jurnal_produksi.create', compact('permintaans', 'materials', 'kode'));
@@ -97,7 +97,7 @@ class JurnalProduksiController extends Controller
      */
     public function edit($id)
     {
-        $permintaans = Permintaan::all();
+        $permintaans = Permintaan::yangTerbuka();
         $data = JurnalProduksi::findOrFail($id);
         $hasil_produksi = HasilProduksi::where('jurnal_produksi_id', $id)->get();
         $materials = Material::all();
@@ -111,6 +111,7 @@ class JurnalProduksiController extends Controller
     {
         $request->validate([
             'kode' => 'required|string|max:255',
+            'permintaan_id' => 'required||exists:permintaans,id',
             'materials.*' => 'required|distinct|exists:materials,id',
             'jumlah_kecil' => 'required|array',
             'jumlah_kecil.*' => 'required|numeric|min:0', // Mengganti "jumlahs" dengan "jumlah_kecil" sesuai dengan form Anda
@@ -120,7 +121,7 @@ class JurnalProduksiController extends Controller
 
         $jurnal_produksi = JurnalProduksi::findOrFail($id);
         $jurnal_produksi->kode = $request->kode;
-        $jurnal_produksi->berlaku_sampai = $request->berlaku_sampai;
+        $jurnal_produksi->permintaan_id = $request->permintaan_id;
         $jurnal_produksi->save();
 
         // Validasi produk akhir harus unik
@@ -155,28 +156,40 @@ class JurnalProduksiController extends Controller
 
     public static function dataTable()
     {
-        $data = JurnalProduksi::with('user')->get();
+        $data = JurnalProduksi::with('user', 'permintaan')->get();
         return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('created_at', function ($row) {
                 return Carbon::parse($row->created_at)->format('d-m-Y H:i:s');
             })
-            // ->addColumn('berlaku_sampai', function ($row) {
-            //     return Carbon::parse($row->berlaku_sampai)->format('d-m-Y H:i:s');
-            // })
+            ->addColumn('permintaan_kode', function ($row) {
+                return $row->permintaan->kode;
+            })
             ->addColumn('user_nama', function ($row) {
                 return $row->user->nama;
             })
             ->addColumn('tindakan', function ($row) {
-                $editUrl = route('jurnal_produksi.edit', $row->id);
-                $showUrl = route('jurnal_produksi.show', $row->id);
-                return '
-                    <div class="btn-group" role="group" aria-label="Action Buttons">
-                        <a href="' . $editUrl . '" class="btn btn-secondary btn-sm">Edit</a>
-                        <a href="' . $showUrl . '" class="btn btn-info btn-sm">Detail</a>
-                        <button class="btn btn-danger btn-sm delete-btn" data-id="' . $row->id . '" data-name="' . $row->name . '">Hapus</button>
-                    </div>
-                ';
+                if ($row->permintaan->status == 1) {
+                    $showUrl = route('jurnal_produksi.show', $row->id);
+                    return '
+                        <div class="btn-group" role="group" aria-label="Action Buttons">
+                            <a href="' . $showUrl . '" class="btn btn-info btn-sm">Detail</a>
+                            <span class="badge badge-secondary">
+                                <i class="icon-lock"></i> Dikunci
+                            </span>
+                        </div>
+                    ';
+                } else {
+                    $editUrl = route('jurnal_produksi.edit', $row->id);
+                    $showUrl = route('jurnal_produksi.show', $row->id);
+                    return '
+                        <div class="btn-group" role="group" aria-label="Action Buttons">
+                            <button class="btn btn-dark btn-sm close-btn" data-id="' . $row->id . '">Tutup</button>
+                            <a href="' . $editUrl . '" class="btn btn-secondary btn-sm">Edit</a>
+                            <button class="btn btn-danger btn-sm delete-btn" data-id="' . $row->id . '" data-name="' . $row->name . '">Hapus</button>
+                        </div>
+                    ';
+                }
             })
             ->rawColumns(['tindakan'])
             ->setRowAttr([

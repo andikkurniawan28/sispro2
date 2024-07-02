@@ -6,6 +6,7 @@ use App\Models\Permintaan;
 use App\Models\Material;
 use Illuminate\Http\Request;
 use App\Models\PermintaanDetail;
+use App\Models\ActivityLog;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -165,21 +166,59 @@ class PermintaanController extends Controller
             ->addColumn('user_nama', function ($row) {
                 return $row->user->nama;
             })
-            ->addColumn('tindakan', function ($row) {
-                $editUrl = route('permintaan.edit', $row->id);
-                $showUrl = route('permintaan.show', $row->id);
-                return '
-                    <div class="btn-group" role="group" aria-label="Action Buttons">
-                        <a href="' . $editUrl . '" class="btn btn-secondary btn-sm">Edit</a>
-                        <a href="' . $showUrl . '" class="btn btn-info btn-sm">Detail</a>
-                        <button class="btn btn-danger btn-sm delete-btn" data-id="' . $row->id . '" data-name="' . $row->name . '">Hapus</button>
-                    </div>
-                ';
+            ->addColumn('status', function ($row) {
+                if ($row->status == 1) {
+                    return '<span class="badge badge-success">Ditutup</span>';
+                } else {
+                    return '<span class="badge badge-danger">Terbuka</span>';
+                }
             })
-            ->rawColumns(['tindakan'])
+            ->addColumn('tindakan', function ($row) {
+                if ($row->status == 1) {
+                    $showUrl = route('permintaan.show', $row->id);
+                    return '
+                        <div class="btn-group" role="group" aria-label="Action Buttons">
+                            <a href="' . $showUrl . '" class="btn btn-info btn-sm">Detail</a>
+                            <span class="badge badge-secondary">
+                                <i class="icon-lock"></i> Dikunci
+                            </span>
+                        </div>
+                    ';
+                } else {
+                    $editUrl = route('permintaan.edit', $row->id);
+                    $showUrl = route('permintaan.show', $row->id);
+                    return '
+                        <div class="btn-group" role="group" aria-label="Action Buttons">
+                            <button class="btn btn-dark btn-sm close-btn" data-id="' . $row->id . '">Tutup</button>
+                            <a href="' . $editUrl . '" class="btn btn-secondary btn-sm">Edit</a>
+                            <a href="' . $showUrl . '" class="btn btn-info btn-sm">Detail</a>
+                            <button class="btn btn-danger btn-sm delete-btn" data-id="' . $row->id . '" data-name="' . $row->name . '">Hapus</button>
+                        </div>
+                    ';
+                }
+            })
+            ->rawColumns(['status', 'tindakan'])
             ->setRowAttr([
                 'data-searchable' => 'true'
             ])
             ->make(true);
+
+    }
+
+    public function api($id)
+    {
+        $data = PermintaanDetail::with('material')->where('permintaan_id', $id)->get();
+        return response()->json($data);
+    }
+
+    public function tutup($id)
+    {
+        $data = Permintaan::findOrFail($id);
+        ActivityLog::create([
+            'user_id' => Auth::id(),
+            'description' => "Permintaan '{$data->kode}' ditutup.",
+        ]);
+        $data->update(['status' => 1]);
+        return redirect()->route('permintaan.index')->with('success', 'Permintaan berhasil ditutup.');
     }
 }

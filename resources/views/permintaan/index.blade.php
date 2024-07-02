@@ -48,6 +48,7 @@
                                             <th>{{ ucReplaceUnderscoreToSpace('dibuat_pada') }}</th>
                                             <th>{{ ucReplaceUnderscoreToSpace('berlaku_sampai') }}</th>
                                             <th>{{ ucReplaceUnderscoreToSpace('user') }}</th>
+                                            <th>{{ ucReplaceUnderscoreToSpace('status') }}</th>
                                             <th>{{ ucReplaceUnderscoreToSpace('tindakan') }}</th>
                                         </tr>
                                     </thead>
@@ -75,6 +76,7 @@
                     { data: 'created_at', name: 'created_at' },
                     { data: 'berlaku_sampai', name: 'berlaku_sampai' },
                     { data: 'user_nama', name: 'user_nama' },
+                    { data: 'status', name: 'status' },
                     { data: 'tindakan', name: 'tindakan', orderable: false, searchable: false },
                 ]
             });
@@ -121,6 +123,31 @@
 
                             form.appendChild(hiddenMethod);
                             form.appendChild(csrfTokenInput);
+                            document.body.appendChild(form);
+                            form.submit();
+                        }
+                    });
+                }
+            });
+            document.addEventListener('click', function(event) {
+                if (event.target.classList.contains('close-btn')) {
+                    event.preventDefault();
+                    const button = event.target;
+                    const permintaan_id = button.getAttribute('data-id');
+                    Swal.fire({
+                        title: 'Apakah Anda yakin?',
+                        text: 'Anda akan menutup Permintaan ini!',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Ya, saya yakin!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            const form = document.createElement('form');
+                            form.setAttribute('method', 'GET');
+                            form.setAttribute('action', `{{ url('permintaan/tutup') }}/${permintaan_id}`);
+                            form.setAttribute('style', 'display: none;');
                             document.body.appendChild(form);
                             form.submit();
                         }

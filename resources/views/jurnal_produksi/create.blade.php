@@ -57,10 +57,10 @@
                                         </div>
                                     </div>
                                     <div class="col-md-8">
-                                        {{-- <div class="form-group">
+                                        <div class="form-group">
                                             <label for="permintaan_id">{{ ucReplaceUnderscoreToSpace('detail_permintaan') }}</label>
                                             <div class="table-responsive">
-                                                <table class="table table-bordered" id="detail-permintaan">
+                                                <table class="table table-bordered table-hover">
                                                     <thead>
                                                         <tr>
                                                             <th style="width: 50%">{{ ucReplaceUnderscoreToSpace('material') }}</th>
@@ -68,18 +68,19 @@
                                                             <th style="width: 25%">{{ ucReplaceUnderscoreToSpace('jumlah_besar') }}</th>
                                                         </tr>
                                                     </thead>
-                                                    <tbody>
+                                                    <tbody id="detail-permintaan">
+                                                        {{-- Taruh detail permintaan disini --}}
                                                     </tbody>
                                                 </table>
                                             </div>
-                                        </div> --}}
+                                        </div>
                                     </div>
                                     <div class="col-md-12">
                                         <br>
                                         <div class="form-group">
                                             <label for="permintaan_id">{{ ucReplaceUnderscoreToSpace('hasil_produksi') }}</label>
                                             <div class="table-responsive">
-                                                <table class="table table-bordered">
+                                                <table class="table table-bordered table-hover">
                                                     <thead>
                                                         <tr>
                                                             <th style="width: 50%">{{ ucReplaceUnderscoreToSpace('material') }}</th>
@@ -244,6 +245,35 @@
 
             $('#add_material').click(function() {
                 addMaterialRow();
+            });
+
+            // Fetch details when permintaan is selected
+            $('#permintaan_id').change(function() {
+                var permintaanId = $(this).val();
+                if (permintaanId) {
+                    $.ajax({
+                        url: '{{ url("permintaan/api") }}/' + permintaanId,
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function(response) {
+                            var tbody = $('#detail-permintaan');
+                            tbody.empty(); // Clear existing rows
+                            response.forEach(function(detail) {
+                                var row = `
+                                    <tr>
+                                        <td>${detail.material.nama}</td>
+                                        <td>${detail.jumlah_dalam_satuan_kecil}</td>
+                                        <td>${detail.jumlah_dalam_satuan_besar}</td>
+                                    </tr>
+                                `;
+                                tbody.append(row);
+                            });
+                        },
+                        error: function() {
+                            alert('Failed to fetch details');
+                        }
+                    });
+                }
             });
         });
     </script>
