@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('kode')->unique();
             $table->foreignId('jenis_jurnal_gudang_id')->constrained();
+            $table->foreignId('jurnal_produksi_id')->nullable()->constrained();
             $table->foreignId('gudang_id')->constrained();
             $table->foreignId('user_id')->constrained();
             $table->timestamp('created_at')->useCurrent();

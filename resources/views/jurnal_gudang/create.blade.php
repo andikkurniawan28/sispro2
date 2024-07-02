@@ -73,7 +73,6 @@
                                                 @foreach ($gudangs as $gudang)
                                                     <option value="{{ $gudang->id }}"
                                                         {{ old('gudang_id') == $gudang->id ? 'selected' : '' }}>
-                                                        {{-- {{ ucwords(str_replace('_', ' ', $gudang->kode)) }} | --}}
                                                         {{ ucwords(str_replace('_', ' ', $gudang->nama)) }}
                                                     </option>
                                                 @endforeach

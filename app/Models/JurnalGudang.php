@@ -32,6 +32,11 @@ class JurnalGudang extends Model
         return $this->hasMany(JurnalGudangDetail::class);
     }
 
+    public function jurnal_produksi()
+    {
+        return $this->belongsTo(JurnalProduksi::class);
+    }
+
     public static function kode_faktur()
     {
         $tanggal = now()->format('d/m/y'); // Format tanggal dd/mm/yy

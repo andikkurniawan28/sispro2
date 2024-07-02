@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\Gudang;
 use App\Models\Material;
 use App\Models\JurnalGudang;
+use App\Models\JurnalProduksi;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use App\Models\JenisJurnalGudang;
@@ -32,9 +33,10 @@ class JurnalGudangController extends Controller
     {
         $gudangs = Gudang::all();
         $jenis_jurnal_gudangs = JenisJurnalGudang::all();
+        $jurnal_produksis = JurnalProduksi::yangBelumDikirim();
         $materials = Material::all();
         $kode = JurnalGudang::kode_faktur();
-        return view('jurnal_gudang.create', compact('materials', 'kode', 'gudangs', 'jenis_jurnal_gudangs'));
+        return view('jurnal_gudang.create', compact('materials', 'kode', 'gudangs', 'jenis_jurnal_gudangs', 'jurnal_produksis'));
     }
 
     /**
@@ -45,7 +47,8 @@ class JurnalGudangController extends Controller
         // Validasi input
         $request->validate([
             'kode' => 'required|string|max:255',
-            'jenis_jurnal_gudang_id' => 'required',
+            'jenis_jurnal_gudang_id' => 'required|exists:jenis_jurnal_gudangs,id',
+            'jurnal_produksi_id' => 'nullable|exists:jurnal_produksis,id',
             'gudang_id' => 'required',
             'materials' => 'required|array',
             'materials.*' => 'required|distinct|exists:materials,id',
@@ -69,7 +72,7 @@ class JurnalGudangController extends Controller
             // Validasi jika produk akhir sudah pernah dimasukkan sebelumnya
             if (in_array($material_id, $existingMaterial)) {
                 $jurnal_gudang->delete(); // Hapus jurnal_gudang yang sudah dibuat jika ada duplikasi
-                return redirect()->back()->with('error', 'Produk Akhir harus unik dalam satu jurnal_gudang.');
+                return redirect()->back()->with('error', 'Material harus unik dalam satu jurnal_gudang.');
             }
             $existingMaterial[] = $material_id;
 
@@ -121,6 +124,7 @@ class JurnalGudangController extends Controller
         $request->validate([
             'kode' => 'required|string|max:255',
             'gudang_id' => 'required',
+            'jurnal_produksi_id' => 'nullable|exists:jurnal_produksis,id',
             'materials.*' => 'required|distinct|exists:materials,id',
             'jumlah_kecil' => 'required|array',
             'jumlah_kecil.*' => 'required|numeric|min:0', // Mengganti "jumlahs" dengan "jumlah_kecil" sesuai dengan form Anda
@@ -145,7 +149,7 @@ class JurnalGudangController extends Controller
         foreach ($request->materials as $index => $material_id) {
             // Validasi jika produk akhir sudah pernah dimasukkan sebelumnya
             if (in_array($material_id, $existingMaterial)) {
-                return redirect()->back()->with('error', 'Produk Akhir harus unik dalam satu jurnal_gudang.');
+                return redirect()->back()->with('error', 'Material harus unik dalam satu jurnal_gudang.');
             }
             $existingMaterial[] = $material_id;
 
@@ -159,11 +163,6 @@ class JurnalGudangController extends Controller
                 "jumlah_dalam_satuan_besar" => $jumlah_besar,
             ]);
             self::updateSaldoOnCreate($arah_saldo, $material_id, $gudang_nama, $jumlah_besar);
-
-            // JurnalGudangDetail::updateOrCreate(
-            //     ['jurnal_gudang_id' => $id, 'material_id' => $material_id],
-            //     ['jumlah_dalam_satuan_kecil' => $jumlah_kecil, 'jumlah_dalam_satuan_besar' => $jumlah_besar]
-            // );
         }
 
         return redirect()->route('jurnal_gudang.index')->with('success', 'Jurnal Gudang berhasil diupdate.');

@@ -178,11 +178,11 @@ class PermintaanController extends Controller
                     $showUrl = route('permintaan.show', $row->id);
                     return '
                         <div class="btn-group" role="group" aria-label="Action Buttons">
-                            <a href="' . $showUrl . '" class="btn btn-info btn-sm">Detail</a>
                             <span class="badge badge-secondary">
                                 <i class="icon-lock"></i> Dikunci
                             </span>
                         </div>
+                        <a href="' . $showUrl . '" class="btn btn-info btn-sm">Detail</a>
                     ';
                 } else {
                     $editUrl = route('permintaan.edit', $row->id);

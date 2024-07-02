@@ -27,6 +27,11 @@ class JurnalProduksi extends Model
         return $this->hasMany(HasilProduksi::class);
     }
 
+    public function jurnal_gudang()
+    {
+        return $this->hasMany(JurnalGudang::class);
+    }
+
     public static function kode_faktur()
     {
         $tanggal = now()->format('d/m/y');
@@ -58,4 +63,16 @@ class JurnalProduksi extends Model
             ]);
         });
     }
+
+    public static function yangBelumDikirim()
+    {
+        $data = self::whereDoesntHave('jurnal_gudang', function ($query) {
+            $query->whereHas('jenis_jurnal_gudang', function ($query) {
+                $query->where('kode', 'STP');
+            });
+        })->get();
+
+        return $data;
+    }
+
 }
