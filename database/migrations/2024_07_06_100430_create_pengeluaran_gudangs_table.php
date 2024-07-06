@@ -11,12 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('jurnal_gudangs', function (Blueprint $table) {
+        Schema::create('pengeluaran_gudangs', function (Blueprint $table) {
             $table->id();
             $table->string('kode')->unique();
-            $table->foreignId('jenis_jurnal_gudang_id')->constrained();
-            $table->foreignId('permintaan')->nullable()->constrained();
-            $table->foreignId('jurnal_produksi_id')->nullable()->constrained();
             $table->foreignId('gudang_id')->constrained();
             $table->foreignId('user_id')->constrained();
             $table->timestamp('created_at')->useCurrent();
@@ -29,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('jurnal_gudangs');
+        Schema::dropIfExists('pengeluaran_gudangs');
     }
 };

@@ -11,14 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('jurnal_gudangs', function (Blueprint $table) {
+        Schema::create('pengeluaran_gudang_items', function (Blueprint $table) {
             $table->id();
-            $table->string('kode')->unique();
-            $table->foreignId('jenis_jurnal_gudang_id')->constrained();
-            $table->foreignId('permintaan')->nullable()->constrained();
-            $table->foreignId('jurnal_produksi_id')->nullable()->constrained();
-            $table->foreignId('gudang_id')->constrained();
-            $table->foreignId('user_id')->constrained();
+            $table->foreignId('pengeluaran_gudang_id')->constrained();
+            $table->foreignId('material_id')->constrained();
+            $table->float('jumlah_dalam_satuan_kecil');
+            $table->float('jumlah_dalam_satuan_besar');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });
@@ -29,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('jurnal_gudangs');
+        Schema::dropIfExists('pengeluaran_gudang_items');
     }
 };

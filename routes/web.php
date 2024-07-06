@@ -20,6 +20,8 @@ use App\Http\Controllers\SaldoMaterialController;
 use App\Http\Controllers\FungsiMaterialController;
 use App\Http\Controllers\JurnalProduksiController;
 use App\Http\Controllers\JenisJurnalGudangController;
+use App\Http\Controllers\PengeluaranGudangController;
+use App\Http\Controllers\PemasukanGudangController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,6 +51,8 @@ Route::resource('/permintaan', PermintaanController::class)->middleware(['auth']
 Route::get('permintaan/api/{id}', [PermintaanController::class, 'api'])->name('permintaan.api');
 Route::get('permintaan/tutup/{id}', [PermintaanController::class, 'tutup'])->name('permintaan.tutup')->middleware(['auth']);
 Route::resource('/jurnal_gudang', JurnalGudangController::class)->middleware(['auth']);
+Route::resource('/pengeluaran_gudang', PengeluaranGudangController::class)->middleware(['auth']);
+Route::resource('/pemasukan_gudang', PemasukanGudangController::class)->middleware(['auth']);
 Route::resource('/jenis_material', JenisMaterialController::class)->middleware(['auth']);
 Route::resource('/fungsi_material', FungsiMaterialController::class)->middleware(['auth']);
 Route::resource('/material', MaterialController::class)->middleware(['auth']);
