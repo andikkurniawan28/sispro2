@@ -6,7 +6,6 @@ use Carbon\Carbon;
 use App\Models\Gudang;
 use App\Models\Material;
 use App\Models\PemasukanGudang;
-use App\Models\JurnalProduksi;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use App\Models\PemasukanGudangItem;
@@ -31,10 +30,9 @@ class PemasukanGudangController extends Controller
     public function create()
     {
         $gudangs = Gudang::all();
-        $jurnal_produksis = JurnalProduksi::yangBelumDikirim();
         $materials = Material::all();
         $kode = PemasukanGudang::kode_faktur();
-        return view('pemasukan_gudang.create', compact('materials', 'kode', 'gudangs', 'jurnal_produksis'));
+        return view('pemasukan_gudang.create', compact('materials', 'kode', 'gudangs'));
     }
 
     /**
@@ -189,5 +187,10 @@ class PemasukanGudangController extends Controller
                 'data-searchable' => 'true'
             ])
             ->make(true);
+    }
+
+    public static function updateStock($pemasukan_gudang_item_id)
+    {
+
     }
 }

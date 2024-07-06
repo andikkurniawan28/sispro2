@@ -27,11 +27,6 @@ class JurnalProduksi extends Model
         return $this->hasMany(HasilProduksi::class);
     }
 
-    public function jurnal_gudang()
-    {
-        return $this->hasMany(JurnalGudang::class);
-    }
-
     public static function kode_faktur()
     {
         $tanggal = now()->format('d/m/y');

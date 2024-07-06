@@ -15,7 +15,6 @@ use App\Models\Permission;
 use App\Models\JenisMaterial;
 use App\Models\FungsiMaterial;
 use Illuminate\Database\Seeder;
-use App\Models\JenisJurnalGudang;
 use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
@@ -161,12 +160,6 @@ class DatabaseSeeder extends Seeder
             ["nama" => ucReplaceUnderscoreToSpace('gudang_c')],
         ];
         Gudang::insert($gudang);
-
-        $jenis_jurnal_gudang = [
-            ["nama" => ucReplaceUnderscoreToSpace('serah_terima_hasil_produksi'), 'saldo' => 'plus', 'kode' => 'STP'],
-            ["nama" => ucReplaceUnderscoreToSpace('kebutuhan_bahan_produksi'), 'saldo' => 'minus', 'kode' => 'KBP'],
-        ];
-        JenisJurnalGudang::insert($jenis_jurnal_gudang);
 
         FungsiMaterial::insert([
             ["nama" => ucReplaceUnderscoreToSpace('bahan_baku')],

@@ -102,11 +102,6 @@
                                     <span class="sub-item">{{ ucReplaceUnderscoreToSpace('gudang') }}</span>
                                 </a>
                             </li>
-                            <li>
-                                <a href="{{ route('jenis_jurnal_gudang.index') }}">
-                                    <span class="sub-item">{{ ucReplaceUnderscoreToSpace('jenis_jurnal_gudang') }}</span>
-                                </a>
-                            </li>
                         </ul>
                     </div>
                 </li>
@@ -127,11 +122,6 @@
                             <li>
                                 <a href="{{ route('permintaan.index') }}">
                                     <span class="sub-item">{{ ucReplaceUnderscoreToSpace('permintaan') }}</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ route('jurnal_gudang.index') }}">
-                                    <span class="sub-item">{{ ucReplaceUnderscoreToSpace('jurnal_gudang') }}</span>
                                 </a>
                             </li>
                             <li>
