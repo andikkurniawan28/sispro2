@@ -112,7 +112,6 @@ class PengeluaranGudangController extends Controller
         $request->validate([
             'kode' => 'required|string|max:255',
             'gudang_id' => 'required',
-            'jurnal_produksi_id' => 'nullable|exists:jurnal_produksis,id',
             'materials.*' => 'required|distinct|exists:materials,id',
             'jumlah_kecil' => 'required|array',
             'jumlah_kecil.*' => 'required|numeric|min:0', // Mengganti "jumlahs" dengan "jumlah_kecil" sesuai dengan form Anda
@@ -120,7 +119,11 @@ class PengeluaranGudangController extends Controller
             'jumlah_besar.*' => 'required|numeric|min:0', // Menambahkan validasi untuk "jumlah_besar"
         ]);
 
-        PengeluaranGudangItem::where('pengeluaran_gudang_id', $id)->delete();
+        $pengeluaran_gudang_items = PengeluaranGudangItem::where('pengeluaran_gudang_id', $id)->get();
+        foreach($pengeluaran_gudang_items as $item)
+        {
+            PengeluaranGudangItem::findOrFail($item->id)->delete();
+        }
 
         $pengeluaran_gudang = PengeluaranGudang::findOrFail($id);
         $pengeluaran_gudang->kode = $request->kode;
@@ -156,6 +159,11 @@ class PengeluaranGudangController extends Controller
     public function destroy($id)
     {
         $pengeluaran_gudang = PengeluaranGudang::findOrFail($id);
+        $pengeluaran_gudang_items = PengeluaranGudangItem::where('pengeluaran_gudang_id', $id)->get();
+        foreach($pengeluaran_gudang_items as $item)
+        {
+            PengeluaranGudangItem::findOrFail($item->id)->delete();
+        }
         $pengeluaran_gudang->delete();
         return redirect()->back()->with("success", "Pengeluaran Gudang berhasil dihapus.");
     }
