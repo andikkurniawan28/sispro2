@@ -16,6 +16,7 @@ use App\Models\JenisMaterial;
 use App\Models\FungsiMaterial;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use App\Models\JenisPenyesuaianGudang;
 
 class DatabaseSeeder extends Seeder
 {
@@ -196,6 +197,16 @@ class DatabaseSeeder extends Seeder
             ["nama" => ucReplaceUnderscoreToSpace('tepung_tapioka_cakra_merah'), "kode" => "M2", "barcode" => "M2", "fungsi_material_id" => 1, "jenis_material_id" => 5, "satuan_besar_id" => 1, "satuan_kecil_id" => 8, "sejumlah" => 50, "hasil_per_batch_dalam_satuan_besar" => null, "hasil_per_batch_dalam_satuan_kecil" => null],
             ["nama" => ucReplaceUnderscoreToSpace('weiwang_minipao_coklat'), "kode" => "MPC", "barcode" => "MPC", "fungsi_material_id" => 4, "jenis_material_id" => 2, "satuan_besar_id" => 3, "satuan_kecil_id" => 2, "sejumlah" => 10, "hasil_per_batch_dalam_satuan_besar" => 100, "hasil_per_batch_dalam_satuan_kecil" => 1000],
             ["nama" => ucReplaceUnderscoreToSpace('weiwang_minipao_ayam'), "kode" => "MPA", "barcode" => "MPA", "fungsi_material_id" => 4, "jenis_material_id" => 2, "satuan_besar_id" => 3, "satuan_kecil_id" => 2, "sejumlah" => 10, "hasil_per_batch_dalam_satuan_besar" => 100, "hasil_per_batch_dalam_satuan_kecil" => 1000],
+        ]);
+
+        JenisPenyesuaianGudang::insert([
+            ["nama" => ucReplaceUnderscoreToSpace('deposit_saldo_awal'), "saldo" => "bertambah"],
+            ["nama" => ucReplaceUnderscoreToSpace('barang_mati'), "saldo" => "berkurang"],
+            ["nama" => ucReplaceUnderscoreToSpace('barang_rusak'), "saldo" => "berkurang"],
+            ["nama" => ucReplaceUnderscoreToSpace('barang_hilang'), "saldo" => "berkurang"],
+            ["nama" => ucReplaceUnderscoreToSpace('barang_susut'), "saldo" => "berkurang"],
+            ["nama" => ucReplaceUnderscoreToSpace('barang_dipakai'), "saldo" => "berkurang"],
+            ["nama" => ucReplaceUnderscoreToSpace('barang_beranak'), "saldo" => "bertambah"],
         ]);
 
     }

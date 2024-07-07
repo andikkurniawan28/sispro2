@@ -1,7 +1,7 @@
 @extends('template.kaiadmin.master')
 
 @section('title')
-    Penyesuaian {{ ucReplaceUnderscoreToSpace('saldo_material') }}
+    Tambah {{ ucReplaceUnderscoreToSpace('jenis_penyesuaian_gudang') }}
 @endsection
 
 @section('navigation')
@@ -15,13 +15,13 @@
             <i class="icon-arrow-right"></i>
         </li>
         <li class="nav-item">
-            <a href="{{ route('saldo_material.index') }}">{{ ucReplaceUnderscoreToSpace('saldo_material') }}</a>
+            <a href="{{ route('jenis_penyesuaian_gudang.index') }}">{{ ucReplaceUnderscoreToSpace('jenis_penyesuaian_gudang') }}</a>
         </li>
         <li class="separator">
             <i class="icon-arrow-right"></i>
         </li>
         <li class="nav-item">
-            <a href="{{ route('saldo_material.index') }}">@yield('title')</a>
+            <a href="{{ route('jenis_penyesuaian_gudang.index') }}">@yield('title')</a>
         </li>
     </ul>
 @endsection
@@ -39,20 +39,25 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-6">
-                                <form action="{{ route('saldo_material.proses') }}" method="POST">
+                                <form action="{{ route('jenis_penyesuaian_gudang.store') }}" method="POST">
                                     @csrf
-                                    <input type="hidden" name="id" value="{{ $id }}">
                                     <div class="form-group">
                                         <label for="nama">{{ ucReplaceUnderscoreToSpace('nama') }}</label>
-                                        <input type="text" class="form-control" id="nama" value="{{ $material->nama }}" placeholder="Masukkan nama ..." readonly>
+                                        <input type="text" class="form-control" id="nama" name="nama" value="{{ old('nama') }}" placeholder="Masukkan nama ..." required autofocus>
                                     </div>
-                                    @foreach($gudangs as $gudang)
-                                    @php $gudang_nama = ucReplaceSpaceToUnderscore($gudang->nama); @endphp
+
                                     <div class="form-group">
-                                        <label for="nama">{{ ucReplaceUnderscoreToSpace($gudang->nama) }}</label>
-                                        <input type="text" class="form-control" id="{{ $gudang_nama }}" name="{{ $gudang_nama }}" value="{{ $material->$gudang_nama }}" placeholder="Masukkan saldo ...">
+                                        <label>{{ ucReplaceUnderscoreToSpace('saldo') }}</label>
+                                        <div>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="saldo" id="saldo_bertambah" value="bertambah" {{ old('saldo') == 'bertambah' ? 'checked' : '' }}> Bertambah
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="saldo" id="saldo_berkurang" value="berkurang" {{ old('saldo') == 'berkurang' ? 'checked' : '' }}> Berkurang
+                                            </label>
+                                        </div>
                                     </div>
-                                    @endforeach
+
                                     <button type="submit" class="btn btn-primary">Simpan</button>
                                 </form>
                             </div>

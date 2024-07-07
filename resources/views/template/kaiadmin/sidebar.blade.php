@@ -102,6 +102,11 @@
                                     <span class="sub-item">{{ ucReplaceUnderscoreToSpace('gudang') }}</span>
                                 </a>
                             </li>
+                            <li>
+                                <a href="{{ route('jenis_penyesuaian_gudang.index') }}">
+                                    <span class="sub-item">{{ ucReplaceUnderscoreToSpace('jenis_penyesuaian_gudang') }}</span>
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </li>
@@ -137,6 +142,11 @@
                             <li>
                                 <a href="{{ route('mutasi_antar_gudang.index') }}">
                                     <span class="sub-item">{{ ucReplaceUnderscoreToSpace('mutasi_antar_gudang') }}</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('penyesuaian_gudang.index') }}">
+                                    <span class="sub-item">{{ ucReplaceUnderscoreToSpace('penyesuaian_gudang') }}</span>
                                 </a>
                             </li>
                         </ul>

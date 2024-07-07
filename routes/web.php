@@ -21,6 +21,8 @@ use App\Http\Controllers\JurnalProduksiController;
 use App\Http\Controllers\PemasukanGudangController;
 use App\Http\Controllers\MutasiAntarGudangController;
 use App\Http\Controllers\PengeluaranGudangController;
+use App\Http\Controllers\PenyesuaianGudangController;
+use App\Http\Controllers\JenisPenyesuaianGudangController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,6 +47,7 @@ Route::resource('/user', UserController::class)->middleware(['auth']);
 Route::get('/log_aktifitas', ActivityLogController::class)->name('log_aktifitas')->middleware(['auth']);
 Route::resource('/satuan', SatuanController::class)->middleware(['auth']);
 Route::resource('/gudang', GudangController::class)->middleware(['auth']);
+Route::resource('/jenis_penyesuaian_gudang', JenisPenyesuaianGudangController::class)->middleware(['auth']);
 Route::resource('/permintaan', PermintaanController::class)->middleware(['auth']);
 Route::get('permintaan/api/{id}', [PermintaanController::class, 'api'])->name('permintaan.api');
 Route::get('permintaan/tutup/{id}', [PermintaanController::class, 'tutup'])->name('permintaan.tutup')->middleware(['auth']);
@@ -54,8 +57,7 @@ Route::resource('/material', MaterialController::class)->middleware(['auth']);
 Route::resource('/kebutuhan', KebutuhanController::class)->middleware(['auth']);
 Route::resource('/jurnal_produksi', JurnalProduksiController::class)->middleware(['auth']);
 Route::get('/saldo_material', [SaldoMaterialController::class, 'index'])->name('saldo_material.index')->middleware(['auth']);
-Route::post('/saldo_material', [SaldoMaterialController::class, 'proses'])->name('saldo_material.proses')->middleware(['auth']);
-Route::get('/saldo_material/{id}', [SaldoMaterialController::class, 'penyesuaian'])->name('saldo_material.penyesuaian')->middleware(['auth']);
 Route::resource('/pengeluaran_gudang', PengeluaranGudangController::class)->middleware(['auth']);
 Route::resource('/pemasukan_gudang', PemasukanGudangController::class)->middleware(['auth']);
 Route::resource('/mutasi_antar_gudang', MutasiAntarGudangController::class)->middleware(['auth']);
+Route::resource('/penyesuaian_gudang', PenyesuaianGudangController::class)->middleware(['auth']);
