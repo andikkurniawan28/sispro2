@@ -17,11 +17,11 @@
     </nav>
     <div class="copyright">
       2024, made with <i class="fa fa-heart heart text-danger"></i> by
-      <a href="http://www.themekita.com">ThemeKita</a>
+      <a href="https://wa.me/6285733465399">Andik Kurniawan</a>
     </div>
     <div>
       Distributed by
-      <a target="_blank" href="https://themewagon.com/">ThemeWagon</a>.
+      <a target="_blank" href="https://wa.me/6285733465399">Andik Kurniawan</a>.
     </div>
   </div>
 </footer>

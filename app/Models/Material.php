@@ -12,6 +12,12 @@ class Material extends Model
 
     protected $guarded = [];
 
+    public static function produk()
+    {
+        $materials = Material::whereIn('fungsi_material_id', [3,4,5])->get();
+        return $materials;
+    }
+
     public function fungsi_material()
     {
         return $this->belongsTo(FungsiMaterial::class);

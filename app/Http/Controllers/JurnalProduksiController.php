@@ -30,7 +30,7 @@ class JurnalProduksiController extends Controller
     public function create()
     {
         $permintaans = Permintaan::yangTerbuka();
-        $materials = Material::all();
+        $materials = Material::produk();
         $kode = JurnalProduksi::kode_faktur();
         return view('jurnal_produksi.create', compact('permintaans', 'materials', 'kode'));
     }
@@ -100,7 +100,7 @@ class JurnalProduksiController extends Controller
         $permintaans = Permintaan::yangTerbuka();
         $data = JurnalProduksi::findOrFail($id);
         $hasil_produksi = HasilProduksi::where('jurnal_produksi_id', $id)->get();
-        $materials = Material::all();
+        $materials = Material::produk();
         return view('jurnal_produksi.edit', compact('permintaans', 'data', 'hasil_produksi', 'materials'));
     }
 

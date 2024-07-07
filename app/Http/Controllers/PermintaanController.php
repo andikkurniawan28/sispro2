@@ -29,7 +29,7 @@ class PermintaanController extends Controller
      */
     public function create()
     {
-        $materials = Material::with('satuan_besar')->get();
+        $materials = Material::produk();
         $kode = Permintaan::kode_faktur();
         return view('permintaan.create', compact('materials', 'kode'));
     }
@@ -98,7 +98,7 @@ class PermintaanController extends Controller
     {
         $data = Permintaan::findOrFail($id);
         $permintaan_detail = PermintaanDetail::where('permintaan_id', $id)->get();
-        $materials = Material::all();
+        $materials = Material::produk();
         return view('permintaan.edit', compact('data', 'permintaan_detail', 'materials'));
     }
 
