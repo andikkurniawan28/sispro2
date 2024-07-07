@@ -69,6 +69,8 @@
                                             <th>Nama</th>
                                             <th>Jumlah Kecil</th>
                                             <th>Jumlah Besar</th>
+                                            <th>Harga</th>
+                                            <th>Total</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -79,6 +81,8 @@
                                                 <td>{{ ucReplaceUnderscoreToSpace($material->material->nama) }}</td>
                                                 <td>{{ $material->jumlah_dalam_satuan_kecil }} {{ $material->material->satuan_kecil->nama }}</td>
                                                 <td>{{ $material->jumlah_dalam_satuan_besar }} {{ $material->material->satuan_besar->nama }}</td>
+                                                <td>{{ $material->harga }}</td>
+                                                <td>{{ $material->total }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>

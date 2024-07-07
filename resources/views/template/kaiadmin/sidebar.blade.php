@@ -112,12 +112,12 @@
                 </li>
 
                 <li class="nav-item">
-                    <a data-bs-toggle="collapse" href="#persediaan">
+                    <a data-bs-toggle="collapse" href="#logistik">
                         <i class="fas fa-warehouse"></i>
-                        <p>{{ ucReplaceUnderscoreToSpace('persediaan') }}</p>
+                        <p>{{ ucReplaceUnderscoreToSpace('logistik') }}</p>
                         <span class="caret"></span>
                     </a>
-                    <div class="collapse" id="persediaan">
+                    <div class="collapse" id="logistik">
                         <ul class="nav nav-collapse">
                             <li>
                                 <a href="{{ route('saldo_material.index') }}">

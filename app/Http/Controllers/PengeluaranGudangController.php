@@ -49,7 +49,11 @@ class PengeluaranGudangController extends Controller
             'jumlah_kecil' => 'required|array',
             'jumlah_kecil.*' => 'required|numeric|min:0', // Mengganti "jumlahs" dengan "jumlah_kecil" sesuai dengan form Anda
             'jumlah_besar' => 'required|array',
-            'jumlah_besar.*' => 'required|numeric|min:0', // Menambahkan validasi untuk "jumlah_besar"
+            'jumlah_besar.*' => 'required|numeric|min:0', // Menambahkan validasi untuk "jumlah_besar",
+            'harga' => 'required|array',
+            'harga.*' => 'required|numeric|min:0',
+            'total' => 'required|array',
+            'total.*' => 'required|numeric|min:0',
         ]);
 
         // Buat data pengeluaran_gudang
@@ -72,8 +76,10 @@ class PengeluaranGudangController extends Controller
             PengeluaranGudangItem::create([
                 'pengeluaran_gudang_id' => $pengeluaran_gudang->id,
                 'material_id' => $material_id,
-                'jumlah_dalam_satuan_kecil' => $request->jumlah_kecil[$index], // Sesuaikan dengan nama input di form Anda
-                'jumlah_dalam_satuan_besar' => $request->jumlah_besar[$index], // Sesuaikan dengan nama input di form Anda
+                'jumlah_dalam_satuan_kecil' => $request->jumlah_kecil[$index],
+                'jumlah_dalam_satuan_besar' => $request->jumlah_besar[$index],
+                'harga' => $request->harga[$index],
+                'total' => $request->total[$index],
 
             ]);
         }
@@ -117,6 +123,10 @@ class PengeluaranGudangController extends Controller
             'jumlah_kecil.*' => 'required|numeric|min:0', // Mengganti "jumlahs" dengan "jumlah_kecil" sesuai dengan form Anda
             'jumlah_besar' => 'required|array',
             'jumlah_besar.*' => 'required|numeric|min:0', // Menambahkan validasi untuk "jumlah_besar"
+            'harga' => 'required|array',
+            'harga.*' => 'required|numeric|min:0',
+            'total' => 'required|array',
+            'total.*' => 'required|numeric|min:0',
         ]);
 
         $pengeluaran_gudang_items = PengeluaranGudangItem::where('pengeluaran_gudang_id', $id)->get();
@@ -147,6 +157,8 @@ class PengeluaranGudangController extends Controller
                 "material_id" => $material_id,
                 "jumlah_dalam_satuan_kecil" => $jumlah_kecil,
                 "jumlah_dalam_satuan_besar" => $jumlah_besar,
+                'harga' => $request->harga[$index],
+                'total' => $request->total[$index],
             ]);
         }
 

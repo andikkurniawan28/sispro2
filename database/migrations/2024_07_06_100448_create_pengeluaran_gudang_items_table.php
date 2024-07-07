@@ -17,6 +17,8 @@ return new class extends Migration
             $table->foreignId('material_id')->constrained();
             $table->float('jumlah_dalam_satuan_kecil');
             $table->float('jumlah_dalam_satuan_besar');
+            $table->double('harga');
+            $table->double('total');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });
