@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pengeluaran_gudang_items', function (Blueprint $table) {
+        Schema::create('mutasi_antar_gudang_items', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('pengeluaran_gudang_id')->constrained()->onDelete('cascade');
+            $table->foreignId('mutasi_antar_gudang_id')->constrained();
             $table->foreignId('material_id')->constrained();
             $table->float('jumlah_dalam_satuan_kecil');
             $table->float('jumlah_dalam_satuan_besar');
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pengeluaran_gudang_items');
+        Schema::dropIfExists('mutasi_antar_gudang_items');
     }
 };

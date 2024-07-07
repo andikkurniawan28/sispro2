@@ -196,9 +196,4 @@ class PemasukanGudangController extends Controller
             ])
             ->make(true);
     }
-
-    public static function updateStock($pemasukan_gudang_item_id)
-    {
-
-    }
 }

@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\JurnalProduksi;
-use App\Models\Material;
-use Illuminate\Http\Request;
-use App\Models\HasilProduksi;
-use App\Models\Permintaan;
-use Yajra\DataTables\DataTables;
-use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use App\Models\Gudang;
+use App\Models\Material;
+use App\Models\MutasiAntarGudang;
+use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
+use App\Models\MutasiAntarGudangItem;
+use Illuminate\Support\Facades\Auth;
 
-class JurnalProduksiController extends Controller
+class MutasiAntarGudangController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -21,7 +21,7 @@ class JurnalProduksiController extends Controller
         if ($request->ajax()) {
             return self::dataTable();
         }
-        return view('jurnal_produksi.index');
+        return view('mutasi_antar_gudang.index');
     }
 
     /**
@@ -29,10 +29,10 @@ class JurnalProduksiController extends Controller
      */
     public function create()
     {
-        $permintaans = Permintaan::yangTerbuka();
+        $gudangs = Gudang::all();
         $materials = Material::all();
-        $kode = JurnalProduksi::kode_faktur();
-        return view('jurnal_produksi.create', compact('permintaans', 'materials', 'kode'));
+        $kode = MutasiAntarGudang::kode_faktur();
+        return view('mutasi_antar_gudang.create', compact('materials', 'kode', 'gudangs'));
     }
 
     /**
@@ -42,8 +42,9 @@ class JurnalProduksiController extends Controller
     {
         // Validasi input
         $request->validate([
-            'permintaan_id' => 'required|exists:permintaans,id',
             'kode' => 'required|string|max:255',
+            'gudang_asal_id' => 'required|exists:gudangs,id',
+            'gudang_tujuan_id' => 'required|exists:gudangs,id',
             'materials' => 'required|array',
             'materials.*' => 'required|distinct|exists:materials,id',
             'jumlah_kecil' => 'required|array',
@@ -52,11 +53,12 @@ class JurnalProduksiController extends Controller
             'jumlah_besar.*' => 'required|numeric|min:0', // Menambahkan validasi untuk "jumlah_besar"
         ]);
 
-        // Buat data jurnal_produksi
-        $jurnal_produksi = JurnalProduksi::create([
+        // Buat data mutasi_antar_gudang
+        $mutasi_antar_gudang = MutasiAntarGudang::create([
             'user_id' => Auth::id(),
             'kode' => $request->kode,
-            'permintaan_id' => $request->permintaan_id,
+            'gudang_asal_id' => $request->gudang_asal_id,
+            'gudang_tujuan_id' => $request->gudang_tujuan_id,
         ]);
 
         // Validasi produk akhir harus unik
@@ -64,13 +66,13 @@ class JurnalProduksiController extends Controller
         foreach ($request->materials as $index => $material_id) {
             // Validasi jika produk akhir sudah pernah dimasukkan sebelumnya
             if (in_array($material_id, $existingMaterial)) {
-                $jurnal_produksi->delete(); // Hapus jurnal_produksi yang sudah dibuat jika ada duplikasi
-                return redirect()->back()->with('error', 'Material harus unik dalam satu jurnal_produksi.');
+                $mutasi_antar_gudang->delete(); // Hapus mutasi_antar_gudang yang sudah dibuat jika ada duplikasi
+                return redirect()->back()->with('error', 'Material harus unik dalam satu mutasi_antar_gudang.');
             }
             $existingMaterial[] = $material_id;
 
-            HasilProduksi::create([
-                'jurnal_produksi_id' => $jurnal_produksi->id,
+            MutasiAntarGudangItem::create([
+                'mutasi_antar_gudang_id' => $mutasi_antar_gudang->id,
                 'material_id' => $material_id,
                 'jumlah_dalam_satuan_kecil' => $request->jumlah_kecil[$index], // Sesuaikan dengan nama input di form Anda
                 'jumlah_dalam_satuan_besar' => $request->jumlah_besar[$index], // Sesuaikan dengan nama input di form Anda
@@ -79,7 +81,7 @@ class JurnalProduksiController extends Controller
         }
 
         // Redirect dengan pesan sukses
-        return redirect()->route('jurnal_produksi.index')->with('success', 'Jurnal Produksi berhasil dibuat.');
+        return redirect()->route('mutasi_antar_gudang.index')->with('success', 'Mutasi Antar Gudang berhasil dibuat.');
     }
 
     /**
@@ -87,9 +89,9 @@ class JurnalProduksiController extends Controller
      */
     public function show($id)
     {
-        $jurnal_produksi = JurnalProduksi::findOrFail($id);
-        $hasil_produksi = HasilProduksi::where('jurnal_produksi_id', $id)->get();
-        return view('jurnal_produksi.show', compact('jurnal_produksi', 'hasil_produksi'));
+        $mutasi_antar_gudang = MutasiAntarGudang::findOrFail($id);
+        $mutasi_antar_gudang_detail = MutasiAntarGudangItem::where('mutasi_antar_gudang_id', $id)->get();
+        return view('mutasi_antar_gudang.show', compact('mutasi_antar_gudang', 'mutasi_antar_gudang_detail'));
     }
 
     /**
@@ -97,11 +99,11 @@ class JurnalProduksiController extends Controller
      */
     public function edit($id)
     {
-        $permintaans = Permintaan::yangTerbuka();
-        $data = JurnalProduksi::findOrFail($id);
-        $hasil_produksi = HasilProduksi::where('jurnal_produksi_id', $id)->get();
+        $data = MutasiAntarGudang::findOrFail($id);
+        $mutasi_antar_gudang_detail = MutasiAntarGudangItem::where('mutasi_antar_gudang_id', $id)->get();
         $materials = Material::all();
-        return view('jurnal_produksi.edit', compact('permintaans', 'data', 'hasil_produksi', 'materials'));
+        $gudangs = Gudang::all();
+        return view('mutasi_antar_gudang.edit', compact('data', 'mutasi_antar_gudang_detail', 'materials', 'gudangs'));
     }
 
     /**
@@ -111,7 +113,8 @@ class JurnalProduksiController extends Controller
     {
         $request->validate([
             'kode' => 'required|string|max:255',
-            'permintaan_id' => 'required||exists:permintaans,id',
+            'gudang_asal_id' => 'required|exists:gudangs,id',
+            'gudang_tujuan_id' => 'required|exists:gudangs,id',
             'materials.*' => 'required|distinct|exists:materials,id',
             'jumlah_kecil' => 'required|array',
             'jumlah_kecil.*' => 'required|numeric|min:0', // Mengganti "jumlahs" dengan "jumlah_kecil" sesuai dengan form Anda
@@ -119,29 +122,39 @@ class JurnalProduksiController extends Controller
             'jumlah_besar.*' => 'required|numeric|min:0', // Menambahkan validasi untuk "jumlah_besar"
         ]);
 
-        $jurnal_produksi = JurnalProduksi::findOrFail($id);
-        $jurnal_produksi->kode = $request->kode;
-        $jurnal_produksi->permintaan_id = $request->permintaan_id;
-        $jurnal_produksi->save();
+        $mutasi_antar_gudang_items = MutasiAntarGudangItem::where('mutasi_antar_gudang_id', $id)->get();
+        foreach($mutasi_antar_gudang_items as $item)
+        {
+            MutasiAntarGudangItem::findOrFail($item->id)->delete();
+        }
+
+        $mutasi_antar_gudang = MutasiAntarGudang::findOrFail($id);
+        $mutasi_antar_gudang->kode = $request->kode;
+        $mutasi_antar_gudang->gudang_asal_id = $request->gudang_asal_id;
+        $mutasi_antar_gudang->gudang_tujuan_id = $request->gudang_tujuan_id;
+        $mutasi_antar_gudang->save();
 
         // Validasi produk akhir harus unik
         $existingMaterial = [];
         foreach ($request->materials as $index => $material_id) {
             // Validasi jika produk akhir sudah pernah dimasukkan sebelumnya
             if (in_array($material_id, $existingMaterial)) {
-                return redirect()->back()->with('error', 'Material harus unik dalam satu jurnal_produksi.');
+                return redirect()->back()->with('error', 'Material harus unik dalam satu mutasi_antar_gudang.');
             }
             $existingMaterial[] = $material_id;
 
             $jumlah_kecil = $request->jumlah_kecil[$index];
             $jumlah_besar = $request->jumlah_besar[$index];
-            HasilProduksi::updateOrCreate(
-                ['jurnal_produksi_id' => $id, 'material_id' => $material_id],
-                ['jumlah_dalam_satuan_kecil' => $jumlah_kecil, 'jumlah_dalam_satuan_besar' => $jumlah_besar]
-            );
+
+            MutasiAntarGudangItem::create([
+                "mutasi_antar_gudang_id" => $id,
+                "material_id" => $material_id,
+                "jumlah_dalam_satuan_kecil" => $jumlah_kecil,
+                "jumlah_dalam_satuan_besar" => $jumlah_besar,
+            ]);
         }
 
-        return redirect()->route('jurnal_produksi.index')->with('success', 'Jurnal Produksi berhasil diupdate.');
+        return redirect()->route('mutasi_antar_gudang.index')->with('success', 'Mutasi Antar Gudang berhasil diupdate.');
     }
 
     /**
@@ -149,48 +162,37 @@ class JurnalProduksiController extends Controller
      */
     public function destroy($id)
     {
-        $jurnal_produksi = JurnalProduksi::findOrFail($id);
-        $jurnal_produksi->delete();
-        return redirect()->back()->with("success", "Jurnal Produksi berhasil dihapus.");
+        $mutasi_antar_gudang = MutasiAntarGudang::findOrFail($id);
+        $mutasi_antar_gudang_items = MutasiAntarGudangItem::where('mutasi_antar_gudang_id', $id)->get();
+        foreach($mutasi_antar_gudang_items as $item)
+        {
+            MutasiAntarGudangItem::findOrFail($item->id)->delete();
+        }
+        $mutasi_antar_gudang->delete();
+        return redirect()->back()->with("success", "Mutasi Antar Gudang berhasil dihapus.");
     }
 
     public static function dataTable()
     {
-        $data = JurnalProduksi::with('user', 'permintaan')->get();
+        $data = MutasiAntarGudang::with('user')->get();
         return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('created_at', function ($row) {
                 return Carbon::parse($row->created_at)->format('d-m-Y H:i:s');
             })
-            ->addColumn('permintaan_kode', function ($row) {
-                return $row->permintaan->kode;
-            })
             ->addColumn('user_nama', function ($row) {
                 return $row->user->nama;
             })
             ->addColumn('tindakan', function ($row) {
-                if ($row->permintaan->status == 1) {
-                    $showUrl = route('jurnal_produksi.show', $row->id);
-                    return '
-                        <div class="btn-group" role="group" aria-label="Action Buttons">
-                            <span class="badge badge-secondary">
-                                <i class="icon-lock"></i> Dikunci
-                            </span>
-                        </div>
+                $editUrl = route('mutasi_antar_gudang.edit', $row->id);
+                $showUrl = route('mutasi_antar_gudang.show', $row->id);
+                return '
+                    <div class="btn-group" role="group" aria-label="Action Buttons">
+                        <a href="' . $editUrl . '" class="btn btn-secondary btn-sm">Edit</a>
                         <a href="' . $showUrl . '" class="btn btn-info btn-sm">Detail</a>
-                    ';
-                } else {
-                    $editUrl = route('jurnal_produksi.edit', $row->id);
-                    $showUrl = route('jurnal_produksi.show', $row->id);
-                    return '
-                        <div class="btn-group" role="group" aria-label="Action Buttons">
-                            <button class="btn btn-dark btn-sm close-btn" data-id="' . $row->id . '">Tutup</button>
-                            <a href="' . $showUrl . '" class="btn btn-info btn-sm">Detail</a>
-                            <a href="' . $editUrl . '" class="btn btn-secondary btn-sm">Edit</a>
-                            <button class="btn btn-danger btn-sm delete-btn" data-id="' . $row->id . '" data-name="' . $row->name . '">Hapus</button>
-                        </div>
-                    ';
-                }
+                        <button class="btn btn-danger btn-sm delete-btn" data-id="' . $row->id . '" data-name="' . $row->name . '">Hapus</button>
+                    </div>
+                ';
             })
             ->rawColumns(['tindakan'])
             ->setRowAttr([

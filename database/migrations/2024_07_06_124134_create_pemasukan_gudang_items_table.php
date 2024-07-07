@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('pemasukan_gudang_items', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('pemasukan_gudang_id')->constrained();
+            $table->foreignId('pemasukan_gudang_id')->constrained()->onDelete('cascade');
             $table->foreignId('material_id')->constrained();
             $table->float('jumlah_dalam_satuan_kecil');
             $table->float('jumlah_dalam_satuan_besar');

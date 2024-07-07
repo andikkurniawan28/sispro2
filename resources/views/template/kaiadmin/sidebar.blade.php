@@ -134,6 +134,11 @@
                                     <span class="sub-item">{{ ucReplaceUnderscoreToSpace('pemasukan_gudang') }}</span>
                                 </a>
                             </li>
+                            <li>
+                                <a href="{{ route('mutasi_antar_gudang.index') }}">
+                                    <span class="sub-item">{{ ucReplaceUnderscoreToSpace('mutasi_antar_gudang') }}</span>
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </li>

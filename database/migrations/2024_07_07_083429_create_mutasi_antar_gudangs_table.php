@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pengeluaran_gudang_items', function (Blueprint $table) {
+        Schema::create('mutasi_antar_gudangs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('pengeluaran_gudang_id')->constrained()->onDelete('cascade');
-            $table->foreignId('material_id')->constrained();
-            $table->float('jumlah_dalam_satuan_kecil');
-            $table->float('jumlah_dalam_satuan_besar');
+            $table->string('kode')->unique();
+            $table->foreignId('gudang_asal_id')->constrained('gudangs');
+            $table->foreignId('gudang_tujuan_id')->constrained('gudangs');
+            $table->foreignId('user_id')->constrained();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pengeluaran_gudang_items');
+        Schema::dropIfExists('mutasi_antar_gudangs');
     }
 };
