@@ -106,8 +106,8 @@
                                                                     <input type="number" class="form-control harga" id="harga_{{ $index }}" name="harga[]" placeholder="Masukkan {{ ucReplaceUnderscoreToSpace('harga') }}" value="{{ old('harga')[$index] ?? '' }}" step="any">
                                                                 </td>
                                                                 <td>
-                                                                    <input type="text" class="form-control total" id="total_{{ $index }}" name="total[]" readonly>
-                                                                    <span class="total_span" id="total_span_{{ $index }}">{{ old('total_span')[$index] ?? '' }}</span>
+                                                                    <input type="text" class="form-control total" id="total_{{ $index }}" name="total[]" value="{{ old('total')[$index] ?? '' }}" readonly>
+                                                                    <span class="total_span" id="total_span_{{ $index }}">{{ formatRupiah(old('total')[$index]) ?? '' }}</span>
                                                                 </td>
                                                                 <td>
                                                                     <button type="button" class="btn btn-danger btn-sm btn-block remove-material">{{ ucReplaceUnderscoreToSpace('hapus') }}</button>
@@ -147,15 +147,11 @@
             }
 
             rupiah = split[1] !== undefined ? rupiah + ',' + split[1] : rupiah;
-            return prefix === undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+            return prefix === undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : 'Rp. 0');
         }
 
         $(document).ready(function() {
             function initializeSelect2() {
-                $('.jenis_pengeluaran_gudang').select2({
-                    theme: 'bootstrap',
-                    width: '100%',
-                });
                 $('.gudang').select2({
                     theme: 'bootstrap',
                     width: '100%',
@@ -185,22 +181,31 @@
                 row.find('.satuan_besar').text(satuanBesar);
                 row.find('input.harga').val(hargaJual);
 
+                function calculateTotal() {
+                    const jumlahBesar = parseFloat(row.find('.jumlah_dalam_satuan_besar').val()) || 0;
+                    const harga = parseFloat(row.find('input.harga').val()) || 0;
+                    const total = jumlahBesar * harga;
+                    row.find('.total').val(total);
+                    row.find('.total_span').text(formatRupiah(total, 'Rp. '));
+                }
+
                 row.find('.jumlah_dalam_satuan_kecil').on('input', function() {
                     const jumlahKecil = parseFloat($(this).val());
                     const jumlahBesar = (jumlahKecil / sejumlah) || 0;
                     row.find('.jumlah_dalam_satuan_besar').val(jumlahBesar);
-                    const total = jumlahBesar * hargaJual;
-                    row.find('.total').val(total);
-                    row.find('.total_span').text(formatRupiah(total)); // Format rupiah here
+                    calculateTotal();
                 });
 
                 row.find('.jumlah_dalam_satuan_besar').on('input', function() {
                     const jumlahBesar = parseFloat($(this).val());
                     const jumlahKecil = jumlahBesar * sejumlah || 0;
                     row.find('.jumlah_dalam_satuan_kecil').val(jumlahKecil);
-                    const total = jumlahBesar * hargaJual;
-                    row.find('.total').val(total);
-                    row.find('.total_span').text(formatRupiah(total)); // Format rupiah here
+                    calculateTotal();
+                });
+
+
+                row.find('input.harga').on('input', function() {
+                    calculateTotal();
                 });
             }
 
@@ -250,6 +255,14 @@
 
             initializeSelect2();
             initializeRemoveButton();
+
+            // Tambahkan inisialisasi ini agar berfungsi saat nilai lama dikembalikan
+            $(document).ready(function() {
+                $('#materials_table select.material').each(function() {
+                    updateSatuan($(this));
+                });
+            });
+
         });
     </script>
 @endsection

@@ -20,3 +20,12 @@ if (!function_exists('ucReplaceSpaceToUnderscore')) {
         return ucwords(str_replace(' ', '_', $string));
     }
 }
+
+if (!function_exists('formatRupiah')) {
+    function formatRupiah($string)
+    {
+        $angka = (float)$string;
+        $formattedNumber = number_format($angka, 2, ',', '.');
+        return 'Rp. ' . $formattedNumber;
+    }
+}
