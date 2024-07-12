@@ -69,6 +69,8 @@
                                             <th>Nama</th>
                                             <th>Jumlah Kecil</th>
                                             <th>Jumlah Besar</th>
+                                            <th>Harga</th>
+                                            <th>Total</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -79,9 +81,17 @@
                                                 <td>{{ ucReplaceUnderscoreToSpace($material->material->nama) }}</td>
                                                 <td>{{ $material->jumlah_dalam_satuan_kecil }} {{ $material->material->satuan_kecil->nama }}</td>
                                                 <td>{{ $material->jumlah_dalam_satuan_besar }} {{ $material->material->satuan_besar->nama }}</td>
+                                                <td>{{ formatRupiah($material->harga) }}</td>
+                                                <td>{{ formatRupiah($material->total) }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th colspan="6">Grand Total</th>
+                                            <th>{{ formatRupiah($pemasukan_gudang->grand_total) }}</th>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                             <div class="invoice-footer">

@@ -49,7 +49,11 @@ class PemasukanGudangController extends Controller
             'jumlah_kecil' => 'required|array',
             'jumlah_kecil.*' => 'required|numeric|min:0', // Mengganti "jumlahs" dengan "jumlah_kecil" sesuai dengan form Anda
             'jumlah_besar' => 'required|array',
-            'jumlah_besar.*' => 'required|numeric|min:0', // Menambahkan validasi untuk "jumlah_besar"
+            'jumlah_besar.*' => 'required|numeric|min:0', // Menambahkan validasi untuk "jumlah_besar",
+            'harga' => 'required|array',
+            'harga.*' => 'required|numeric|min:0',
+            'total' => 'required|array',
+            'total.*' => 'required|numeric|min:0',
         ]);
 
         // Buat data pemasukan_gudang
@@ -57,6 +61,7 @@ class PemasukanGudangController extends Controller
             'user_id' => Auth::id(),
             'kode' => $request->kode,
             'gudang_id' => $request->gudang_id,
+            'grand_total' => $request->grand_total,
         ]);
 
         // Validasi produk akhir harus unik
@@ -72,8 +77,10 @@ class PemasukanGudangController extends Controller
             PemasukanGudangItem::create([
                 'pemasukan_gudang_id' => $pemasukan_gudang->id,
                 'material_id' => $material_id,
-                'jumlah_dalam_satuan_kecil' => $request->jumlah_kecil[$index], // Sesuaikan dengan nama input di form Anda
-                'jumlah_dalam_satuan_besar' => $request->jumlah_besar[$index], // Sesuaikan dengan nama input di form Anda
+                'jumlah_dalam_satuan_kecil' => $request->jumlah_kecil[$index],
+                'jumlah_dalam_satuan_besar' => $request->jumlah_besar[$index],
+                'harga' => $request->harga[$index],
+                'total' => $request->total[$index],
 
             ]);
         }
@@ -117,6 +124,10 @@ class PemasukanGudangController extends Controller
             'jumlah_kecil.*' => 'required|numeric|min:0', // Mengganti "jumlahs" dengan "jumlah_kecil" sesuai dengan form Anda
             'jumlah_besar' => 'required|array',
             'jumlah_besar.*' => 'required|numeric|min:0', // Menambahkan validasi untuk "jumlah_besar"
+            'harga' => 'required|array',
+            'harga.*' => 'required|numeric|min:0',
+            'total' => 'required|array',
+            'total.*' => 'required|numeric|min:0',
         ]);
 
         $pemasukan_gudang_items = PemasukanGudangItem::where('pemasukan_gudang_id', $id)->get();
@@ -128,6 +139,7 @@ class PemasukanGudangController extends Controller
         $pemasukan_gudang = PemasukanGudang::findOrFail($id);
         $pemasukan_gudang->kode = $request->kode;
         $pemasukan_gudang->gudang_id = $request->gudang_id;
+        $pemasukan_gudang->grand_total = $request->grand_total;
         $pemasukan_gudang->save();
 
         // Validasi produk akhir harus unik
@@ -147,6 +159,8 @@ class PemasukanGudangController extends Controller
                 "material_id" => $material_id,
                 "jumlah_dalam_satuan_kecil" => $jumlah_kecil,
                 "jumlah_dalam_satuan_besar" => $jumlah_besar,
+                'harga' => $request->harga[$index],
+                'total' => $request->total[$index],
             ]);
         }
 
@@ -171,6 +185,7 @@ class PemasukanGudangController extends Controller
     public static function dataTable()
     {
         $data = PemasukanGudang::with('user')->get();
+
         return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('created_at', function ($row) {
@@ -178,6 +193,9 @@ class PemasukanGudangController extends Controller
             })
             ->addColumn('user_nama', function ($row) {
                 return $row->user->nama;
+            })
+            ->addColumn('grand_total', function ($row) {
+                return formatRupiah($row->grand_total);
             })
             ->addColumn('tindakan', function ($row) {
                 $editUrl = route('pemasukan_gudang.edit', $row->id);
@@ -195,5 +213,10 @@ class PemasukanGudangController extends Controller
                 'data-searchable' => 'true'
             ])
             ->make(true);
+    }
+
+    function formatRupiah($angka)
+    {
+        return 'Rp. ' . number_format($angka, 0, ',', '.');
     }
 }

@@ -46,22 +46,6 @@
                                             <input type="text" class="form-control" id="kode" name="kode"
                                                 value="{{ $kode }}" placeholder="Masukkan kode ..." readonly>
                                         </div>
-                                        {{-- <div class="form-group">
-                                            <label for="jenis_pemasukan_gudang_id">{{ ucReplaceUnderscoreToSpace('jenis_pemasukan_gudang') }}</label>
-                                            <select class="jenis_pemasukan_gudang form-control @error('jenis_pemasukan_gudang_id') is-invalid @enderror"
-                                                id="jenis_pemasukan_gudang_id" name="jenis_pemasukan_gudang_id" required>
-                                                <option disabled selected>Pilih {{ ucReplaceUnderscoreToSpace('jenis_pemasukan_gudang') }}
-                                                </option>
-                                                @foreach ($jenis_pemasukan_gudangs as $jenis_pemasukan_gudang)
-                                                    <option value="{{ $jenis_pemasukan_gudang->id }}" data-kode-jurnal-gudang="{{ $jenis_pemasukan_gudang->kode }}">
-                                                        {{ ucwords(str_replace('_', ' ', $jenis_pemasukan_gudang->nama)) }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                            @error('jenis_pemasukan_gudang_id')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div> --}}
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
@@ -88,9 +72,11 @@
                                             <table class="table table-bordered">
                                                 <thead>
                                                     <tr>
-                                                        <th style="width: 50%">{{ ucReplaceUnderscoreToSpace('material') }}</th>
-                                                        <th style="width: 20%">{{ ucReplaceUnderscoreToSpace('jumlah_kecil') }}</th>
-                                                        <th style="width: 20%">{{ ucReplaceUnderscoreToSpace('jumlah_besar') }}</th>
+                                                        <th style="width: 25%">{{ ucReplaceUnderscoreToSpace('material') }}</th>
+                                                        <th style="width: 15%">{{ ucReplaceUnderscoreToSpace('jumlah_kecil') }}</th>
+                                                        <th style="width: 15%">{{ ucReplaceUnderscoreToSpace('jumlah_besar') }}</th>
+                                                        <th style="width: 15%">{{ ucReplaceUnderscoreToSpace('harga') }}</th>
+                                                        <th style="width: 20%">{{ ucReplaceUnderscoreToSpace('total') }}</th>
                                                         <th style="width: 10%">{{ ucReplaceUnderscoreToSpace('hapus') }}</th>
                                                     </tr>
                                                 </thead>
@@ -102,19 +88,26 @@
                                                                     <select class="form-control material" id="material_{{ $index }}" name="materials[]" required>
                                                                         <option disabled selected>Pilih {{ ucReplaceUnderscoreToSpace('material') }}</option>
                                                                         @foreach ($materials as $materialItem)
-                                                                            <option value="{{ $materialItem->id }}" data-satuan-kecil="{{ $materialItem->satuan_kecil->nama }}" data-satuan-besar="{{ $materialItem->satuan_besar->nama }}" data-sejumlah="{{ $materialItem->sejumlah }}" {{ $materialItem->id == $material ? 'selected' : '' }}>
+                                                                            <option value="{{ $materialItem->id }}" data-satuan-kecil="{{ $materialItem->satuan_kecil->nama }}" data-satuan-besar="{{ $materialItem->satuan_besar->nama }}" data-sejumlah="{{ $materialItem->sejumlah }}" data-harga-jual="{{ $materialItem->harga_jual }}" {{ $materialItem->id == $material ? 'selected' : '' }}>
                                                                                 {{ ucwords(str_replace('_', ' ', $materialItem->kode)) }} | {{ ucwords(str_replace('_', ' ', $materialItem->nama)) }}
                                                                             </option>
                                                                         @endforeach
                                                                     </select>
                                                                 </td>
                                                                 <td>
-                                                                    <input type="number" class="form-control jumlah_dalam_satuan_kecil" id="jumlah_dalam_satuan_kecil_{{ $index }}" name="jumlah_kecil[]" placeholder="Masukkan {{ ucReplaceUnderscoreToSpace('jumlah_kecil') }}" value="{{ old('jumlah_kecil')[$index] }}" step="any" required>
+                                                                    <input type="number" class="form-control jumlah_dalam_satuan_kecil" id="jumlah_dalam_satuan_kecil_{{ $index }}" name="jumlah_kecil[]" placeholder="Masukkan {{ ucReplaceUnderscoreToSpace('jumlah_kecil') }}" value="{{ old('jumlah_kecil')[$index] ?? '' }}" step="any" required>
                                                                     <span class="satuan_kecil" id="satuan_kecil_{{ $index }}">{{ $materials->find($material)->satuan_kecil->nama }}</span>
                                                                 </td>
                                                                 <td>
-                                                                    <input type="number" class="form-control jumlah_dalam_satuan_besar" id="jumlah_dalam_satuan_besar_{{ $index }}" name="jumlah_besar[]" placeholder="Masukkan {{ ucReplaceUnderscoreToSpace('jumlah_besar') }}" value="{{ old('jumlah_besar')[$index] }}" step="any" required>
+                                                                    <input type="number" class="form-control jumlah_dalam_satuan_besar" id="jumlah_dalam_satuan_besar_{{ $index }}" name="jumlah_besar[]" placeholder="Masukkan {{ ucReplaceUnderscoreToSpace('jumlah_besar') }}" value="{{ old('jumlah_besar')[$index] ?? '' }}" step="any" required>
                                                                     <span class="satuan_besar" id="satuan_besar_{{ $index }}">{{ $materials->find($material)->satuan_besar->nama }}</span>
+                                                                </td>
+                                                                <td>
+                                                                    <input type="number" class="form-control harga" id="harga_{{ $index }}" name="harga[]" placeholder="Masukkan {{ ucReplaceUnderscoreToSpace('harga') }}" value="{{ old('harga')[$index] ?? '' }}" step="any">
+                                                                </td>
+                                                                <td>
+                                                                    <input type="text" class="form-control total" id="total_{{ $index }}" name="total[]" value="{{ old('total')[$index] ?? '' }}" readonly>
+                                                                    <span class="total_span" id="total_span_{{ $index }}">{{ formatRupiah(old('total')[$index]) ?? '' }}</span>
                                                                 </td>
                                                                 <td>
                                                                     <button type="button" class="btn btn-danger btn-sm btn-block remove-material">{{ ucReplaceUnderscoreToSpace('hapus') }}</button>
@@ -122,6 +115,24 @@
                                                             </tr>
                                                         @endforeach
                                                     @endif
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <br>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>{{ ucReplaceUnderscoreToSpace('grand_total') }}</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>
+                                                            <input class="form-control" id="grand_total" name="grand_total" value="" readonly>
+                                                            <span class="grand_total_span" id="grand_total_span"></span>
+                                                        </td>
+                                                    </tr>
                                                 </tbody>
                                             </table>
                                         </div>
@@ -141,12 +152,24 @@
         </div>
     </div>
     <script>
+        function formatRupiah(angka, prefix) {
+            var number_string = angka.toString().replace(/[^,\d]/g, ''),
+                split = number_string.split(','),
+                sisa = split[0].length % 3,
+                rupiah = split[0].substr(0, sisa),
+                ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+            if (ribuan) {
+                separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
+
+            rupiah = split[1] !== undefined ? rupiah + ',' + split[1] : rupiah;
+            return prefix === undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : 'Rp. 0');
+        }
+
         $(document).ready(function() {
             function initializeSelect2() {
-                $('.jenis_pemasukan_gudang').select2({
-                    theme: 'bootstrap',
-                    width: '100%',
-                });
                 $('.gudang').select2({
                     theme: 'bootstrap',
                     width: '100%',
@@ -155,7 +178,6 @@
                     theme: 'bootstrap',
                     width: '100%',
                 }).on('change', function() {
-                    var index = $(this).attr('id').split('_')[1];
                     updateSatuan($(this));
                 });
             }
@@ -170,102 +192,105 @@
                 const row = selectElement.closest('tr');
                 const satuanKecil = selectElement.find('option:selected').data('satuan-kecil');
                 const satuanBesar = selectElement.find('option:selected').data('satuan-besar');
+                const hargaJual = selectElement.find('option:selected').data('harga-jual');
+                const sejumlah = parseFloat(selectElement.find('option:selected').data('sejumlah'));
+
                 row.find('.satuan_kecil').text(satuanKecil);
                 row.find('.satuan_besar').text(satuanBesar);
-                const jumlahKecilInput = row.find('.jumlah_dalam_satuan_kecil');
-                const jumlahBesarInput = row.find('.jumlah_dalam_satuan_besar');
-                calculateJumlahBesar(jumlahKecilInput);
-                calculateJumlahKecil(jumlahBesarInput);
-            }
+                row.find('input.harga').val(hargaJual);
 
-            function calculateJumlahBesar(inputElement) {
-                const row = inputElement.closest('tr');
-                const jumlahKecil = parseFloat(inputElement.val());
-                const selectElement = row.find('.material');
-                const sejumlah = parseFloat(selectElement.find('option:selected').data('sejumlah'));
-                if (!isNaN(jumlahKecil) && !isNaN(sejumlah)) {
-                    const jumlahBesar = jumlahKecil / sejumlah;
-                    row.find('.jumlah_dalam_satuan_besar').val(jumlahBesar.toFixed(2));
+                function calculateTotal() {
+                    const jumlahBesar = parseFloat(row.find('.jumlah_dalam_satuan_besar').val()) || 0;
+                    const harga = parseFloat(row.find('input.harga').val()) || 0;
+                    const total = jumlahBesar * harga;
+                    row.find('.total').val(total);
+                    row.find('.total_span').text(formatRupiah(total, 'Rp. '));
+                    hitungGrandTotal();
                 }
+
+                row.find('.jumlah_dalam_satuan_kecil').on('input', function() {
+                    const jumlahKecil = parseFloat($(this).val());
+                    const jumlahBesar = (jumlahKecil / sejumlah) || 0;
+                    row.find('.jumlah_dalam_satuan_besar').val(jumlahBesar);
+                    calculateTotal();
+                });
+
+                row.find('.jumlah_dalam_satuan_besar').on('input', function() {
+                    const jumlahBesar = parseFloat($(this).val());
+                    const jumlahKecil = jumlahBesar * sejumlah || 0;
+                    row.find('.jumlah_dalam_satuan_kecil').val(jumlahKecil);
+                    calculateTotal();
+                });
+
+                row.find('input.harga').on('input', function() {
+                    calculateTotal();
+                });
             }
 
-            function calculateJumlahKecil(inputElement) {
-                const row = inputElement.closest('tr');
-                const jumlahBesar = parseFloat(inputElement.val());
-                const selectElement = row.find('.material');
-                const sejumlah = parseFloat(selectElement.find('option:selected').data('sejumlah'));
-                if (!isNaN(jumlahBesar) && !isNaN(sejumlah)) {
-                    const jumlahKecil = jumlahBesar * sejumlah;
-                    row.find('.jumlah_dalam_satuan_kecil').val(jumlahKecil.toFixed(2));
-                }
+            function hitungGrandTotal() {
+                let grandTotal = 0;
+                $('#materials_table tr').each(function() {
+                    const total = parseFloat($(this).find('.total').val()) || 0;
+                    grandTotal += total;
+                });
+                $('#grand_total').val(grandTotal.toFixed(0)); // Menghilangkan angka desimal
+                $('#grand_total_span').text(formatRupiah(grandTotal.toFixed(0), 'Rp. ')); // Menghilangkan angka desimal
             }
 
-            function updateKode(selectElement) {
-                const kodeInput = $('#kode');
-                const jenisJurnalGudangKode = selectElement.find('option:selected').data('kode-jurnal-gudang');
-                const defaultKode = "{{ $kode }}";
-                const newKode = jenisJurnalGudangKode + defaultKode;
-                kodeInput.val(newKode);
+            function ucReplaceUnderscoreToSpace(str) {
+                return str.replace(/_/g, ' ').replace(/\b\w/g, function(txt) {
+                    return txt.toUpperCase();
+                });
             }
 
-            initializeSelect2();
-            initializeRemoveButton();
-
-            $(document).on('change', '.jenis_pemasukan_gudang', function() {
-                updateKode($(this));
-            });
-
-            $(document).on('input', '.jumlah_dalam_satuan_kecil', function() {
-                calculateJumlahBesar($(this));
-            });
-
-            $(document).on('input', '.jumlah_dalam_satuan_besar', function() {
-                calculateJumlahKecil($(this));
-            });
-
-            let materialCounter = {{ old('materials') ? count(old('materials')) : 0 }};
-
-            function addMaterialRow() {
-                materialCounter++;
-                const newRowId = 'material_row_' + materialCounter;
-                const newRow = `
-                    <tr id="${newRowId}">
+            $('#add_material').click(function() {
+                const index = $('#materials_table tr').length;
+                $('#materials_table').append(`
+                    <tr id="material_row_${index}">
                         <td>
-                            <select class="form-control material" id="material_${materialCounter}" name="materials[]" required>
-                                <option disabled selected>Pilih {{ ucReplaceUnderscoreToSpace('material') }}</option>
+                            <select class="form-control material" id="material_${index}" name="materials[]" required>
+                                <option disabled selected>Pilih ${ucReplaceUnderscoreToSpace('material')}</option>
                                 @foreach ($materials as $material)
-                                    <option value="{{ $material->id }}" data-satuan-kecil="{{ $material->satuan_kecil->nama }}" data-satuan-besar="{{ $material->satuan_besar->nama }}" data-sejumlah="{{ $material->sejumlah }}">
+                                    <option value="{{ $material->id }}" data-satuan-kecil="{{ $material->satuan_kecil->nama }}" data-satuan-besar="{{ $material->satuan_besar->nama }}" data-sejumlah="{{ $material->sejumlah }}" data-harga-jual="{{ $material->harga_jual }}">
                                         {{ ucwords(str_replace('_', ' ', $material->kode)) }} | {{ ucwords(str_replace('_', ' ', $material->nama)) }}
                                     </option>
                                 @endforeach
                             </select>
                         </td>
                         <td>
-                            <input type="number" class="form-control jumlah_dalam_satuan_kecil" id="jumlah_dalam_satuan_kecil_${materialCounter}" name="jumlah_kecil[]" placeholder="Masukkan {{ ucReplaceUnderscoreToSpace('jumlah_kecil') }}" step="any" required>
-                            <span class="satuan_kecil" id="satuan_kecil_${materialCounter}"></span>
+                            <input type="number" class="form-control jumlah_dalam_satuan_kecil" id="jumlah_dalam_satuan_kecil_${index}" name="jumlah_kecil[]" placeholder="Masukkan ${ucReplaceUnderscoreToSpace('jumlah_kecil')}" step="any" required>
+                            <span class="satuan_kecil" id="satuan_kecil_${index}"></span>
                         </td>
                         <td>
-                            <input type="number" class="form-control jumlah_dalam_satuan_besar" id="jumlah_dalam_satuan_besar_${materialCounter}" name="jumlah_besar[]" placeholder="Masukkan {{ ucReplaceUnderscoreToSpace('jumlah_besar') }}" step="any" required>
-                            <span class="satuan_besar" id="satuan_besar_${materialCounter}"></span>
+                            <input type="number" class="form-control jumlah_dalam_satuan_besar" id="jumlah_dalam_satuan_besar_${index}" name="jumlah_besar[]" placeholder="Masukkan ${ucReplaceUnderscoreToSpace('jumlah_besar')}" step="any" required>
+                            <span class="satuan_besar" id="satuan_besar_${index}"></span>
                         </td>
                         <td>
-                            <button type="button" class="btn btn-danger btn-sm btn-block remove-material">{{ ucReplaceUnderscoreToSpace('hapus') }}</button>
+                            <input type="number" class="form-control harga" id="harga_${index}" name="harga[]" placeholder="Masukkan ${ucReplaceUnderscoreToSpace('harga')}" step="any">
+                        </td>
+                        <td>
+                            <input type="text" class="form-control total" id="total_${index}" name="total[]" readonly>
+                            <span class="total_span" id="total_span_${index}"></span>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-danger btn-sm btn-block remove-material">${ucReplaceUnderscoreToSpace('hapus')}</button>
                         </td>
                     </tr>
-                `;
-                $('#materials_table').append(newRow);
-                $('#material_' + materialCounter).select2({
-                    theme: 'bootstrap',
-                    width: '100%',
-                }).on('change', function() {
+                `);
+                initializeSelect2();
+                initializeRemoveButton();
+            });
+
+            initializeSelect2();
+            initializeRemoveButton();
+
+            // Tambahkan inisialisasi ini agar berfungsi saat nilai lama dikembalikan
+            $(document).ready(function() {
+                $('#materials_table select.material').each(function() {
                     updateSatuan($(this));
                 });
-                initializeRemoveButton();
-            }
-
-            $('#add_material').click(function() {
-                addMaterialRow();
             });
+
         });
     </script>
 @endsection
