@@ -41,14 +41,14 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-bordered mt-4" id="mutasi_antar_gudang-table" width="100%">
+                                <table class="table table-bordered table-hover mt-4" id="mutasi_antar_gudang-table" width="100%">
                                     <thead>
                                         <tr>
                                             <th>{{ ucReplaceUnderscoreToSpace('kode') }}</th>
                                             <th>{{ ucReplaceUnderscoreToSpace('dibuat_pada') }}</th>
                                             <th>{{ ucReplaceUnderscoreToSpace('dari') }}</th>
                                             <th>{{ ucReplaceUnderscoreToSpace('ke') }}</th>
-                                            <th>{{ ucReplaceUnderscoreToSpace('grand_total') }}</th>
+                                            <th>{{ ucReplaceUnderscoreToSpace('senilai') }}</th>
                                             <th>{{ ucReplaceUnderscoreToSpace('user') }}</th>
                                             <th>{{ ucReplaceUnderscoreToSpace('tindakan') }}</th>
                                         </tr>

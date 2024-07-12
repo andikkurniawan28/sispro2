@@ -41,7 +41,7 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-bordered mt-4" id="jabatan-table" width="100%">
+                                <table class="table table-bordered table-hover mt-4" id="jabatan-table" width="100%">
                                     <thead>
                                         <tr>
                                             <th>{{ ucReplaceUnderscoreToSpace('nama') }}</th>
