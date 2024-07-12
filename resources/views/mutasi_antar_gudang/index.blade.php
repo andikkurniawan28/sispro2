@@ -46,6 +46,9 @@
                                         <tr>
                                             <th>{{ ucReplaceUnderscoreToSpace('kode') }}</th>
                                             <th>{{ ucReplaceUnderscoreToSpace('dibuat_pada') }}</th>
+                                            <th>{{ ucReplaceUnderscoreToSpace('dari') }}</th>
+                                            <th>{{ ucReplaceUnderscoreToSpace('ke') }}</th>
+                                            <th>{{ ucReplaceUnderscoreToSpace('grand_total') }}</th>
                                             <th>{{ ucReplaceUnderscoreToSpace('user') }}</th>
                                             <th>{{ ucReplaceUnderscoreToSpace('tindakan') }}</th>
                                         </tr>
@@ -72,6 +75,9 @@
                 columns: [
                     { data: 'kode', name: 'kode' },
                     { data: 'created_at', name: 'created_at' },
+                    { data: 'gudang_asal_nama', name: 'gudang_asal_nama' },
+                    { data: 'gudang_tujuan_nama', name: 'gudang_tujuan_nama' },
+                    { data: 'grand_total', name: 'grand_total' },
                     { data: 'user_nama', name: 'user_nama' },
                     { data: 'tindakan', name: 'tindakan', orderable: false, searchable: false },
                 ]

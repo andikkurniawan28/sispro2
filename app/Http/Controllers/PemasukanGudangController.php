@@ -184,12 +184,15 @@ class PemasukanGudangController extends Controller
 
     public static function dataTable()
     {
-        $data = PemasukanGudang::with('user')->get();
+        $data = PemasukanGudang::with('user', 'gudang')->get();
 
         return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('created_at', function ($row) {
                 return Carbon::parse($row->created_at)->format('d-m-Y H:i:s');
+            })
+            ->addColumn('gudang_nama', function ($row) {
+                return $row->gudang->nama;
             })
             ->addColumn('user_nama', function ($row) {
                 return $row->user->nama;
@@ -213,10 +216,5 @@ class PemasukanGudangController extends Controller
                 'data-searchable' => 'true'
             ])
             ->make(true);
-    }
-
-    function formatRupiah($angka)
-    {
-        return 'Rp. ' . number_format($angka, 0, ',', '.');
     }
 }

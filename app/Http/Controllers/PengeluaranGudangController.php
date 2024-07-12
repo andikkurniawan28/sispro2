@@ -42,6 +42,7 @@ class PengeluaranGudangController extends Controller
     {
         // Validasi input
         $request->validate([
+            'grand_total' => 'required|numeric',
             'kode' => 'required|string|max:255',
             'gudang_id' => 'required|exists:gudangs,id',
             'materials' => 'required|array',
@@ -117,6 +118,7 @@ class PengeluaranGudangController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
+            'grand_total' => 'required|numeric',
             'kode' => 'required|string|max:255',
             'gudang_id' => 'required',
             'materials.*' => 'required|distinct|exists:materials,id',
@@ -184,7 +186,7 @@ class PengeluaranGudangController extends Controller
 
     public static function dataTable()
     {
-        $data = PengeluaranGudang::with('user')->get();
+        $data = PengeluaranGudang::with('user', 'gudang')->get();
 
         return Datatables::of($data)
             ->addIndexColumn()
@@ -193,6 +195,9 @@ class PengeluaranGudangController extends Controller
             })
             ->addColumn('user_nama', function ($row) {
                 return $row->user->nama;
+            })
+            ->addColumn('gudang_nama', function ($row) {
+                return $row->gudang->nama;
             })
             ->addColumn('grand_total', function ($row) {
                 return formatRupiah($row->grand_total);
@@ -213,10 +218,5 @@ class PengeluaranGudangController extends Controller
                 'data-searchable' => 'true'
             ])
             ->make(true);
-    }
-
-    function formatRupiah($angka)
-    {
-        return 'Rp. ' . number_format($angka, 0, ',', '.');
     }
 }

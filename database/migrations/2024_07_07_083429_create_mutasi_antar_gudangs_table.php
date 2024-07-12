@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('gudang_asal_id')->constrained('gudangs');
             $table->foreignId('gudang_tujuan_id')->constrained('gudangs');
             $table->foreignId('user_id')->constrained();
+            $table->double('grand_total');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });

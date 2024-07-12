@@ -53,6 +53,10 @@ class PenyesuaianGudangController extends Controller
             'jumlah_kecil.*' => 'required|numeric|min:0', // Mengganti "jumlahs" dengan "jumlah_kecil" sesuai dengan form Anda
             'jumlah_besar' => 'required|array',
             'jumlah_besar.*' => 'required|numeric|min:0', // Menambahkan validasi untuk "jumlah_besar"
+            'harga' => 'required|array',
+            'harga.*' => 'required|numeric|min:0', // Menambahkan validasi untuk "harga"
+            'total' => 'required|array',
+            'total.*' => 'required|numeric|min:0',
         ]);
 
         // Buat data penyesuaian_gudang
@@ -61,6 +65,7 @@ class PenyesuaianGudangController extends Controller
             'user_id' => Auth::id(),
             'kode' => $request->kode,
             'gudang_id' => $request->gudang_id,
+            'grand_total' => $request->grand_total,
         ]);
 
         // Validasi produk akhir harus unik
@@ -78,6 +83,8 @@ class PenyesuaianGudangController extends Controller
                 'material_id' => $material_id,
                 'jumlah_dalam_satuan_kecil' => $request->jumlah_kecil[$index], // Sesuaikan dengan nama input di form Anda
                 'jumlah_dalam_satuan_besar' => $request->jumlah_besar[$index], // Sesuaikan dengan nama input di form Anda
+                'harga' => $request->harga[$index],
+                'total' => $request->total[$index],
 
             ]);
         }
@@ -123,6 +130,10 @@ class PenyesuaianGudangController extends Controller
             'jumlah_kecil.*' => 'required|numeric|min:0', // Mengganti "jumlahs" dengan "jumlah_kecil" sesuai dengan form Anda
             'jumlah_besar' => 'required|array',
             'jumlah_besar.*' => 'required|numeric|min:0', // Menambahkan validasi untuk "jumlah_besar"
+            'harga' => 'required|array',
+            'harga.*' => 'required|numeric|min:0', // Menambahkan validasi untuk "harga"
+            'total' => 'required|array',
+            'total.*' => 'required|numeric|min:0',
         ]);
 
         $penyesuaian_gudang_items = PenyesuaianGudangItem::where('penyesuaian_gudang_id', $id)->get();
@@ -135,6 +146,7 @@ class PenyesuaianGudangController extends Controller
         $penyesuaian_gudang->kode = $request->kode;
         $penyesuaian_gudang->jenis_penyesuaian_gudang_id = $request->jenis_penyesuaian_gudang_id;
         $penyesuaian_gudang->gudang_id = $request->gudang_id;
+        $penyesuaian_gudang->grand_total = $request->grand_total;
         $penyesuaian_gudang->save();
 
         // Validasi produk akhir harus unik
@@ -148,12 +160,16 @@ class PenyesuaianGudangController extends Controller
 
             $jumlah_kecil = $request->jumlah_kecil[$index];
             $jumlah_besar = $request->jumlah_besar[$index];
+            $harga = $request->harga[$index];
+            $total = $request->total[$index];
 
             PenyesuaianGudangItem::create([
                 "penyesuaian_gudang_id" => $id,
                 "material_id" => $material_id,
                 "jumlah_dalam_satuan_kecil" => $jumlah_kecil,
                 "jumlah_dalam_satuan_besar" => $jumlah_besar,
+                'harga' => $harga,
+                'total' => $total,
             ]);
         }
 
@@ -177,7 +193,7 @@ class PenyesuaianGudangController extends Controller
 
     public static function dataTable()
     {
-        $data = PenyesuaianGudang::with('user')->get();
+        $data = PenyesuaianGudang::with('user', 'gudang', 'jenis_penyesuaian_gudang')->get();
         return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('created_at', function ($row) {
@@ -185,6 +201,24 @@ class PenyesuaianGudangController extends Controller
             })
             ->addColumn('user_nama', function ($row) {
                 return $row->user->nama;
+            })
+            ->addColumn('gudang_nama', function ($row) {
+                return $row->gudang->nama;
+            })
+            ->addColumn('jenis_penyesuaian_gudang_nama', function ($row) {
+                return $row->jenis_penyesuaian_gudang->nama;
+            })
+            ->addColumn('grand_total', function ($row) {
+                $grandTotal = formatRupiah($row->grand_total);
+                $saldo = $row->jenis_penyesuaian_gudang->saldo;
+
+                if ($saldo == 'berkurang') {
+                    return '<span style="color: red;">' . $grandTotal . '</span>';
+                } elseif ($saldo == 'bertambah') {
+                    return '<span style="color: black;">' . $grandTotal . '</span>';
+                } else {
+                    return $grandTotal;
+                }
             })
             ->addColumn('tindakan', function ($row) {
                 $editUrl = route('penyesuaian_gudang.edit', $row->id);
@@ -197,10 +231,11 @@ class PenyesuaianGudangController extends Controller
                     </div>
                 ';
             })
-            ->rawColumns(['tindakan'])
+            ->rawColumns(['grand_total', 'tindakan'])
             ->setRowAttr([
                 'data-searchable' => 'true'
             ])
             ->make(true);
     }
+
 }

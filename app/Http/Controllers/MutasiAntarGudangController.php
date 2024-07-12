@@ -42,6 +42,7 @@ class MutasiAntarGudangController extends Controller
     {
         // Validasi input
         $request->validate([
+            'grand_total' => 'required|numeric',
             'kode' => 'required|string|max:255',
             'gudang_asal_id' => 'required|exists:gudangs,id',
             'gudang_tujuan_id' => 'required|exists:gudangs,id',
@@ -51,6 +52,10 @@ class MutasiAntarGudangController extends Controller
             'jumlah_kecil.*' => 'required|numeric|min:0', // Mengganti "jumlahs" dengan "jumlah_kecil" sesuai dengan form Anda
             'jumlah_besar' => 'required|array',
             'jumlah_besar.*' => 'required|numeric|min:0', // Menambahkan validasi untuk "jumlah_besar"
+            'harga' => 'required|array',
+            'harga.*' => 'required|numeric|min:0', // Menambahkan validasi untuk "harga"
+            'total' => 'required|array',
+            'total.*' => 'required|numeric|min:0',
         ]);
 
         // Buat data mutasi_antar_gudang
@@ -59,6 +64,7 @@ class MutasiAntarGudangController extends Controller
             'kode' => $request->kode,
             'gudang_asal_id' => $request->gudang_asal_id,
             'gudang_tujuan_id' => $request->gudang_tujuan_id,
+            'grand_total' => $request->grand_total,
         ]);
 
         // Validasi produk akhir harus unik
@@ -76,7 +82,8 @@ class MutasiAntarGudangController extends Controller
                 'material_id' => $material_id,
                 'jumlah_dalam_satuan_kecil' => $request->jumlah_kecil[$index], // Sesuaikan dengan nama input di form Anda
                 'jumlah_dalam_satuan_besar' => $request->jumlah_besar[$index], // Sesuaikan dengan nama input di form Anda
-
+                'harga' => $request->harga[$index],
+                'total' => $request->total[$index],
             ]);
         }
 
@@ -112,6 +119,7 @@ class MutasiAntarGudangController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
+            'grand_total' => 'required|numeric',
             'kode' => 'required|string|max:255',
             'gudang_asal_id' => 'required|exists:gudangs,id',
             'gudang_tujuan_id' => 'required|exists:gudangs,id',
@@ -120,6 +128,10 @@ class MutasiAntarGudangController extends Controller
             'jumlah_kecil.*' => 'required|numeric|min:0', // Mengganti "jumlahs" dengan "jumlah_kecil" sesuai dengan form Anda
             'jumlah_besar' => 'required|array',
             'jumlah_besar.*' => 'required|numeric|min:0', // Menambahkan validasi untuk "jumlah_besar"
+            'harga' => 'required|array',
+            'harga.*' => 'required|numeric|min:0', // Menambahkan validasi untuk "jumlah_besar"
+            'total' => 'required|array',
+            'total.*' => 'required|numeric|min:0',
         ]);
 
         $mutasi_antar_gudang_items = MutasiAntarGudangItem::where('mutasi_antar_gudang_id', $id)->get();
@@ -132,6 +144,7 @@ class MutasiAntarGudangController extends Controller
         $mutasi_antar_gudang->kode = $request->kode;
         $mutasi_antar_gudang->gudang_asal_id = $request->gudang_asal_id;
         $mutasi_antar_gudang->gudang_tujuan_id = $request->gudang_tujuan_id;
+        $mutasi_antar_gudang->grand_total = $request->grand_total;
         $mutasi_antar_gudang->save();
 
         // Validasi produk akhir harus unik
@@ -145,12 +158,16 @@ class MutasiAntarGudangController extends Controller
 
             $jumlah_kecil = $request->jumlah_kecil[$index];
             $jumlah_besar = $request->jumlah_besar[$index];
+            $harga = $request->harga[$index];
+            $total = $request->total[$index];
 
             MutasiAntarGudangItem::create([
                 "mutasi_antar_gudang_id" => $id,
                 "material_id" => $material_id,
                 "jumlah_dalam_satuan_kecil" => $jumlah_kecil,
                 "jumlah_dalam_satuan_besar" => $jumlah_besar,
+                'harga' => $harga,
+                'total' => $total,
             ]);
         }
 
@@ -182,6 +199,15 @@ class MutasiAntarGudangController extends Controller
             })
             ->addColumn('user_nama', function ($row) {
                 return $row->user->nama;
+            })
+            ->addColumn('gudang_asal_nama', function ($row) {
+                return $row->gudang_asal->nama;
+            })
+            ->addColumn('gudang_tujuan_nama', function ($row) {
+                return $row->gudang_tujuan->nama;
+            })
+            ->addColumn('grand_total', function ($row) {
+                return formatRupiah($row->grand_total);
             })
             ->addColumn('tindakan', function ($row) {
                 $editUrl = route('mutasi_antar_gudang.edit', $row->id);
