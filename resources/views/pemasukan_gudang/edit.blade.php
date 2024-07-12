@@ -322,6 +322,9 @@
                 });
             });
 
+            // Memastikan kalkulasi grand total kembali berjalan
+            hitungGrandTotal();
+
         });
     </script>
 @endsection
