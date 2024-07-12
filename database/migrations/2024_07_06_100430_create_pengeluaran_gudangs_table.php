@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('kode')->unique();
             $table->foreignId('gudang_id')->constrained();
             $table->foreignId('user_id')->constrained();
+            $table->double('grand_total');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });

@@ -147,6 +147,24 @@
                                                 </tbody>
                                             </table>
                                         </div>
+                                        <br>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>{{ ucReplaceUnderscoreToSpace('grand_total') }}</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>
+                                                            <input class="form-control" id="grand_total" name="grand_total" value="" readonly>
+                                                            <span class="grand_total_span" id="grand_total_span"></span>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                         <div class="row mt-3">
                                             <div class="col-sm-12 offset-sm-2">
                                                 <button type="submit" class="btn btn-primary">Simpan</button>
@@ -217,6 +235,7 @@
                     const total = jumlahBesar * harga;
                     row.find('.total').val(total);
                     row.find('.total_span').text(formatRupiah(total, 'Rp. '));
+                    hitungGrandTotal();
                 }
 
                 row.find('.jumlah_dalam_satuan_kecil').on('input', function() {
@@ -233,10 +252,19 @@
                     calculateTotal();
                 });
 
-
                 row.find('input.harga').on('input', function() {
                     calculateTotal();
                 });
+            }
+
+            function hitungGrandTotal() {
+                let grandTotal = 0;
+                $('#materials_table tr').each(function() {
+                    const total = parseFloat($(this).find('.total').val()) || 0;
+                    grandTotal += total;
+                });
+                $('#grand_total').val(grandTotal.toFixed(0)); // Menghilangkan angka desimal
+                $('#grand_total_span').text(formatRupiah(grandTotal.toFixed(0), 'Rp. ')); // Menghilangkan angka desimal
             }
 
             function ucReplaceUnderscoreToSpace(str) {
@@ -290,6 +318,7 @@
             $(document).ready(function() {
                 $('#materials_table select.material').each(function() {
                     updateSatuan($(this));
+                    hitungGrandTotal($(this));
                 });
             });
 

@@ -61,6 +61,7 @@ class PengeluaranGudangController extends Controller
             'user_id' => Auth::id(),
             'kode' => $request->kode,
             'gudang_id' => $request->gudang_id,
+            'grand_total' => $request->grand_total,
         ]);
 
         // Validasi produk akhir harus unik
@@ -138,6 +139,7 @@ class PengeluaranGudangController extends Controller
         $pengeluaran_gudang = PengeluaranGudang::findOrFail($id);
         $pengeluaran_gudang->kode = $request->kode;
         $pengeluaran_gudang->gudang_id = $request->gudang_id;
+        $pengeluaran_gudang->grand_total = $request->grand_total;
         $pengeluaran_gudang->save();
 
         // Validasi produk akhir harus unik
@@ -183,6 +185,7 @@ class PengeluaranGudangController extends Controller
     public static function dataTable()
     {
         $data = PengeluaranGudang::with('user')->get();
+
         return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('created_at', function ($row) {
@@ -190,6 +193,9 @@ class PengeluaranGudangController extends Controller
             })
             ->addColumn('user_nama', function ($row) {
                 return $row->user->nama;
+            })
+            ->addColumn('grand_total', function ($row) {
+                return formatRupiah($row->grand_total);
             })
             ->addColumn('tindakan', function ($row) {
                 $editUrl = route('pengeluaran_gudang.edit', $row->id);
@@ -207,5 +213,10 @@ class PengeluaranGudangController extends Controller
                 'data-searchable' => 'true'
             ])
             ->make(true);
+    }
+
+    function formatRupiah($angka)
+    {
+        return 'Rp. ' . number_format($angka, 0, ',', '.');
     }
 }

@@ -86,6 +86,12 @@
                                             </tr>
                                         @endforeach
                                     </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th colspan="6">Grand Total</th>
+                                            <th>{{ formatRupiah($pengeluaran_gudang->grand_total) }}</th>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                             <div class="invoice-footer">
