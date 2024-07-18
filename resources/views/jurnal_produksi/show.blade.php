@@ -51,14 +51,14 @@
                                         {{ date('d-m-Y H:i:s', strtotime($jurnal_produksi->created_at)) }}
                                     </div>
                                     <div>
-                                        <strong>Dibuat Oleh:</strong> {{ $jurnal_produksi->user->nama }}
+                                        <strong>Diajukan Oleh:</strong> {{ $jurnal_produksi->user->nama }}
                                         ({{ $jurnal_produksi->user->jabatan->nama }})
                                     </div>
                                 </div>
                             </div>
                             <hr>
                             <div class="invoice-body">
-                                <h5>Detail {{ ucReplaceUnderscoreToSpace('hasil_produksi') }}:</h5>
+                                <h5>Detail {{ ucReplaceUnderscoreToSpace('jurnal_produksi') }}:</h5>
                                 <br>
                                 <table class="table table-bordered">
                                     <thead>
@@ -71,7 +71,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($hasil_produksi as $index => $material)
+                                        @foreach ($jurnal_produksi_detail as $index => $material)
                                             <tr>
                                                 <td>{{ $index + 1 }}</td>
                                                 <td>{{ ucReplaceUnderscoreToSpace($material->material->kode) }}</td>

@@ -41,12 +41,12 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-bordered mt-4" id="jurnal_produksi-table" width="100%">
+                                <table class="table table-bordered table-hover mt-4" id="jurnal_produksi-table" width="100%">
                                     <thead>
                                         <tr>
                                             <th>{{ ucReplaceUnderscoreToSpace('kode') }}</th>
-                                            <th>{{ ucReplaceUnderscoreToSpace('permintaan') }}</th>
                                             <th>{{ ucReplaceUnderscoreToSpace('dibuat_pada') }}</th>
+                                            <th>{{ ucReplaceUnderscoreToSpace('permintaan') }}</th>
                                             <th>{{ ucReplaceUnderscoreToSpace('user') }}</th>
                                             <th>{{ ucReplaceUnderscoreToSpace('tindakan') }}</th>
                                         </tr>
@@ -72,9 +72,8 @@
                 ajax: "{{ route('jurnal_produksi.index') }}",
                 columns: [
                     { data: 'kode', name: 'kode' },
-                    { data: 'permintaan_kode', name: 'permintaan_kode' },
                     { data: 'created_at', name: 'created_at' },
-                    // { data: 'berlaku_sampai', name: 'berlaku_sampai' },
+                    { data: 'permintaan_kode', name: 'permintaan_kode' },
                     { data: 'user_nama', name: 'user_nama' },
                     { data: 'tindakan', name: 'tindakan', orderable: false, searchable: false },
                 ]
@@ -122,6 +121,31 @@
 
                             form.appendChild(hiddenMethod);
                             form.appendChild(csrfTokenInput);
+                            document.body.appendChild(form);
+                            form.submit();
+                        }
+                    });
+                }
+            });
+            document.addEventListener('click', function(event) {
+                if (event.target.classList.contains('close-btn')) {
+                    event.preventDefault();
+                    const button = event.target;
+                    const jurnal_produksi_id = button.getAttribute('data-id');
+                    Swal.fire({
+                        title: 'Apakah Anda yakin?',
+                        text: 'Anda akan menutup Permintaan ini!',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Ya, saya yakin!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            const form = document.createElement('form');
+                            form.setAttribute('method', 'GET');
+                            form.setAttribute('action', `{{ url('jurnal_produksi/tutup') }}/${jurnal_produksi_id}`);
+                            form.setAttribute('style', 'display: none;');
                             document.body.appendChild(form);
                             form.submit();
                         }

@@ -22,9 +22,9 @@ class JurnalProduksi extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function hasil()
+    public function detail()
     {
-        return $this->hasMany(HasilProduksi::class);
+        return $this->hasMany(JurnalProduksiDetail::class);
     }
 
     public static function kode_faktur()

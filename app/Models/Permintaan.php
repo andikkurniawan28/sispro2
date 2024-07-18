@@ -27,11 +27,6 @@ class Permintaan extends Model
         return $this->hasMany(JurnalProduksi::class);
     }
 
-    public function permintaan()
-    {
-        return $this->hasMany(Permintaan::class);
-    }
-
     public static function kode_faktur()
     {
         $tanggal = now()->format('d/m/y');

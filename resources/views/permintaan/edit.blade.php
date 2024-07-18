@@ -47,6 +47,8 @@
                                             <input type="text" class="form-control" id="kode" name="kode"
                                                 value="{{ $data->kode }}" placeholder="Masukkan kode ..." readonly>
                                         </div>
+                                    </div>
+                                    <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="berlaku_sampai">{{ ucReplaceUnderscoreToSpace('berlaku_sampai') }}</label>
                                             <input type="datetime-local" class="form-control" id="berlaku_sampai"
