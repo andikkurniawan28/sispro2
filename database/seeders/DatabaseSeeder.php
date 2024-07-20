@@ -268,6 +268,11 @@ class DatabaseSeeder extends Seeder
                 'akun_dasar_id' => AkunDasar::where('nama', ucReplaceUnderscoreToSpace('aktiva_tetap'))->get()->last()->id,
             ],
             [
+                'nama' => ucReplaceUnderscoreToSpace('akumulasi_penyusutan_alat_kerja'),
+                'kode' => '11',
+                'akun_dasar_id' => AkunDasar::where('nama', ucReplaceUnderscoreToSpace('aktiva_tetap'))->get()->last()->id,
+            ],
+            [
                 'nama' => ucReplaceUnderscoreToSpace('selisih_kurs_kas'),
                 'kode' => '12',
                 'akun_dasar_id' => AkunDasar::where('nama', ucReplaceUnderscoreToSpace('aktiva_lain-lain'))->get()->last()->id,
@@ -367,8 +372,83 @@ class DatabaseSeeder extends Seeder
             ],
             [
                 'nama' => ucReplaceUnderscoreToSpace('meubel'),
-                'kode' => '1800',
+                'kode' => '1700',
                 'akun_induk_id' => AkunInduk::where('nama', ucReplaceUnderscoreToSpace('kendaraan_&_inventaris'))->get()->last()->id,
+            ],
+            [
+                'nama' => ucReplaceUnderscoreToSpace('alat_alat-kerja'),
+                'kode' => '1800',
+                'akun_induk_id' => AkunInduk::where('nama', ucReplaceUnderscoreToSpace('alat_kerja'))->get()->last()->id,
+            ],
+            [
+                'nama' => ucReplaceUnderscoreToSpace('akumulasi_penyusutan_bangunan'),
+                'kode' => '1901',
+                'akun_induk_id' => AkunInduk::where('nama', ucReplaceUnderscoreToSpace('akumulasi_penyusutan_bangunan'))->get()->last()->id,
+            ],
+            [
+                'nama' => ucReplaceUnderscoreToSpace('akumulasi_penyusutan_kendaraan'),
+                'kode' => '1902',
+                'akun_induk_id' => AkunInduk::where('nama', ucReplaceUnderscoreToSpace('akumulasi_penyusutan_kendaraan_&_inventaris'))->get()->last()->id,
+            ],
+            [
+                'nama' => ucReplaceUnderscoreToSpace('akumulasi_penyusutan_meubel'),
+                'kode' => '1903',
+                'akun_induk_id' => AkunInduk::where('nama', ucReplaceUnderscoreToSpace('akumulasi_penyusutan_kendaraan_&_inventaris'))->get()->last()->id,
+            ],
+            [
+                'nama' => ucReplaceUnderscoreToSpace('akumulasi_penyusutan_alat_kerja'),
+                'kode' => '1904',
+                'akun_induk_id' => AkunInduk::where('nama', ucReplaceUnderscoreToSpace('akumulasi_penyusutan_alat_kerja'))->get()->last()->id,
+            ],
+            [
+                'nama' => ucReplaceUnderscoreToSpace('selisih_kurs_kas'),
+                'kode' => '2000',
+                'akun_induk_id' => AkunInduk::where('nama', ucReplaceUnderscoreToSpace('selisih_kurs_kas'))->get()->last()->id,
+            ],
+            [
+                'nama' => ucReplaceUnderscoreToSpace('selisih_kurs_bank'),
+                'kode' => '2001',
+                'akun_induk_id' => AkunInduk::where('nama', ucReplaceUnderscoreToSpace('selisih_kurs_bank'))->get()->last()->id,
+            ],
+            [
+                'nama' => ucReplaceUnderscoreToSpace('hutang_usaha'),
+                'kode' => '2100',
+                'akun_induk_id' => AkunInduk::where('nama', ucReplaceUnderscoreToSpace('hutang_usaha'))->get()->last()->id,
+            ],
+            [
+                'nama' => ucReplaceUnderscoreToSpace('modal'),
+                'kode' => '3000',
+                'akun_induk_id' => AkunInduk::where('nama', ucReplaceUnderscoreToSpace('modal'))->get()->last()->id,
+            ],
+            [
+                'nama' => ucReplaceUnderscoreToSpace('penjualan'),
+                'kode' => '4000',
+                'akun_induk_id' => AkunInduk::where('nama', ucReplaceUnderscoreToSpace('penjualan'))->get()->last()->id,
+            ],
+            [
+                'nama' => ucReplaceUnderscoreToSpace('HPP'),
+                'kode' => '5000',
+                'akun_induk_id' => AkunInduk::where('nama', ucReplaceUnderscoreToSpace('harga_pokok'))->get()->last()->id,
+            ],
+            [
+                'nama' => ucReplaceUnderscoreToSpace('biaya_operasional'),
+                'kode' => '6000',
+                'akun_induk_id' => AkunInduk::where('nama', ucReplaceUnderscoreToSpace('biaya_operasional'))->get()->last()->id,
+            ],
+            [
+                'nama' => ucReplaceUnderscoreToSpace('biaya_gaji'),
+                'kode' => '6100',
+                'akun_induk_id' => AkunInduk::where('nama', ucReplaceUnderscoreToSpace('biaya_operasional'))->get()->last()->id,
+            ],
+            [
+                'nama' => ucReplaceUnderscoreToSpace('pendapatan_lain'),
+                'kode' => '7000',
+                'akun_induk_id' => AkunInduk::where('nama', ucReplaceUnderscoreToSpace('pendapatan_lain'))->get()->last()->id,
+            ],
+            [
+                'nama' => ucReplaceUnderscoreToSpace('biaya_lain'),
+                'kode' => '8000',
+                'akun_induk_id' => AkunInduk::where('nama', ucReplaceUnderscoreToSpace('biaya_lain'))->get()->last()->id,
             ],
         ]);
 
