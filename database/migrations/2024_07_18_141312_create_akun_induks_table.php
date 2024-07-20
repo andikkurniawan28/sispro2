@@ -13,7 +13,11 @@ return new class extends Migration
     {
         Schema::create('akun_induks', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->foreignId('akun_dasar_id')->constrained();
+            $table->string('kode')->unique();
+            $table->string('nama')->unique();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });
     }
 

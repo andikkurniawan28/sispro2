@@ -13,7 +13,13 @@ return new class extends Migration
     {
         Schema::create('akuns', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->foreignId('akun_sub_id')->constrained();
+            $table->string('kode')->unique();
+            $table->string('nama')->unique();
+            $table->double('saldo_awal')->default(0);
+            $table->string('saldo_normal');
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });
     }
 
