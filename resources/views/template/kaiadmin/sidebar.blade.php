@@ -107,6 +107,26 @@
                                     <span class="sub-item">{{ ucReplaceUnderscoreToSpace('jenis_penyesuaian_gudang') }}</span>
                                 </a>
                             </li>
+                            <li>
+                                <a href="{{ route('akun_dasar.index') }}">
+                                    <span class="sub-item">{{ ucReplaceUnderscoreToSpace('akun_dasar') }}</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('akun_induk.index') }}">
+                                    <span class="sub-item">{{ ucReplaceUnderscoreToSpace('akun_induk') }}</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('akun_sub.index') }}">
+                                    <span class="sub-item">{{ ucReplaceUnderscoreToSpace('akun_sub') }}</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('akun.index') }}">
+                                    <span class="sub-item">{{ ucReplaceUnderscoreToSpace('akun') }}</span>
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </li>

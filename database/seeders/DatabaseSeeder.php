@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Akun;
 use App\Models\User;
 use App\Models\Fitur;
 use App\Models\Setup;

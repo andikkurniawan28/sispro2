@@ -2,14 +2,18 @@
 
 use App\Models\JenisTransaksi;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AkunController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SetupController;
 use App\Http\Controllers\DivisiController;
 use App\Http\Controllers\GudangController;
 use App\Http\Controllers\SatuanController;
+use App\Http\Controllers\AkunSubController;
 use App\Http\Controllers\JabatanController;
 use App\Http\Controllers\MaterialController;
+use App\Http\Controllers\AkunDasarController;
+use App\Http\Controllers\AkunIndukController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KebutuhanController;
 use App\Http\Controllers\PermintaanController;
@@ -61,3 +65,7 @@ Route::resource('/pengeluaran_gudang', PengeluaranGudangController::class)->midd
 Route::resource('/pemasukan_gudang', PemasukanGudangController::class)->middleware(['auth']);
 Route::resource('/mutasi_antar_gudang', MutasiAntarGudangController::class)->middleware(['auth']);
 Route::resource('/penyesuaian_gudang', PenyesuaianGudangController::class)->middleware(['auth']);
+Route::resource('/akun_dasar', AkunDasarController::class)->middleware(['auth']);
+Route::resource('/akun_induk', AkunIndukController::class)->middleware(['auth']);
+Route::resource('/akun_sub', AkunSubController::class)->middleware(['auth']);
+Route::resource('/akun', AkunController::class)->middleware(['auth']);
